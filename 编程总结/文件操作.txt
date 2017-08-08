@@ -1,0 +1,17 @@
+txt文本删除
+	      if (PathFileExists(fname))
+		{         
+			CFile  mfile(fname,CFile::modeReadWrite);
+			if (mfile.GetLength()>0)
+			{
+				mfile.SetLength(0);
+				mfile.Close();
+			}
+		}
+xls 删除
+         mfile.remove(fname);	
+创造文件夹
+ if (!PathFileExists(strFilePath))
+    {
+	CreateDirectory(strFilePath,NULL);
+    }    

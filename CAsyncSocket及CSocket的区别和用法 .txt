@@ -1,0 +1,363 @@
+http://blog.chinaunix.net/uid-20743151-id-326359.html
+http://blog.csdn.net/libaineu2004/article/details/40395917  
+
+微软的MFC把复杂的WinSock API函数封装到类里，这使得编写网络应用程序更容易。CAsyncSocket类逐个封装了WinSock API，为高级网络程序员提供了更加有力而灵活的方法。这个类基于程序员了解网络通讯的假设，目的是为了在MFC中使用WinSock，程序员有责任处理诸如阻塞、字节顺序和在Unicode与MBCS 间转换字符的任务。为了给程序员提供更方便的接口以自动处理这些任务，MFC给出了CSocket类，这个类是由CAsyncSocket类继承下来的，它提供了比CAsyncSocket更高层的WinSock API接口。CSocket类和CSocketFile类可以与CArchive类一起合作来管理发送和接收的数据，这使管理数据收发更加便利。CSocket对象提供阻塞模式，这对于CArchive的同步操作是至关重要的。阻塞函数（如Receive()、Send()、ReceiveFrom()、SendTo() 和Accept()）直到操作完成后才返回控制权，因此如果需要低层控制和高效率，就使用CAsyncSock类；如果需要方便，则可使用CSocket类。 
+　　CSocket类是由CAsyncSocket继承而来的，事实上，在MFC中CAsyncSocket 逐个封装了WinSock API，每个CAsyncSocket对象代表一个Windows Socket对象，使用CAsyncSocket 类要求程序员对网络编程较为熟悉。相比起来，CSocket类是CAsyncSocket的派生类，继承了它封装的WinSock API。
+ 　　一个CSocket对象代表了一个比CAsyncSocket对象更高层次的Windows Socket的抽象，CSocket类与CSocketFile类和CArchive类一起工作来发送和接收数据，因此使用它更加容易使用。CSocket对象提供阻塞模式，因为阻塞功能对于CArchive的同步操作是至关重要的。在这里有必要对阻塞的概念作一解释：一个socket可以处于"阻塞模式"或"非阻塞模式"，当一个套接字处于阻塞模式（即同步操作）时，它的阻塞函数直到操作完成才会返回控制权，之所以称为阻塞是因为此套接字的阻塞函数在完成操作返回之前什么也不能做。如果一个socket处于非阻塞模式（即异步操作），则会被调用函数立即返回。在CAsyncSocket类中可以用GetLastError 成员函数查询最后的错误，如果错误是WSAEWOULDBLOCK则说明有阻塞，而CSocket绝不会返回WSAEWOULDBLOCK，因为它自己管理阻塞。微软建议尽量使用非阻塞模式，通过网络事件的发生而通知应用程序进行相应的处理。但在CSocket类中，为了利用CArchive 处理通讯中的许多问题和简化编程，它的一些成员函数总是具有阻塞性质的，这是因为CArchive类需要同步的操作。
+ 　　在Win32环境下，如果要使用具有阻塞性质的套接字，应该放在独立的工作线程中处理，利用多线程的方法使阻塞不至于干扰其他线程，也不会把CPU时间浪费在阻塞上。多线程的方法既可以使程序员享受CSocket带来的简化编程的便利，也不会影响用户界面对用户的反应。 
+
+
+    MFC疑难注解：CAsyncSocket及CSocket。CSocket从CAsyncSocket派生，但是其功能已经由异步转换成同步。MFC对SOCKET编程的支持其实是很充分的，然而其文档是语焉不详的。以至于大多数用VC编写的功能稍复杂的网络程序，还是使用API的。故CAsyncSocket及CSocket事实上成为疑难，群众多敬而远之。余好事者也，不忍资源浪费，特为之注解。
+
+一、CAsyncSocket与CSocket的区别
+
+前者是异步通信，后者是同步通信；前者是非阻塞模式，后者是阻塞模式。另外，异步非阻塞模式有
+ 时也被称为长连接，同步阻塞模式则被称为短连接。为了更明白地讲清楚两者的区别，举个例子：
+
+设想你是一位体育老师，需要测验100位同学的400米成绩。你当然不会让100位同学一起起跑，因为当
+ 同学们返回终点时，你根本来不及掐表记录各位同学的成绩。
+
+如果你每次让一位同学起跑并等待他回到终点你记下成绩后再让下一位起跑，直到所有同学都跑完。恭
+ 喜你，你已经掌握了同步阻塞模式。
+
+你设计了一个函数，传入参数是学生号和起跑时间，返回值是到达终点的时间。你调用该函数100次，
+ 就能完成这次测验任务。这个函数是同步的，因为只要你调用它，就能得到结果；这个函数也是阻塞的，
+ 因为你一旦调用它，就必须等待，直到它给你结果，不能去干其他事情。
+
+如果你一边每隔10秒让一位同学起跑，直到所有同学出发完毕；另一边每有一个同学回到终点就记录成
+ 绩，直到所有同学都跑完。恭喜你，你已经掌握了异步非阻塞模式。
+
+你设计了两个函数，其中一个函数记录起跑时间和学生号，该函数你会主动调用100次；另一个函数记
+ 录到达时间和学生号，该函数是一个事件驱动的callback函数，当有同学到达终点时，你会被动调用。
+ 你主动调用的函数是异步的，因为你调用它，它并不会告诉你结果；这个函数也是非阻塞的，因为你一
+ 旦调用它，它就马上返回，你不用等待就可以再次调用它。但仅仅将这个函数调用100次，你并没有完
+ 成你的测验任务，你还需要被动等待调用另一个函数100次。
+
+当然，你马上就会意识到，同步阻塞模式的效率明显低于异步非阻塞模式。那么，谁还会使用同步阻塞
+ 模式呢？
+
+不错，异步模式效率高，但更麻烦，你一边要记录起跑同学的数据，一边要记录到达同学的数据，而且
+ 同学们回到终点的次序与起跑的次序并不相同，所以你还要不停地在你的成绩册上查找学生号。忙乱之
+ 中你往往会张冠李戴。
+
+你可能会想出更聪明的办法：你带了很多块秒表，让同学们分组互相测验。恭喜你！你已经掌握了多线
+ 程同步模式！
+
+每个拿秒表的同学都可以独立调用你的同步函数，这样既不容易出错，效率也大大提高，只要秒表足够
+ 多，同步的效率也能达到甚至超过异步。
+
+可以理解，你现的问题可能是：既然多线程同步既快又好，异步模式还有存在的必要吗？
+
+很遗憾，异步模式依然非常重要，因为在很多情况下，你拿不出很多秒表。你需要通信的对端系统可能
+ 只允许你建立一个SOCKET连接，很多金融、电信行业的大型业务系统都如此要求。
+
+现在，你应该已经明白了：CAsyncSocket用于在少量连接时，处理大批量无步骤依赖性的业务。CSocket
+用于处理步骤依赖性业务，或在可多连接时配合多线程使用。
+
+
+二、CAsyncSocket异步机制
+
+当你获得了一个异步连接后，实际上你扫除了发送动作与接收动作之间的依赖性。所以你随时可以发包，
+ 也随时可能收到包。发送、接收函数都是异步非阻塞的，顷刻就能返回，所以收发交错进行着，你可以
+ 一直工作，保持很高的效率。但是，正因为发送、接收函数都是异步非阻塞的，所以仅调用它们并不能
+ 保障发送或接收的完成。例如发送函数Send，调用它可能有4种结果：
+
+1、错误，Send()==SOCKET_ERROR，GetLastError()!=WSAEWOULDBLOCK，这种情况可能由各种网络问题导
+ 致，你需要马上决定是放弃本次操作，还是启用某种对策
+
+2、忙，Send()==SOCKET_ERROR，GetLastError()==WSAEWOULDBLOCK，导致这种情况的原因是，你的发送
+ 缓冲区已被填满或对方的接受缓冲区已被填满。这种情况你实际上不用马上理睬。因为CAsyncSocket会
+ 记得你的Send WSAEWOULDBLOCK了，待发送的数据会写入CAsyncSocket内部的发送缓冲区，并会在不忙的
+ 时候自动调用OnSend，发送内部缓冲区里的数据。
+
+3、部分完成，0<Send(pBuf,nLen)<nLen，导致这种情况的原因是，你的发送缓冲区或对方的接收缓冲区
+ 中剩余的空位不足以容纳你这次需要发送的全部数据。处理这种情况的通常做法是继续发送尚未发送的
+ 数据直到全部完成或WSAEWOULDBLOCK。这种情况很容易让人产生疑惑，既然缓冲区空位不足，那么本次
+ 发送就已经填满了缓冲区，干嘛还要继续发送呢，就像WSAEWOULDBLOCK了一样直接交给OnSend去处理剩
+ 余数据的发送不是更合理吗？然而很遗憾，CAsyncSocket不会记得你只完成了部分发送任务从而在合适
+ 的时候触发OnSend，因为你并没有WSAEWOULDBLOCK。你可能认为既然已经填满缓冲区，继续发送必然会
+WSAEWOULDBLOCK，其实不然，假如WSAEWOULDBLOCK是由于对方读取接收缓冲区不及时引起的，继续发送
+ 的确很可能会WSAEWOULDBLOCK，但假如WSAEWOULDBLOCK是由于发送缓冲区被填满，就不一定了，因为你
+ 的网卡处理发送缓冲区中数据的速度不见得比你往发送缓冲区拷贝数据的速度更慢，这要取决与你竞争
+CPU、内存、带宽资源的其他应用程序的具体情况。假如这时候CPU负载较大而网卡负载较低，则虽然刚
+ 刚发送缓冲区是满的，你继续发送也不会WSAEWOULDBLOCK。
+
+4、完成，Send(pBuf,nLen)==nLen
+
+与OnSend协助Send完成工作一样，OnRecieve、OnConnect、OnAccept也会分别协助Recieve、Connect、
+Accept完成工作。这一切都通过消息机制完成：
+
+在你使用CAsyncSocket之前，必须调用AfxSocketInit初始化WinSock环境，而AfxSocketInit会创建一个
+ 隐藏的CSocketWnd对象，由于这个对象由Cwnd派生，因此它能够接收Windows消息。所以它能够成为高层
+CAsyncSocket对象与WinSock底层之间的桥梁。例如某CAsyncSocket在Send时WSAEWOULDBLOCK了，它就会
+ 发送一条消息给CSocketWnd作为报告，CSocketWnd会维护一个报告登记表，当它收到底层WinSock发出的
+ 空闲消息时，就会检索报告登记表，然后直接调用报告者的OnSend函数。所以前文所说的CAsyncSocket会
+ 自动调用OnXxx，实际上是不对的，真正的调用者是CSocketWnd——它是一个CWnd对象，运行在独立的线
+ 程中。
+
+使用CAsyncSocket时，Send流程和Recieve流程是不同的，不理解这一点就不可能顺利使用CAsyncSocket。
+
+MSDN对CAsyncSocket的解释很容易让你理解为：只有OnSend被触发时你Send才有意义，你才应该Send，
+ 同样只有OnRecieve被触发时你才应该Recieve。很不幸，你错了：
+
+你会发现，连接建立的同时，OnSend就第一次被触发了，嗯，这很好，但你现在还不想Send，你让OnSend
+返回，干点其他的事情，等待下一次OnSend试试看？实际上，你再也等不到OnSend被触发了。因为，除
+ 了第一次以外，OnSend的任何一次触发，都源于你调用了Send，但碰到了WSAEWOULDBLOCK！
+
+所以，使用CAsyncSocket时，针对发送的流程逻辑应该是：你需两个成员变量，一个发送任务表，一个
+ 记录发送进度。你可以，也应该，在任何你需要的时候，主动调用Send来发送数据，同时更新任务表和
+ 发送进度。而OnSend，则是你的负责擦屁股工作的助手，它被触发时要干的事情就是根据任务表和发送
+ 进度调用Send继续发。若又没能将任务表全部发送完成，更新发送进度，退出，等待下一次OnSend；若
+ 任务表已全部发送完毕，则清空任务表及发送进度。
+
+使用CAsyncSocket的接收流程逻辑是不同的：你永远不需要主动调用Recieve，你只应该在OnRecieve中等
+ 待。由于你不可能知道将要抵达的数据类型及次序，所以你需要定义一个已收数据表作为成员变量来存储
+ 已收到但尚未处理的数据。每次OnRecieve被触发，你只需要被动调用一次Recieve来接受固定长度的数据，
+ 并添加到你的已收数据表后。然后你需要扫描已收数据表，若其中已包含一条或数条完整的可解析的业务
+ 数据包，截取出来，调用业务处理窗口的处理函数来处理或作为消息参数发送给业务处理窗口。而已收数
+ 据表中剩下的数据，将等待下次OnRecieve中被再次组合、扫描并处理。
+
+在长连接应用中，连接可能因为各种原因中断，所以你需要自动重连。你需要根据CAsyncSocket的成员变
+ 量m_hSocket来判断当前连接状态：if(m_hSocket==INVALID_SOCKET)。当然，很奇怪的是，即使连接已经
+ 中断，OnClose也已经被触发，你还是需要在OnClose中主动调用Close，否则m_hSocket并不会被自动赋值
+ 为INVALID_SOCKET。
+
+在很多长连接应用中，除建立连接以外，还需要先Login，然后才能进行业务处理，连接并Login是一个步
+ 骤依赖性过程，用异步方式处理反而会很麻烦，而CAsyncSocket是支持切换为同步模式的，你应该掌握在
+ 适当的时候切换同异步模式的方法：
+
+DWORD dw;
+
+//切换为同步模式
+dw=0;
+ IOCtl(FIONBIO,&dw);
+ ...
+
+//切换回异步模式
+dw=1;
+ IOCtl(FIONBIO,&dw);
+
+
+三、CSocket的用法
+
+CSocket在CAsyncSocket的基础上，修改了Send、Recieve等成员函数，帮你内置了一个用以轮询收发缓冲区
+ 的循环，变成了同步短连接模式。
+
+短连接应用简单明了，CSocket经常不用派生就可以直接使用，但也有些问题：
+
+1、用作监听的时候
+
+曾经看到有人自己创建线程，在线程中创建CSocket对象进行Listen、Accept，若Accept成功则再起一个线
+ 程继续Listen、Accept。。。可以说他完全不理解CSocket，实际上CSocket的监听机制已经内置了多线程机
+ 制，你只需要从CSocket派生，然后重载OnAccept：
+
+//CListenSocket头文件
+class CListenSocket : public CSocket
+ {
+ public:
+     CListenSocket(HWND hWnd=NULL);
+     HWND m_hWnd; //事件处理窗口
+    virtual void OnAccept(int nErrorCode);
+ };
+
+//CListenSocket实现文件
+#include "ListenSocket.h"
+ CListenSocket::CListenSocket(HWND hWnd){m_hWnd=hWnd;}
+ void CListenSocket::OnAccept(int nErrorCode)
+ {
+     SendMessage(m_hWnd,WM_SOCKET_MSG,SOCKET_CLNT_ACCEPT,0);
+     CSocket::OnAccept(nErrorCode);
+ }
+
+//主线程
+...
+m_pListenSocket=new CListenSocket(m_hWnd);
+ m_pListenSocket->Create(...);
+ m_pListenSocket->Listen();
+ ...
+
+LRESULT CXxxDlg::OnSocketMsg(WPARAM wParam, LPARAM lParam)
+ {
+     UINT type=(UINT)wParam;
+     switch(type)
+     {
+     case SOCKET_CLNT_ACCEPT:
+         {
+             CSocket* pSocket=new CSocket;
+             if(!m_pListenSocket->Accept(*pSocket))
+             {
+                 delete pSocket;
+                 break;
+             }
+             ...
+         }
+     ...
+     }
+ }
+
+
+ 2、用于多线程的时候
+
+常看到人说CSocket在子线程中不能用，其实不然。实际情况是：
+
+直接使用CSocket动态创建的对象，将其指针作为参数传递给子线程，则子线程中进行收发等各种操作都
+ 没问题。但如果是使用CSocket派生类创建的对象，就要看你重载了哪些方法，假如你仅重载了OnClose，
+ 则子线程中你也可以正常收发，但不能Close!
+
+因为CSocket是用内部循环做到同步的，并不依赖各OnXxx，它不需要与CSocketWnd交互。但当你派生并重
+ 载OnXxx后，它为了提供消息机制就必须与CSocketWnd交互。当你调用AfxSocketInit时，你的主线程会获
+ 得一个访问CSocketWnd的句柄，对CSocketWnd的访问是MFC自动帮你完成的，是被隐藏的。而你自己创建
+ 的子线程并不自动具备访问CSocketWnd的机制，所以子线程中需要访问CSocketWnd的操作都会失败。
+
+常看到的解决办法是给子线程传递SOCKET句柄而不是CSocket对象指针，然后在子线程中创建CSocket临时
+ 对象并Attach传入的句柄，用完后再Dettach并delete临时对象。俺没有这么干过，估计是因为Attach方法
+ 含有获取CSocketWnd句柄的内置功能。
+
+俺的解决方案还是使用自定义消息，比如俺不能在子线程中Close，那么，俺可以给主线程发送一条消息，
+ 让主线程的消息处理函数来完成Close，也很方便。
+
+CSocket一般配合多线程使用，只要你想收发数据，你就可以创建一个CSocket对象，并创建一个子线程来
+ 进行收发。所以被阻塞的只是子线程，而主线程总是可以随时创建子线程去帮它干活。由于可能同时有很
+ 多个CSocket对象在工作，所以你一般还要创建一个列表来储存这些CSocket对象的标识，这样你可能通过
+ 在列表中检索标识来区分各个CSocket对象，当然，由于内存地址的唯一性，对象指针本身就可以作为标识。
+
+
+ 相对CAsyncSocket而言，CSocket的运作流程更直观也更简单。
+四、技术内幕 
+       Socket有同步阻塞方式和异步非阻塞方式两种使用，事实上同步和异步在我们编程的生涯中可能遇到了很多，而Socket也没什么特别。虽然同步好用，不费劲，但不能满足一些应用场合，其效率也很低。
+       也许初涉编程的人不能理解“同步(或阻塞)”和“异步(或非阻塞)”，其实简单两句话就能讲清楚，同步和异步往往都是针对一个函数来说的，“同步”就是函数直到其要执行的功能全部完成时才返回，而“异步”则是，函数仅仅做一些简单的工作，然后马上返回，而它所要实现的功能留给别的线程或者函数去完成。例如，SendMessage就是“同步”函数，它不但发送消息到消息队列，还需要等待消息被执行完才返回；相反PostMessage就是个异步函数，它只管发送一个消息，而不管这个消息是否被处理，就马上返回。
+<一>、Socket API
+    首先应该知道，有Socket1.1提供的原始API函数，和Socket2.0提供的一组扩展函数，两套函数。这两套函数有重复，但是2.0提供的函数功能更强大，函数数量也更多。这两套函数可以灵活混用，分别包含在头文件Winsock.h，Winsock2.h，分别需要引入库wsock32.lib、Ws2_32.lib。
+1、默认用作同步阻塞方式，那就是当你从不调用WSAIoctl()和ioctlsocket()来改变Socket IO模式，也从不调用WSAAsyncSelect()和WSAEventSelect()来选择需要处理的Socket事件。正是由于函数accept()，WSAAccept()，connect()，WSAConnect()，send()，WSASend()，recv()，WSARecv()等函数被用作阻塞方式，所以可能你需要放在专门的线程里，这样以不影响主程序的运行和主窗口的刷新。
+2、如果作为异步用，那么程序主要就是要处理事件。它有两种处理事件的办法：
+    第一种，它常关联一个窗口，也就是异步Socket的事件将作为消息发往该窗口，这是由WinSock扩展规范里的一个函数WSAAsyncSelect()来实现和窗口关联。最终你只需要处理窗口消息，来收发数据。
+  第二种，用到了扩展规范里另一个关于事件的函数WSAEventSelect()，它是用事件对象的方式来处理Socket事件，也就是，你必须首先用WSACreateEvent()来创建一个事件对象，然后调用WSAEventSelect()来使得Socket的事件和这个事件对象关联。最终你将要在一个线程里用WSAWaitForMultipleEvents()来等待这个事件对象被触发。这个过程也稍显复杂。
+<二>、CAsyncSocket
+    看类名就知道，它是一个异步非阻塞Socket封装类，CAsyncSocket::Create()有一个参数指明了你想要处理哪些Socket事件，你关心的事件被指定以后，这个Socket默认就被用作了异步方式。CAsyncSocket是在UI线程中使用的，不需要多线程。那么CAsyncSocket内部到底是如何将事件交给你的呢？
+    CAsyncSocket的Create()函数，除了创建了一个SOCKET以外，还创建了个CSocketWnd窗口对象，并使用WSAAsyncSelect()将这个SOCKET与该窗口对象关联，以让该窗口对象处理来自Socket的事件(消息)，然而CSocketWnd收到Socket事件之后，只是简单地回调CAsyncSocket::OnReceive()，CAsyncSocket::OnSend()，CAsyncSocket::OnAccept()，CAsyncSocket::OnConnect()等虚函数。所以CAsyncSocket的派生类，只需要在这些虚函数里添加发送和接收的代码。
+  
+  简化后，大致的代码为：
+  bool CAsyncSocket::Create( long lEvent ) file://参数lEvent是指定你所关心的Socket事件
+  {
+   m_hSocket = socket( PF_INET, SOCK_STREAM, 0 ); file://创/建Socket本身
+
+   CSocketWnd* pSockWnd = new CSocketWnd; file://创建响应事件的窗口，实际的这个窗口在AfxSockInit()调用时就被创建了。
+   pSockWnd->Create(...);
+
+   WSAAsyncSelect( m_hSocket, pSockWnd->m_hWnd, WM_SOCKET_NOTIFY, lEvent ); file://Socket/事件和窗口关联
+  }
+  
+  static void PASCAL CAsyncSocket::DoCallBack(WPARAM wParam, LPARAM lParam)
+  {
+   CAsyncSocket Socket;
+   Socket.Attach( (SOCKET)wParam ); file://wParam/就是触发这个事件的Socket的句柄
+   int nErrorCode = WSAGETSELECTERROR(lParam); file://lParam/是错误码与事件码的合成
+   switch (WSAGETSELECTEVENT(lParam))
+   {
+   case FD_READ:
+    pSocket->OnReceive(nErrorCode);
+    break;
+   case FD_WRITE:
+    pSocket->OnSend(nErrorCode);
+    break;
+   case FD_OOB:
+    pSocket->OnOutOfBandData(nErrorCode);
+    break;
+   case FD_ACCEPT:
+    pSocket->OnAccept(nErrorCode);
+    break;
+   case FD_CONNECT:
+    pSocket->OnConnect(nErrorCode);
+    break;
+   case FD_CLOSE:
+    pSocket->OnClose(nErrorCode);
+    break;
+   }
+  }
+
+  CSocketWnd类大致为：
+
+  BEGIN_MESSAGE_MAP(CSocketWnd, CWnd)
+   ON_MESSAGE(WM_SOCKET_NOTIFY, OnSocketNotify)
+  END_MESSAGE_MAP()
+
+  LRESULT CSocketWnd::OnSocketNotify(WPARAM wParam, LPARAM lParam)
+  {
+   CAsyncSocket::DoCallBack( wParam, lParam ); file://收/到Socket事件消息，回调CAsyncSocket的DoCallBack()函数
+   return 0L;
+  }
+
+  然而，最不容易被初学Socket编程的人理解的，也是本文最要提醒的一点是，客户方在使用CAsyncSocket::Connect()时，往往返回一个WSAEWOULDBLOCK的错误(其它的某些函数调用也如此)，实际上这不应该算作一个错误，它是Socket提醒我们，由于你使用了非阻塞Socket方式，所以(连接)操作需要时间，不能瞬间建立。既然如此，我们可以等待呀，等它连接成功为止，于是许多程序员就在调用Connect()之后，Sleep(0)，然后不停地用WSAGetLastError()或者CAsyncSocket::GetLastError()查看Socket返回的错误，直到返回成功为止。这是一种错误的做法，断言，你不能达到预期目的。事实上，我们可以在Connect()调用之后等待CAsyncSocket::OnConnect()事件被触发，CAsyncSocket::OnConnect()是要表明Socket要么连接成功了，要么连接彻底失败了。至此，我们在CAsyncSocket::OnConnect()被调用之后就知道是否Socket连接成功了，还是失败了。
+  类似的，Send()如果返回WSAEWOULDBLOCK错误，我们在OnSend()处等待，Receive()如果返回WSAEWOULDBLOCK错误，我们在OnReceive()处等待，以此类推。
+  还有一点，也许是个难点，那就是在客户方调用Connect()连接服务方，那么服务方如何Accept()，以建立连接的问题。简单的做法就是在监听的Socket收到OnAccept()时，用一个新的CAsyncSocket对象去建立连接，例如：
+
+ void CMySocket::OnAccept( int ErrCode )
+ {
+       CMySocket* pSocket = new CMySocket;
+       Accept( *pSocket );
+ }
+    于是，上面的pSocket和客户方建立了连接，以后的通信就是这个pSocket对象去和客户方进行，而监听的Socket仍然继续在监听，一旦又有一个客户方要连接服务方，则上面的OnAccept()又会被调用一次。当然pSocket是和客户方通信的服务方，它不会触发OnAccept()事件，因为它不是监听Socket。
+
+<三>、CSocket
+   CSocket是MFC在CAsyncSocket基础上派生的一个同步阻塞Socket的封装类。它是如何又把CAsyncSocket变成同步的，而且还能响应同样的Socket事件呢？
+  其实很简单，CSocket在Connect()返回WSAEWOULDBLOCK错误时，不是在OnConnect()，OnReceive()这些事件终端函数里去等待。你先必须明白Socket事件是如何到达这些事件函数里的。这些事件处理函数是靠CSocketWnd窗口对象回调的，而窗口对象收到来自Socket的事件，又是靠线程消息队列分发过来的。总之，Socket事件首先是作为一个消息发给CSocketWnd窗口对象，这个消息肯定需要经过线程消息队列的分发，最终CSocketWnd窗口对象收到这些消息就调用相应的回调函数(OnConnect()等)。
+   所以，CSocket在调用Connect()之后，如果返回一个WSAEWOULDBLOCK错误时，它马上进入一个消息循环，就是从当前线程的消息队列里取关心的消息，如果取到了WM_PAINT消息，则刷新窗口，如果取到的是Socket发来的消息，则根据Socket是否有操作错误码，调用相应的回调函数(OnConnect()等)。
+  大致的简化代码为：
+
+  BOOL CSocket::Connect( ... )
+  {
+   if( !CAsyncSocket::Connect( ... ) )
+   {
+    if( WSAGetLastError() == WSAEWOULDBLOCK ) file://由/于异步操作需要时间，不能立即完成，所以Socket返回这个错误
+    {
+     file://进/入消息循环，以从线程消息队列里查看FD_CONNECT消息，直到收到FD_CONNECT消息，认为连接成功。
+     while( PumpMessages( FD_CONNECT ) );
+    }
+   }
+  }
+  BOOL CSocket::PumpMessages( UINT uEvent )
+  {
+      CWinThread* pThread = AfxGetThread();
+      while( bBlocking ) file://bBlocking/仅仅是一个标志，看用户是否取消对Connect()的调用
+      {
+          MSG msg;
+          if( PeekMessage( &msg, WM_SOCKET_NOTIFY ) )
+          {
+             if( msg.message == WM_SOCKET_NOTIFY && WSAGETSELECTEVENT(msg.lParam) == uStopFlag )
+             {
+                 CAsyncSocket::DoCallBack( msg.wParam, msg.lParam );
+                 return TRUE;
+             }     
+         }
+         else
+        {
+             OnMessagePending(); file://处/理消息队列里的其它消息
+             pThread->OnIdle(-1);
+        }
+     }
+  }
+  BOOL CSocket::OnMessagePending()
+  {
+      MSG msg;
+       if( PeekMessage( &msg, NULL, WM_PAINT, WM_PAINT, PM_REMOVE ) )
+       { file://这/里仅关心WM_PAINT消息，以处理阻塞期间的主窗口重画
+           ::DispatchMessage( &msg );
+           return FALSE;
+       }
+       return FALSE;
+  }
+
+   其它的CSocket函数，诸如Send()，Receive()，Accept()都在收到WSAEWOULDBLOCK错误时，进入PumpMessages()消息循环，这样一个原本异步的CAsyncSocket，到了派生类CSocket，就变成同步的了。
+  明白之后，我们可以对CSocket应用自如了。比如有些程序员将CSocket的操作放入一个线程，以实现多线程的异步Socket(通常，同步+多线程 相似于 异步 )。
+
+<四>、CSocketFile
+  另外，进行Socket编程，不能不提到CSocketFile类，其实它并不是用来在Socket双方发送文件的，而是将需要序列化的数据，比如一些结构体数据，传给对方，这样，程序的CDocument()的序列化函数就完全可以和CSocketFile联系起来。例如你有一个CMyDocument实现了Serialize()，你可以这样来将你的文档数据传给Socket的另一方：
+
+ CSocketFile file( pSocket );
+ CArchive ar( &file, CArchive::store );
+ pDocument->Serialize( ar );
+ ar.Close();
+
+  同样，接收一方可以只改变上面的代码为CArchive ar( &file, CArchive::load );即可。
+   注意到，CSocketFile类虽然从CFile派生，但它屏蔽掉了CFile::Open()等函数，而函数里仅扔出一个例外。那么也就是说，你不能调用CSocketFile的Open函数来打开一个实实在在的文件，否则会导致例外，如果你需要利用CSocketFile来传送文件，你必须提供CSocketFile类的这些函数的实现。
+  再一点，CArchive不支持在datagram的Socket连接上序列化数据.

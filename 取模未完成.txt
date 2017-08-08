@@ -1,0 +1,39 @@
+	////HZK16S	ËÎÌו
+	//
+	//CString tmp1,tmp2,cqh,cwh;
+	//tmp1=_T("ÎÒ");
+	//tmp2=gy.stringtoasc(tmp1);
+	////MessageBox(tmp2);/62 11   ce d2
+	//cqh=tmp2.Mid(0,2);
+	//cwh=tmp2.Mid(2,2);
+	//int iqh,iwh;
+	//iqh=_tcstoul(cqh,0,16);
+	//iwh=_tcstoul(cwh,0,16);
+	//iqh=0xce;
+	//iwh=0xd2;
+	//int offset;
+	//// offset = (     94*(unsigned int)(word[0]-0xa0-1)+   (word[1]-0xa0-1)   )*32;
+
+	//offset=(94*(iqh-0xa0-1)+(iwh-0xa0-1))*32;
+	////MessageBox(tmp2);
+	//CFile file(_T("hzk16s"),CFile::modeRead);
+	//file.Seek(offset,CFile::begin);
+	//char *pbuf; 
+	//pbuf=new char[33];
+	//file.Read(pbuf,32);
+	//
+	//file.Close();
+	//BYTE nei[32];
+	//for(int i=0;i<32;i++)
+	//{
+	//	nei[i]=pbuf[i];
+	//	
+	//}
+	//CString neimo(pbuf);
+	//char buffer[9];
+	//
+	//unsigned char qq=0x0f;
+	//_itoa(qq,buffer,2);
+
+	////neimo.Format(_T("%s"),pbuf);
+	//SetDlgItemText(IDC_EDIT3,neimo);

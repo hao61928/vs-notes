@@ -1,0 +1,35 @@
+问题：我在视图画的图象或者文字，当窗口改变后为什么不见了？OnDraw()和OnPaint()两个都是解决上面的问题，有什么不同？
+
+答：OnDraw()和OnPaint()好象兄弟俩，因为它们的工作类似。
+至于不见了的问题简单，因为当你的窗口改变后，会产生无效区域，这个无效的区域需要重画。一般Windows会发送两个消息WM_PAINT（通知客户区 有变化）和WM_NCPAINT（通知非客户区有变化）。非客户区的重画系统自己搞定了，而客户区的重画需要我们自己来完成。这就需要OnDraw()或 OnPaint()来重画窗口。
+
+OnDraw()和OnPaint()有什么区别呢？首先：我们先要明确CView类派生自CWnd类。而OnPaint()是CWnd的类成员，同时负责响应WM_PAINT消息。OnDraw()是CVIEW的成员函数，并且没有响应消息的功能。这就是为什么你用VC成的程序代码时，在视图类只有 OnDraw没有OnPaint的原因。
+
+其次，要想在屏幕上绘图或显示图形，首先需要建立设备环境DC。其实DC是一个数据结构，它包含输 出设备（不单指你17寸的纯屏显示器，还包括打印机之类的输出设备）的绘图属性的描述。MFC提供了CPaintDC类和CWindwoDC类来实时的响 应，而CPaintDC支持重画。
+
+当视图变得无效时（包括大小的改变，移动，被遮盖等等），Windows 将 WM_PAINT 消息发送给它。该视图的 OnPaint 处理函数通过创建 CPaintDC 类的DC对象来响应该消息并调用视图的 OnDraw 成员函数。通常我们不必编写重写的 OnPaint 处理成员函数。
+
+///CView默认的标准的重画函数
+void CView::OnPaint()
+{ 
+    CPaintDC dc(this);
+    OnPreparDC(&dc)；
+    OnDraw(&dc); //调用了OnDraw
+}
+
+
+既然OnPaint最后也要调用OnDraw,因此我们一般会在OnDraw函数中进行绘制。下面是一个典型的程序
+
+///视图中的绘图代码首先检索指向文档的指针，然后通过DC进行绘图调用。
+void CMyView::OnDraw( CDC* pDC )
+{ 
+    CMyDoc* pDoc = GetDocument(); 
+    CString s = pDoc->GetData(); // Returns a CString
+    CRect rect;
+    GetClientRect( &rect ); 
+    pDC->SetTextAlign( TA_BASELINE | TA_CENTER ); 
+    pDC->TextOut( rect.right / 2, rect.bottom / 2, s, s.GetLength() );
+}
+最后：现在大家明白这哥俩之间的关系了吧。因此我们一般用OnPaint维护窗口的客户区（例如我们的窗口客户区加一个背景图片），用OnDraw维护视图的客户区（例如我们通过鼠标在视图中画图）。当然你也可以不按照上面规律来，只要达到目的并且没有问题，怎么干都成。
+
+补充：我们还可以利用Invalidate(),ValidateRgn(),ValidateRect()函数强制的重画窗口

@@ -1,0 +1,13 @@
+PostMessage:把消息投放到线程的消息队列，不能消息被处理就立即返回
+SendMessage:消息被处理完后才返回
+
+
+几种发送消息的写法：
+   ::PostMessage(GetSafeHwnd(), WM_USER_THREADEND, 0, 0); //GetSafeHwnd()表示得到当前窗口句柄，所以这条语句是发送给当前窗口
+   GetParent()->PostMessage(WM_USER_THREADEND, 0, 0);//发送给父窗口 
+   this->PostMessage(WM_USER_THREADEND, 0, 0);//发送给当前窗口
+
+   HWND h= ::FindWindow(NULL, _T("窗口名字"));
+   ::PostMessage(h, WM_PARASET, 0, 0);//发送给任意窗口
+
+SendMessage也是同样的用法

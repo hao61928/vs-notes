@@ -1,0 +1,61 @@
+typedef struct tagConmunicationData
+{
+    //   COleDateTime oletime;
+    CString strRealError;
+    CString strtokeError;
+    CString strenerge;
+    CString strcomenerge;
+    long isdpluse;
+    long icompluse;
+    CString strpower;
+    CString strcompower;
+    CWnd* pWnd; 
+public:
+    bool operator == (const struct tagConmunicationData &inValue)const {
+        return strRealError == inValue.strRealError &&
+            strtokeError    == inValue.strtokeError&&
+            strenerge       == inValue.strenerge&&
+            strcomenerge    == inValue.strcomenerge&&
+            isdpluse        == inValue.isdpluse&&
+            icompluse       == inValue.icompluse&&
+            strpower        == inValue.strpower&&
+            strcompower     == inValue.strcompower&&
+            pWnd            == inValue.pWnd;
+    }
+}
+typedef struct tagConmunicationData
+{
+    //   COleDateTime oletime;
+    CString strRealError;
+    CString strtokeError;
+    CString strenerge;
+    CString strcomenerge;
+    long isdpluse;
+    long icompluse;
+    CString strpower;
+    CString strcompower;
+    CWnd* pWnd; 
+public:
+    bool operator == (const struct tagConmunicationData &inValue)const {
+        return strRealError == inValue.strRealError &&
+            strtokeError    == inValue.strtokeError&&
+            strenerge       == inValue.strenerge&&
+            strcomenerge    == inValue.strcomenerge&&
+            isdpluse        == inValue.isdpluse&&
+            icompluse       == inValue.icompluse&&
+            strpower        == inValue.strpower&&
+            strcompower     == inValue.strcompower&&
+            pWnd            == inValue.pWnd;
+    }
+    const struct tagConmunicationData & operator =(const struct tagConmunicationData &inValue) {
+            strRealError    = inValue.strRealError;
+            strtokeError    = inValue.strtokeError;
+            strenerge       = inValue.strenerge;
+            strcomenerge    = inValue.strcomenerge;
+            isdpluse        = inValue.isdpluse;
+            icompluse       = inValue.icompluse;
+            strpower        = inValue.strpower;
+            strcompower     = inValue.strcompower;
+            pWnd            = inValue.pWnd;
+            return *this;
+    }

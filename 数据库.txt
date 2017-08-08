@@ -1,0 +1,122 @@
+1.打开
+
+    CADODatabase database;
+    CString strConnection;
+    CString strError;
+    BOOL bResult;
+    
+    pDatabase = new CADODatabase();
+
+    strConnection.Format("Provider=OraOLEDB.Oracle;Data Source=%s;User Id=%s;Password=%s;",
+                            "datasource","user","pass");
+    pDatabase->SetConnectionString(strConnection);
+    bResult = pDatabase->Open();
+    
+    if (!bResult)
+    {
+        CString strError = "测试数据库服务器连接失败!错误原因:/r/n/r/n/r/n";
+        strError += database.GetLastErrorString();
+        cout <<strError.GetBuffer(0) << endl;
+    }else
+    {
+        cout << "connect ok" << endl;
+    }
+
+ 
+
+2.新加
+
+
+
+
+    CString strRecordID, strTruckID, strCoalMineID;
+
+    BOOL bRet;
+
+    CADORecordset *p_rs = new CADORecordset(pDatabase);
+
+
+    CString quryStr;
+    quryStr.Format("xc_Loadameter");
+
+    bRet = p_rs->Open((LPCTSTR)quryStr);
+
+    p_rs->AddNew();
+    p_rs->SetFieldValue("RECORDID",strRecordID);
+    p_rs->SetFieldValue("TRUCKID",strTruckID);
+    p_rs->SetFieldValue("COALMINEID",strCoalMineID);    
+
+    bRet = p_rs->Update();
+
+    p_rs->Close();
+    delete p_rs;
+
+
+3.更新
+
+
+
+
+    CADORecordset *p_rs = new CADORecordset(pDatabase);
+    CString quryStr;
+    quryStr.Format("select * from xc_Loadameter where FIRSTMESUREFLAG = 1");
+    p_rs->Open((LPCTSTR)quryStr);
+
+
+    if (p_rs->GetRecordCount() == 1)
+    {
+        p_rs->Edit();
+
+        double d = 3.1415926;
+        p_rs->SetFieldValue("FIRSTWEIGHT", d);
+        p_rs->Update();  //注意：在Update()前，记录指针必须位于记录起始位置 p_rs->MoveFirst(); 
+    }
+
+    p_rs->Close();
+    delete p_rs;
+
+ 
+
+4.遍历
+
+
+
+
+    CString strCoalNo;
+    BOOL bRet = FALSE;
+
+    CADORecordset *p_rs = new CADORecordset(pDatabase);
+    CString quryStr;
+    quryStr.Format( "SELECT * FROM xc_loadameter");
+    bRet = p_rs->Open((LPCTSTR)quryStr);
+    if (!bRet)
+    {
+        cout << "Open Error" << endl;
+    }
+
+    while (!p_rs->IsEof())
+    {
+        p_rs->GetFieldValue("COALMINEID", strCoalNo);
+        cout << strCoalNo << endl; 
+        p_rs->MoveNext();
+    }
+
+    p_rs->Close();
+    delete p_rs;
+
+ 
+
+5.删除
+
+
+
+
+  CString strCoalNo;
+  CADORecordset *p_rs = new CADORecordset(pDatabase);
+  CString quryStr;
+  quryStr.Format( "SELECT * FROM xc_loadameter");
+  p_rs->Open((LPCTSTR)quryStr);
+
+ p_rs->Delete();
+   p_rs->Close();
+  delete p_rs;

@@ -1,0 +1,43 @@
+手动 更改按钮大小	
+CRect hdr;
+	m_button1.GetWindowRect(hdr);
+	hdr.top=20;
+	hdr.bottom=40;
+	hdr.right=40;
+	hdr.left=20;
+	m_button1.MoveWindow(hdr);
+
+
+新建按钮 手动
+      CButton *m_pButton=new CButton();
+	m_pButton->Create(L"qsw", WS_CHILD|BS_DEFPUSHBUTTON|WS_VISIBLE, CRect(20, 120, 120, 140), this, 100);
+
+
+
+
+
+CRect recttmp;//GetDlgItem(IDC_BUTTON3)->GetDlgItem(IDC_BUTTON3)->
+	GetWindowRect(&recttmp);//GetWindowRgn
+	
+	rgn3.CreateRoundRectRgn(recttmp.left,recttmp.top,recttmp.right,recttmp.bottom,20,20); 
+	SetWindowRgn(rgn3,TRUE); 
+
+
+
+SetWindowPos()函数使用更灵活，多用于只修改控件位置而大小不变或只修改大小而位置不变的情况：
+BOOL SetWindowPos(const CWnd* pWndInsertAfter,int x,int y,int cx,int cy,UINT nFlags);
+第一个参数我不会用，一般设为NULL;
+x、y控件位置；cx、cy控件宽度和高度；
+nFlags常用取值：
+SWP_NOZORDER：忽略第一个参数；
+SWP_NOMOVE：忽略x、y，维持位置不变；
+SWP_NOSIZE：忽略cx、cy，维持大小不变；
+例：
+CWnd *pWnd;
+pWnd = GetDlgItem( IDC_BUTTON1 ); //获取控件指针，IDC_BUTTON1为控件ID号
+pWnd->SetWindowPos( NULL,50,80,0,0,SWP_NOZORDER | SWP_NOSIZE ); //把按钮移到窗口的(50,80)处
+pWnd = GetDlgItem( IDC_EDIT1 );
+pWnd->SetWindowPos( NULL,0,0,100,80,SWP_NOZORDER | SWP_NOMOVE ); //把编辑控件的大小设为(100,80)，位置不变
+pWnd = GetDlgItem( IDC_EDIT1 );
+pWnd->SetWindowPos( NULL,0,0,100,80,SWP_NOZORDER ); //编辑控件的大小和位置都改变
+以上方法也适用于各种窗口。

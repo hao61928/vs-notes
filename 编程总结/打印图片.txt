@@ -1,0 +1,121 @@
+void  CPhotoProcess::Test_print_short(CString &strname)
+{
+//	ShellExecute(NULL, "open", strname, NULL, NULL, SW_NORMAL); 
+//	return ;
+
+	HDC hdcPrint; 
+	CDC printDC;
+	CImage image;
+	image.Load(strname);
+	char szPrintName[256] = {0};
+	strcpy(szPrintName,m_cPrintName);
+//	strcpy(szPrintName, "\\\\192.168.0.11\\HP LaserJet 5000 Series");
+	hdcPrint  = CreateDC(NULL, szPrintName, NULL, NULL);
+	if(!printDC.Attach(hdcPrint))
+	{
+		outlog(OUTLOG_ERROR,"print","HP LaserJet 5000 Series is invalid.");
+		return ;
+	}
+	int dwImageWidth = image.GetWidth();//图片显示在显示器上的大小
+	int dwImageHeight = image.GetHeight();
+	outlog(OUTLOG_DETAIL,"print","Picture: x=%d,y=%d",dwImageWidth,dwImageHeight);
+
+	DOCINFO docinfo;
+	memset(&docinfo, 0, sizeof(docinfo));
+	docinfo.cbSize = sizeof(docinfo);
+	char *pszFilenam="image.bmp";
+	//	char *pszFilenam="image.png";
+	docinfo.lpszDocName = pszFilenam;
+	printDC.SetMapMode(MM_TEXT);
+
+	//	int nPrinterXDPI, nPrinterYDPI;
+	int nTotalPixelsY, nTotalPixelsX;
+	nTotalPixelsX = GetDeviceCaps(printDC.GetSafeHdc(),HORZRES);//打印机水平象素数
+	nTotalPixelsY = ::GetDeviceCaps(printDC.GetSafeHdc(),VERTRES);//打印机垂直象素数
+	//nPrinterXDPI = ::GetDeviceCaps(printDC.GetSafeHdc(),LOGPIXELSX);//打印机分辨率
+	//nPrinterYDPI = GetDeviceCaps(printDC.GetSafeHdc(),LOGPIXELSY);
+
+	int nRasterCaps = GetDeviceCaps(printDC.GetSafeHdc(), RASTERCAPS); 
+	if (nRasterCaps & RC_STRETCHBLT) 
+	{
+		outlog(OUTLOG_DETAIL,"print","Current print supplied StretchBlt.");
+	//	TRACE("\n \n");
+	}
+	else
+		outlog(OUTLOG_ERROR,"print","Current print does not supply StretchBlt.");
+
+	//	CSize paper_size = CSize(nTotalPixelsX,nTotalPixelsY);
+	//int xLogPPI = nPrinterXDPI;
+	//int yLogPPI = nPrinterYDPI;
+
+	//int paper_width = (int) ((double) paper_size.cx * (double) xLogPPI / 25.4);
+	//int paper_height = (int) ((double) paper_size.cy * (double) yLogPPI / 25.4);
+
+	int paper_width = nTotalPixelsX;
+	int paper_height = nTotalPixelsY;
+
+	/// 计算打印图片的大小宽高：nStartX nStartY nPicWidth nPicHeight
+	int nStartX,nStartY,nPicWidth,nPicHeight;
+	if (dwImageWidth > dwImageHeight)
+	{
+		nPicWidth = paper_width;
+		if (paper_width > dwImageWidth)
+		{
+			nPicHeight = dwImageHeight * paper_width / dwImageWidth;
+		}
+		else
+		{
+			nPicHeight = dwImageHeight * dwImageWidth / paper_width;
+		}
+	}
+	else
+	{
+		nPicHeight = paper_height;
+		if (paper_height > dwImageHeight)
+		{
+			nPicWidth = dwImageWidth * paper_height / dwImageHeight;
+		}
+		else
+		{
+			nPicWidth = dwImageWidth * dwImageHeight / paper_height;
+		}
+	}
+	nStartX = (paper_width - nPicWidth) / 2;
+	nStartY = (paper_height - nPicHeight) / 2;
+
+	nStartX = nStartX < 0 ? 0 : nStartX;
+	nStartY = nStartY < 0 ? 0 : nStartY;
+
+	int nRet = 0;
+
+	if(printDC.StartDoc(&docinfo) < 0)
+	{
+		outlog(OUTLOG_ERROR,"print","Printer wouldn't initalize.");
+	}
+	else
+		outlog(OUTLOG_DETAIL,"print","Printer initalized ok.");
+
+	nRet = printDC.StartPage();
+	if (nRet < 0)
+	{
+		outlog(OUTLOG_ERROR,"print","Could not start page.");
+		printDC.AbortDoc();
+	}
+	else
+	{
+		outlog(OUTLOG_DETAIL,"print","Printer Start Page ok.");
+
+		nRet = printDC.SetStretchBltMode(HALFTONE);
+		nRet = image.StretchBlt(printDC,nStartX,nStartY,nPicWidth,nPicHeight,0,0,dwImageWidth, dwImageHeight,SRCCOPY);
+		//=nPicWidth = 4748 ,nPicHeight = 3636
+		outlog(OUTLOG_DETAIL,"print","Stretch:nStartX=%d,nStartY=%d,nPicWidth=%d,nPicHeight=%d",nStartX,nStartY,nPicWidth,nPicHeight);
+		if (nRet)
+		{
+			nRet = 1;
+		}
+
+		nRet = printDC.EndPage();
+		nRet = printDC.EndDoc();
+	}
+
+}

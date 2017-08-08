@@ -1,0 +1,8 @@
+//将按钮修改为BS_OWNERDRAW风格,允许button的采用自绘模式
+     GetDlgItem(IDC_BUTTON1)->ModifyStyle(0,BS_OWNERDRAW,0);
+     //绑定控件IDC_BUTTON1与类CMyButton，响应重载函数DrawItem()
+     m_Btn.Attach(IDC_BUTTON1,this);
+     //设置Button Down的背景色，SetDownColor()和SetUpnColor()是CMyButton类中的析构函数
+    m_Btn.SetDownColor(RGB(255,255,0));
+     //设置Button Up的背景色
+	 m_Btn.SetUpColor(RGB(255,0,255));

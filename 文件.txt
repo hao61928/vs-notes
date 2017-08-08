@@ -1,0 +1,27 @@
+、、Unicode下 写入记事本
+CStdioFile file( _T("7.txt"),CFile::modeCreate| CFile::modeReadWrite);
+	
+	CStringW mm=_T("好的");
+	 CStringA utf8String(mm);
+     int nLen = utf8String.GetLength();
+	file.Write((LPCSTR)utf8String, nLen);
+
+	mm=_T("\n");
+	utf8String=mm;
+    nLen = utf8String.GetLength();
+	file.Write((LPCSTR)utf8String, nLen);
+
+	mm=_T("123456");
+	utf8String=mm;
+      nLen = utf8String.GetLength();
+	file.Write((LPCSTR)utf8String, nLen);
+
+
+	 file.Close();
+
+
+
+
+
+
+

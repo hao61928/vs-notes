@@ -1,0 +1,582 @@
+wb007993399
+
+
+v360  20058
+
+
+
+
+
+
+ select s.tsid as a ,frequency,modulate,symbol_rate from sig_48sendtable t,siop_10tsid s  
+ wt.ID2 = s.TSIDhere t.tabletype=3 and t.sendflag=1 and t.tsid=s.tsid and t.id1=0 and s.PROVIDERID=1"
+ 
+ 
+select s.tsid as a ,frequency,modulate,symbol_rate from sig_48sendtable t,siop_10tsid s 
+where t.tabletype=3 and t.sendflag=1 and t.id2 <>-1 and t.id1=0 and s.PROVIDERID=1
+
+select s.tsid as a ,frequency,modulate,symbol_rate from sig_48sendtable t,siop_10tsid s 
+where t.tabletype=3 and t.sendflag=1 and t.ID2 = s.TSID and t.id1=1
+
+
+select * from siop_06provider t,siop_04service s where s.providerid=t.providerid order by t.providerid
+
+
+select s.tsid as a ,frequency,modulate,symbol_rate from sig_48sendtable t,siop_10tsid s 
+where t.tabletype=3 and t.sendflag=1 and t.ID2 = s.TSID and t.id1 <>1
+
+select s.tsid as a ,frequency,modulate,symbol_rate from sig_48sendtable t,siop_10tsid s 
+where t.tabletype=3 and t.sendflag=1 and t.ID2 = s.TSID and t.id1 <>1
+
+select * from sig_48sendtable where sendflag=1 and tsid=1 and tabletype=4 and id2=-1
+
+
+select * from siop_04service s ,sig_48sendtable t 
+where t.tsid=1 and t.tabletype=4 and t.id1=2 and t.id2=s.serviceid and t.sendflag=1 and s.tsid=1  order by serviceid
+
+select * from siop_04service s ,sig_48sendtable t where s.tsid=1 and t.tabletype=2 and t.id2=-1.and t.id1=s.serviceid and t.sendflag=1 order by s.serviceid
+
+select * from sig_45senddescriptor where tsid=1 and tabletype=4 and id1=2 and sendflag=1 and id2=1001 order by descriptororder
+
+SELECT *
+FROM sig_45senddescriptor
+WHERE (TSID = 1) AND (TABLETYPE = 4) AND (ID1 = 2) AND (SENDFLAG = 1) AND 
+      (ID2 = 1001)
+ORDER BY descriptororder
+
+//sql server
+DECLARE @id int
+SET @id = 0 WHILE (@id <= 30) BEGIN
+          INSERT 
+        INTO SIOP_50EVENT(EVENTID, SERVICEID, EVENTTYPE, STARTTIME, DURATION, 
+              ACCESSDATE, STATUS)
+VALUES (@id, 1001, 0, DATEADD(ss, @id + 10, GETDATE()), 1000, GETDATE(), 2)
+SET @id = @id + 1 END
+
+//Insert test data.
+DECLARE @id int
+SET @id = 0 WHILE (@id <= 1000) BEGIN
+          INSERT 
+        INTO SIOP_50EVENT(EVENTID, SERVICEID, EVENTTYPE, STARTTIME, DURATION,ref_eventid 
+              ACCESSDATE, STATUS)
+VALUES (@id, 1001, 0, DATEADD(ss, @id * 1000, CONVERT(datetime, 
+      '2007-09-19 00:00:00')), 1000,0,GETDATE(), 2);
+       INSERT 
+        INTO SIOP_40EPGTEXT(EVENTID, LANGUAGE, EPGTITLE, SHORTDESC, 
+              LONGDESC, SYS_GENREID, SYS_SUB_GENREID, USR_GENREID, 
+              USR_SUB_GENREID)
+VALUES (@id, 'CHI', @id * 10, @id * 100 + 1, @id * 100 + 2, 1, 2, 3, 4)           
+SET @id = @id + 1 END
+
+
+DECLARE @id int
+SET @id = 0 WHILE (@id <= 1000) BEGIN
+          INSERT 
+        INTO SIOP_40EPGTEXT(EVENTID, LANGUAGE, EPGTITLE, SHORTDESC, 
+              LONGDESC, SYS_GENREID, SYS_SUB_GENREID, USR_GENREID, 
+              USR_SUB_GENREID)
+VALUES (@id, 'CHI', @id * 10, @id * 100 + 1, @id * 100 + 2, 1, 2, 3, 4)
+SET @id = @id + 1 END
+
+
+
+ 
+ //清除无效的数据：比当前时间小的数据
+SELECT *
+FROM SIOP_50EVENT t
+WHERE (STARTTIME <= CONVERT(datetime, '2007-09-08 13:56:56')) AND 
+      (STARTTIME >= CONVERT(datetime, '2007-09-08 11:16:56'))
+ORDER BY STARTTIME
+
+delete from SIOP_40EPGTEXT whe
+ 
+ // 7 天的节目；
+ SELECT t.EVENTID, x.EPGTITLE, t.SERVICEID, t.STARTTIME, t.DURATION, x.SHORTDESC, 
+      x.LONGDESC, x.[LANGUAGE]
+FROM SIOP_50EVENT t INNER JOIN
+      SIOP_40EPGTEXT x ON t.EVENTID = x.EVENTID
+WHERE (t.STARTTIME >= CONVERT(datetime, '2007-09-08 00:00:00')) AND 
+      (t.SERVICEID = 1001) AND (t.STARTTIME < CONVERT(datetime, '2007-09-08 00:00:00') 
+      + 7)
+ORDER BY t.STARTTIME
+ 
+   Q43.怎样取得数据库服务器当前日期、时间？
+   
+   A. SELECT SYSDATE FROM DUAL;
+   
+   SELECT TO_CHAR(SYSDATE, 'YYYY-MM-DD HH:MI:SS') FROM DUAL;
+   
+   Q44.怎样将字符串转换为日期、时间格式？
+   
+   A. SELECT TO_DATE('2002-11-27', 'YYYY-MM-DD') FROM DUAL;
+   
+   SELECT TO_DATE('2002-11-27 09:28:55', 'YYYY-MM-DD HH:MI:SS') FROM DUAL;
+   
+   Q45.常用日期函数有哪些？
+    
+
+
+SELECT *
+FROM SIOP_50EVENT t INNER JOIN
+      SIOP_40EPGTEXT s ON t.EVENTID = s.EVENTID
+WHERE (t.STARTTIME <= CONVERT(datetime, '2007-09-07 19:30:38')) AND (DATEADD(ss, 
+      t.DURATION, t.STARTTIME) > CONVERT(datetime, '2007-09-07 19:30:38'))
+
+
+
+select * from siop_50event t ,siop_40epgtext s where (t.starttime <= CONVERT(datetime, '2007-09-07 18:05:17')) and (DATEADD(ss,t.DURATION,t.STARTTIME) >CONVERT(datetime,'2007-09-07 18:05:17')) and (s.eventid=t.eventid)
+
+
+select * from siop_50event t ,siop_40epgtext x where t.starttime = 
+(select min(s.starttime) from siop_50event s where s.starttime> CONVERT(datetime,'2007-09-08 11:49:00')) 
+and t.eventid=x.eventid
+
+
+
+select * from siop_50event t ,siop_40epgtext x where t.starttime = (select min(s.starttime) from siop_50event s where s.starttime> CONVERT(datetime,'2007-09-08 12:31:58')) and t.eventid=x.eventid
+
+
+
+select * from siop_50event t ,siop_40epgtext s where (t.starttime <= CONVERT(datetime, '2007-09-08 12:06:56')) and (DATEADD(ss,t.DURATION,t.STARTTIME) >CONVERT(datetime,'2007-09-08 12:06:56')) and (s.eventid=t.eventid)
+
+
+select * from siop_50event t ,siop_40epgtext x where t.starttime = (select min(s.starttime) from siop_50event s where s.starttime> CONVERT(datetime,'2007-09-08 12:37:57') AND t.serviceid = s.serviceid) and t.eventid=x.eventid
+
+select t.eventid,x.epgtitle,t.serviceid,t.starttime,t.duration,x.shortdesc,x.longdesc,  t.ref_eventid,x.language from siop_50event t ,siop_40epgtext x	where t.serviceid=1001 		and t.starttime>=CONVERT(datetime,'2007-09-08 00:00:00')		and t.starttime <CONVERT(datetime,'2007-09-08 00:00:00')+7 		and t.eventid=x.eventid		order by t.starttime asc
+
+
+select t.eventid,x.epgtitle,t.serviceid,t.starttime,t.duration,x.shortdesc,x.longdesc,  t.ref_eventid,x.language from siop_50event t ,siop_40epgtext x	where t.serviceid=1001 		and t.starttime>=CONVERT(datetime,'2007-09-08 00:00:00')		and t.starttime <CONVERT(datetime,'2007-09-08 00:00:00')+7 		and t.eventid=x.eventid		order by t.starttime asc
+
+
+UPDATE SIOP_40EPGTEXT
+SET SHORTDESC = 'SHORTDESC : 准视频点播（NVOD）业务之外，当前/后续表中只包含在现行传输流或其他传输流中指定业务的当前事件和按时间.'
+WHERE (EVENTID > 0)
+
+UPDATE SIOP_40EPGTEXT
+SET LONGDESC = 'LONGDESC : NVOD参考描述符（见表62）给出了一个组成NVOD业务的业务列表。每个业务也可以在适当的业务描述表SDT子表中通过一个时移业务描述符（参见6.2.35）进行描述。时移业务描述符通过一个参考业务标识符reference_service_id与一个时移业务相关联.'
+WHERE (EVENTID > 0)
+
+
+UPDATE SIOP_50EVENT
+SET STARTTIME = STARTTIME - 20
+WHERE (SERVICEID = 201)
+
+
+SELECT *
+FROM SIOP_50EVENT
+WHERE (SERVICEID = 201)
+ORDER BY STARTTIME
+
+
+SELECT *
+FROM SIOP_50EVENT
+ORDER BY STARTTIME
+
+UPDATE SIOP_50EVENT
+SET STARTTIME = STARTTIME + 11
+WHERE (SERVICEID > 0)
+
+
+
+DECLARE @id int
+SET @id = 23 WHILE (@id <= 100) BEGIN
+          INSERT 
+        INTO SIOP_10tsid(tsid, providerid, frequency, modulate, symbol_rate, tsname)
+VALUES (@id, 1, @id * 10, 3, @id * 10 + 2, 'tsname')
+SET @id = @id + 1 END
+
+
+
+DECLARE @id int
+SET @id = 2003 WHILE (@id <= 2050) BEGIN
+          INSERT 
+        INTO SIOP_04SERVICE(SERVICEID, TSID, PROVIDERID, SERVICE_NAME, 
+              SERVICETYPE, PMTPID, PCRPID)
+VALUES (@id, @id - 2000, 1, 'servicename' + cast(@id as varchar), 1, 1001 + @id - 2000, 
+      1002 + @id - 2000)
+SET @id = @id + 1 END
+
+DECLARE @id int
+SET @id = 4 WHILE (@id <= 50) BEGIN
+          INSERT 
+        INTO SIg_48sendtable(TSID, tabletype, id1, ID2, sendflag)
+VALUES (@id, 2, 2000 + @id, - 1, 1)
+SET @id = @id + 1 END
+
+
+
+
+SELECT *
+FROM sig_45senddescriptor
+
+DECLARE @id int
+SET @id = 4 WHILE (@id <= 50) BEGIN
+          INSERT 
+        INTO sig_45senddescriptor(TSID, tabletype, id1, ID2, DESCRIPTORTAG,sendflag)
+VALUES (@id, 4, 2000 + @id, - 1, 1)
+SET @id = @id + 1 END
+
+
+//These sentence will check whether the database includes invalid records.  
+select *  from SIOP_40EPGTEXT
+where eventid not in (select eventid from SIOP_50EVENT)
+
+select * from SIOP_50EVENT
+where eventid not in (select eventid from SIOP_40EPGTEXT)
+
+
+DECLARE @id int
+SET @id = 4000 WHILE (@id <= 6000) BEGIN
+          INSERT 
+        INTO SIOP_50EVENT(EVENTID, SERVICEID, EVENTTYPE, STARTTIME, DURATION, 
+              ACCESSDATE, STATUS)
+VALUES (@id, 1901, 0, DATEADD(ss, (@id-4000)*1000, CONVERT(datetime, 
+      '2007-10-23 00:00:00')), 1000, GETDATE(), 2);         
+SET @id = @id + 1 END
+
+-----------
+-----------------------------------------------------------------------------------
+插入Nvod的数据: 19 
+declare @id int
+set @id=18366
+
+INSERT INTO SIOP_50EVENT(EVENTID, SERVICEID, EVENTTYPE, STARTTIME, DURATION,ACCESSDATE, STATUS)
+VALUES (@id, 19, 0, '2007-10-25 00:00:00', 172800, GETDATE(), 2);         
+
+INSERT INTO SIOP_40EPGTEXT(EVENTID, LANGUAGE, EPGTITLE, SHORTDESC, LONGDESC, SYS_GENREID, SYS_SUB_GENREID, USR_GENREID,USR_SUB_GENREID)
+VALUES (@id, 'CHI', 'X特警', 'shortX特警',  'ExtendX特警', 1, 2, 3, 4)
+
+
+ select * from  dbo.SIOP_50EVENT where
+eventid=18366
+
+ select * from  dbo.SIOP_40EPGTEXT where
+eventid=18366
+----------
+DECLARE @id int
+SET @id = 31001 WHILE (@id <= 31346) BEGIN
+          INSERT 
+        INTO SIOP_50EVENT(EVENTID, SERVICEID, EVENTTYPE, STARTTIME, DURATION,ref_eventid, 
+              ACCESSDATE, STATUS)
+VALUES (@id, 1802, 0, DATEADD(ss, (@id-31000)*1060, CONVERT(datetime, 
+      '2007-11-16 00:00:00')), 1060,27809, GETDATE(), 2);         
+SET @id = @id + 1 END
+
+
+DECLARE @id int
+SET @id = 30001 WHILE (@id <= 30346) BEGIN
+          INSERT 
+        INTO SIOP_50EVENT(EVENTID, SERVICEID, EVENTTYPE, STARTTIME, DURATION,ref_eventid, 
+              ACCESSDATE, STATUS)
+VALUES (@id, 1801, 0, DATEADD(ss, (@id-31000)*1030, CONVERT(datetime, 
+      '2007-11-16 00:00:00')), 1030,27619, GETDATE(), 2);         
+SET @id = @id + 1 END
+
+
+DECLARE @id int
+SET @id = 31001 WHILE (@id <= 31346) BEGIN
+INSERT INTO SIOP_40EPGTEXT(EVENTID, LANGUAGE, EPGTITLE, SHORTDESC, LONGDESC, SYS_GENREID, SYS_SUB_GENREID, USR_GENREID,USR_SUB_GENREID)
+VALUES (@id, 'CHI', 'X', 'short',  'Extend', 1, 2, 3, 4)
+SET @id = @id + 1 END
+-----------
+
+UPDATE SIOP_50EVENT
+SET STARTTIME=STARTTIME -2
+WHERE serviceid=1901 or serviceid=1902 or serviceid=1903  or serviceid=19
+ORDER BY STARTTIME
+
+select * from dbo.SIOP_40EPGTEXT t,SIOP_50EVENT s
+where t.eventid=s.eventid and s.SERVICEID=19
+
+ select * from dbo.SIOP_40EPGTEXT t,SIOP_50EVENT s
+where t.eventid=s.eventid and s.SERVICEID=18
+
+
+SELECT *
+FROM SIOP_40EPGTEXT
+WHERE (EVENTID = 17619) OR
+      (EVENTID = 17809)
+      
+      
+      
+      SELECT *
+FROM SIOP_50EVENT
+WHERE (SERVICEID = 1901) OR
+      (SERVICEID = 1902) OR
+      (SERVICEID = 1903) OR
+      (SERVICEID = 19)
+ORDER BY STARTTIME
+
+
+
+select * from SIOP_40EPGTEXT
+where EPGTITLE ='360ff'
+
+update SIOP_40EPGTEXT
+set EPGTITLE ='360ff'
+where EPGTITLE ='360'
+
+update dbo.SIOP_50EVENT 
+set starttime=DATEADD(ss, 500,starttime)
+
+17809	水世界 诚海	CHI	short水世界	Extend水世界	1
+18170	巴黎之恋.mpg	CHI	short巴黎之恋.mpg	Extend巴黎之恋.mpg	1
+18366	X特警	CHI	shortX特警	ExtendX特警	1
+
+
+SELECT *
+FROM sig_48sendtable
+WHERE (TSID = 19) AND (TABLETYPE = 4) AND (SENDFLAG = 1)
+ORDER BY DESCRIPTORTAG
+
+
+1907	数字电视,	eventid =4100 
+1908						eventid =5100 
+
+
+1909	音频广播,	eventid =6100 
+1910						eventid =7100 
+
+
+
+select * from dbo.SIOP_40EPGTEXT
+where eventid in (select eventid from dbo.SIOP_50EVENT where serviceid=1908)
+
+
+DECLARE @id int
+SET @id = 1910
+
+select * from dbo.SIOP_40EPGTEXT
+where eventid in (select eventid from dbo.SIOP_50EVENT where serviceid=@id)
+
+
+select * from dbo.SIOP_04SERVICE
+where serviceid=@id
+
+DECLARE @id int
+SET @id = 1910
+update dbo.SIOP_40EPGTEXT
+set SHORTDESC=SHORTDESC+ 'SHORTDESC 白金音乐_诚海 ',LONGDESC = LONGDESC+'LONGDESC 白金音乐_诚海'
+where eventid in (select eventid from dbo.SIOP_50EVENT where serviceid=@id)
+
+update uc
+set (uc.colname, uc.width, uc.position, uc.enable, uc.intisnull) =
+(
+    select
+    dc.colname, dc.width, dc.position, uc.sysenable, uc.sysisnull
+    from dc,ue
+    where
+    uc.attid = dc.attid
+    and uc.objid = ue.id
+    and ue.userid = 'ada'
+)
+select len(SHORTDESC) as lll,SHORTDESC  from dbo.SIOP_50EVENT
+where SYS_GENREID!=1 and len(SHORTDESC)=0
+order by lll,serviceid,starttime
+
+//从一个表里面读取一个记录,然后插入另一个表里面,用游标的技术,感谢kong zhe的提供.
+
+DECLARE @tsidvalue int
+DECLARE @id int
+SET @tsidvalue = 20
+Declare cur_select Cursor Local For
+    Select SERVICEID From SIOP_04SERVICE where TSID = @tsidvalue order by SERVICEID
+    For Read Only
+
+Open cur_select
+Fetch Next
+    From cur_select
+    Into @id
+While ( @@Fetch_Status = 0 ) Begin
+    INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)
+VALUES (@tsidvalue,2,@id,-1,0)
+    Fetch Next
+        From cur_select
+        Into @id
+End
+Close cur_select
+Deallocate cur_select
+
+
+// 增加游标的事情.
+
+DECLARE @tsidvalue int
+DECLARE @id int
+SET @tsidvalue = -1
+Declare cur_select Cursor Local For
+    Select TSID From dbo.SIOP_10TSID order by TSID
+    For Read Only
+
+Open cur_select
+
+Fetch Next
+    From cur_select
+    Into @id
+
+While ( @@Fetch_Status = 0 ) 
+	
+Begin
+
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,-1,-1,-1,0)
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,0,-1,-1,0)   
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,1,-1,-1,0)
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,2,-1,-1,0)   
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,3,-1,-1,0)   
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,3,0,-1,0)  
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,3,1,-1,0)  
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,4,-1,-1,0)
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,4,2,-1,0)  
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,4,3,-1,0)  
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,5,-1,-1,0)   
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,5,4,-1,0) 
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,5,5,-1,0) 
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,5,6,-1,0) 
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,5,7,-1,0) 
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,6,-1,-1,0)
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,7,-1,-1,0)   
+	INSERT INTO sig_48sendtable(TSID,TABLETYPE,ID1,ID2,sendflag)VALUES (@id,8,-1,-1,0) 
+
+    Fetch Next
+        From cur_select
+        Into @id
+End
+
+Close cur_select
+Deallocate cur_select
+
+
+
+DECLARE @tsidvalue int
+DECLARE @id int
+SET @tsidvalue = 0
+Declare cur_select Cursor Local For
+    Select TSID From dbo.SIOP_10TSID where nit_id =2 order by TSID
+    For Read Only
+
+Open cur_select
+
+Fetch Next
+    From cur_select
+    Into @id
+
+While ( @@Fetch_Status = 0 ) 	
+Begin
+	INSERT INTO SIOP_10TSID(TSID,NIT_id,FREQUENCY,MODULATE,SYMBOL_RATE,Original_networkID)	VALUES (@id,1,(@tsidvalue + 300),3,6875,1)	 
+--	INSERT INTO SIOP_10TSID(TSID,NIT_id,FREQUENCY,MODULATE,SYMBOL_RATE,Original_networkID)	VALUES (@id,3,(@tsidvalue + 700),3,6875,1)	 
+--	INSERT INTO SIOP_10TSID(TSID,NIT_id,FREQUENCY,MODULATE,SYMBOL_RATE,Original_networkID)	VALUES (@id,4,(@tsidvalue + 900),3,6875,1)	 
+	set @tsidvalue = @tsidvalue + 8
+    Fetch Next
+        From cur_select
+        Into @id
+
+End
+Close cur_select
+Deallocate cur_select
+
+
+Some select world in TsPacket project.
+ 	Current program of all services in current time
+		 select * from siop_50event t ,siop_40epgtext s where (t.starttime <= CONVERT(datetime, '%s')) and (DATEADD(ss,t.DURATION,t.STARTTIME) >CONVERT(datetime,'%s')) and (s.eventid=t.eventid) order by serviceid",strDate,strDate);
+
+//Schedule : 
+select Event_ID,epgtitle,serviceid,starttime,duration,shortdesc,longdesc,ref_eventid,language,
+SYS_GENREID,SYS_SUB_GENREID,USR_GENREID,USR_SUB_GENREID,country_code,rating 
+from siop_50event 
+where serviceid=1907 	
+and starttime>='2008-02-01 13:00:00'	
+and starttime <'2008-02-03 01:00:00'		
+order by starttime asc
+
+insert:
+
+INSERT INTO siop_50event(Event_ID,SERVICEID,STARTTIME,DURATION,ref_eventid,EPGTITLE,SHORTDESC,LANGUAGE,ACCESSDATE,EVENTTYPE,STATUS,ProgramIndex,
+,LONGDESC)
+values(77777,1907,'2008-02-01 13:00:00',200,0,'epgtitle 77777','77777SHORTDESC','chi','2008-02-01',0,1,1,'77777LONGDESC')
+
+
+
+select * from dbo.SIOP_50EVENT
+order by ACCESSDATE desc
+
+delete SIOP_50EVENT
+where ACCESSDATE > '2008-04-01'
+
+Insert Into dbo.SIOP_50EVENT Select Event_ID+1000 As Event_ID,SERVICEID,STARTTIME+7 As STARTTIME,DURATION,
+ref_eventid,EPGTITLE,SHORTDESC,LANGUAGE,ACCESSDATE,EVENTTYPE,STATUS,ProgramIndex,LONGDESC,SYS_GENREID,SYS_SUB_GENREID,
+USR_GENREID,USR_SUB_GENREID,country_code,rating,SendFlag,FreeCAMode
+From dbo.SIOP_50EVENT Where SERVICEID=1910 
+
+select t.fk_channelindatainfo from eventinfo t
+group by t.fk_channelindatainfo
+
+
+select %s from %s where upper(%s)=upper('%s') "),
+
+delete Table.name where lower() = lower('')
+
+select * from eventinfo t
+where t.start_time <'20081105110000' 
+order by t.start_time
+
+select * from short_event t where event_name like '%...'
+
+select count(*) from eventinfo t
+select max(start_time) from eventinfo t
+
+select * from eventinfo
+select * from eventinfo_tmp
+select * from extended_event_desc
+select * from extended_event_desc_tmp
+select * from short_event_desc
+select * from short_event_desc_tmp
+
+truncate table short_event_desc
+truncate table short_event_desc_tmp
+truncate table extended_event_desc
+truncate table extended_event_desc_tmp
+truncate table eventinfo
+truncate table eventinfo_tmp
+
+目前,我手头虽然有很多的分析工具,但是自身对宏块不立即,无法把数据变为yuv,然后转为rgb,不过,如果是ts,pic,或者slice层的错误,那我是熟悉的.
+
+
+
+项目组用i.mx27+linux做标清的编码器，但现在还有一个问题没有解决，
+编码生成的ts流经过机顶盒在电视机上播出后，马赛克偏多（另一个型号的编码器经过同样的机顶盒就不存在这样的问题）
+，并且仔细观察发现会视频有一点点的停顿和卡，在看上翻字幕是比较明显。初步估计是应用层在封装复用成ts流时可能有问题所致
+，项目组高手离开了，现在只有几个新人，
+针对这个问题没有办法。看你有没有兴趣和时间，我们可以聊聊。
+
+select unique t1.Obj_ID, t1.file_name, t1.file_size, t1.duration, 
+t5.server_name,t5.obj_id broadcastServer_ID,vs.server_name vs_name,
+vs.obj_id vs_id from VPP_Item_Info t1, 
+Schedule_Info t2, channel_map t3, physical_channel_info t4,
+port p,export e, video_server_info vs,
+broadcast_server_info t5 
+where t2.fk_vpp_item_info = t1.obj_id and t2.start_date > to_date('2009-06-24 00:00:00',
+'yyyy-mm-dd HH24:MI:SS') and t2.end_date < to_date('2009-06-24 23:00:00', 'yyyy-mm-dd HH24:MI:SS') 
+and t3.fk_logical_channel_info = t2.fk_logical_channel_info and t3.fk_physical_channel_info = t4.obj_id and 
+t4.fk_port = p.obj_id and p.fk_export=e.obj_id and e.fk_broadcast_server_info=t5.obj_id and
+ p.fk_export=vs.fk_export
+
+
+
+create or replace view current_play_item_v as
+select ch.name channelName,ch.status ChannelStatus,co.name contentName,
+sc.start_date,sc.actual_start_date ,nowdate.cdate CurrentDate
+ from channel ch,schedule sc,broadcast br,content co,(select   sysdate cdate   from   dual) nowDate
+ where br.schedule_id=sc.id and ch.id=br.channel_id and br.content_id=co.id 
+ and sc.start_date <=nowdate.cdate and sc.stop_date > nowdate.cdate
+ order by ch.id
+
+           
+--
+--delete  from broadcast t where t.create_datetime < to_date('2010-01-20','yyyy-mm-dd')
+--delete  from schedule t where t.create_datetime < to_date('2010-01-20','yyyy-mm-dd')
+delete  from content t where t.creation_datetime < to_date('2010-1-20','yyyy-mm-dd')
+
+
+---for qvs db.
+select * from schedule t --where t.start_date>'2010-08-19 13:10:10'
+where t.start_date > to_date('2010-08-27 13:33:10','yyyy-mm-dd HH24:MI:SS')
+order by t.start_date

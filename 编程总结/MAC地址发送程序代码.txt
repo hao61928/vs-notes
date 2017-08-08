@@ -1,0 +1,206 @@
+//注意头文件的顺序    刘迎迎  2013-1-18
+#include "stdafx.h"
+#define HAVE_REMOTE
+#include <pcap.h>
+#include<iostream>
+#include<stdio.h > 
+#include <windows.h>
+//获取MAC地址的头文件
+#include <iphlpapi.h>   
+#pragma comment(lib,"iphlpapi.lib")  
+
+
+//新添加 刘迎迎 2013-1-21
+//比较两个字符串是否相等
+//返回   0 -  不相等
+//      1 -  相等
+BYTE CMPN( BYTE *p1, BYTE *p2, WORD len )
+{
+   while( len )
+   {
+      if( *p1++ != *p2++ ) return 0;
+      len--;
+   }
+
+   return 1;
+
+}
+
+
+void GetMacAddress(BYTE macAddress[], BYTE length)
+{
+    //从交互界面输入目的MAC地址信息
+	//获取本地mac地址函数 刘迎迎  2013-1-21
+	IP_ADAPTER_INFO adapterMac[5];  //Maximum 5 adapters    
+	DWORD buflen=sizeof(adapterMac);    
+	DWORD status=GetAdaptersInfo(adapterMac,&buflen); 
+	//定义mac地址数组，前6个为本机，后6个为源地址
+    //macAddress = macAddress[length];
+	BYTE i;
+	//macAddress=(BYTE *)malloc(sizeof(BYTE)*12);
+	//数组初始化
+	for(i=0; i<length; i++)
+	{
+		macAddress[i] = 0x01;
+	}
+	if(status==ERROR_SUCCESS)  
+	{     
+			PIP_ADAPTER_INFO painfo=adapterMac;   
+			//复制本机地址到本机地址数组
+			memcpy(&macAddress[0], painfo->Address, 6);   
+			printf( "Local MAC Address: %02X:%02X:%02X:%02X:%02X:%02X\n",macAddress[0],macAddress[1],macAddress[2],macAddress[3],macAddress[4],macAddress[5]); 
+			printf( "Please enter the Ether MAC address!\n");
+			scanf_s( "%02X:%02X:%02X:%02X:%02X:%02X", &macAddress[6], &macAddress[7], &macAddress[8], &macAddress[9], &macAddress[10], &macAddress[11]);
+			printf( "Enter the Ether MAC address is: %02X:%02X:%02X:%02X:%02X:%02X \n", macAddress[6], macAddress[7], macAddress[8], macAddress[9], macAddress[10], macAddress[11]);
+			Sleep(1000);
+			printf("\n");
+	}
+	else
+	{
+		printf("Get MAC Address failture!");
+	}
+	
+} 
+
+
+//发送程序 发送数据封包
+void SendPacket(u_char *p, u_int length)
+{
+	int i,packetDataLength;
+    pcap_if_t * allAdapters;//适配器列表
+    pcap_if_t * adapter;
+    pcap_t           * adapterHandle;//适配器句柄
+    u_char         packet[1500]; //待发送的数据封包
+    char errorBuffer[ PCAP_ERRBUF_SIZE ];//错误信息缓冲区
+	BYTE MacAddress[12];
+	BYTE startAddress[8];
+	BYTE endAddress[8];
+
+	
+	//获取适配器列表   修改 刘迎迎 2013-1-24
+    if( pcap_findalldevs_ex( PCAP_SRC_IF_STRING, NULL, 
+                &allAdapters, errorBuffer ) == -1 )
+    {
+		//检索机器连接的所有网络适配器
+        fprintf( stderr, "Error in pcap_findalldevs_ex function: %s\n", errorBuffer );
+        //return -1;
+    }
+    if( allAdapters == NULL )
+    {
+		//不存在人任何适配器
+        printf( "\nNo adapters found! Make sure WinPcap is installed.\n" );
+        //return 0;
+    }
+    int crtAdapter = 0;
+    for( adapter = allAdapters; adapter != NULL; adapter = adapter->next)
+    {
+		//遍历输入适配器信息(名称和描述信息)
+        printf( "\n%d.%s \n", ++crtAdapter, adapter->name );
+        printf( "-- %s\n", adapter->description );
+    }
+    printf( "\n" );	
+	/*-------------------------------------修改为只通过一个网卡进行通信 刘迎迎 2013-1-21-----------------------------*/
+    //printf( "\n" );
+    ////选择适配器
+    //int adapterNumber;
+    //printf( "Enter the adapter number between 1 and %d:", crtAdapter );
+    //scanf_s( "%d", &adapterNumber );
+    //if( adapterNumber < 1 || adapterNumber > crtAdapter )
+    //{
+    //    printf( "\nAdapter number out of range.\n" );
+    //    // 释放适配器列表
+    //    pcap_freealldevs( allAdapters );
+    //    //return -1;
+    //}
+    //adapter = allAdapters;
+    //for( crtAdapter = 0; crtAdapter < adapterNumber - 1; crtAdapter++ )
+    //adapter = adapter->next;
+	/*------------------------------------------------------------------------------------------------------------*/
+	//移动了位置 刘迎迎 2013-1-21
+	//获取mac地址
+	GetMacAddress(MacAddress, 12);
+	for(i=0; i<6; i++)
+	{	
+		startAddress[i] = MacAddress[i];		
+		endAddress[i] = MacAddress[i + 6];
+	}
+	adapter = allAdapters;
+    // 打开指定适配器
+    adapterHandle = pcap_open( adapter->name, // name of the adapter
+                               65536,         // portion of the packet to capture
+                                              // 65536 guarantees that the whole 
+                               // packet will be captured
+                               //PCAP_OPENFLAG_PROMISCUOUS, // promiscuous mode
+							    0,              //修改为不接收自己发送的模式  刘迎迎 2013-1-18 
+                               1000,             // read timeout - 1 millisecond
+                               NULL,          // authentication on the remote machine
+                               errorBuffer    // error buffer
+                              );
+    if( adapterHandle == NULL )
+    {
+		//指定适配器打开失败
+        fprintf( stderr, "\nUnable to open the adapter\n", adapter->name );
+        // 释放适配器列表
+        pcap_freealldevs( allAdapters );
+        //return -1;
+    }
+    pcap_freealldevs( allAdapters );//释放适配器列表
+	//拷贝所有数据到包发送数组
+    // 创建数据封包
+	// 设置目标的MAC地址为01 : 01 : 01 : 01 : 01 : 01
+   /* packet[0] = 0x01;
+    packet[1] = 0x01;
+    packet[2] = 0x01;
+    packet[3] = 0x01;
+    packet[4] = 0x01;
+    packet[5] = 0x01;*/
+    // 设置源的MAC地址为02 : 02 : 02 : 02 : 02 : 02
+    /*packet[6]  = 0x02;
+    packet[7]  = 0x02;
+    packet[8]  = 0x02;
+    packet[9]  = 0x02;
+    packet[10] = 0x02;
+    packet[11] = 0x02;*/
+	//设置封包其他部分内容
+	for(i = 0; i < length; i++)
+	{
+		packet[i] = *p++;
+	}
+	//-------------------------目的地址  源地址 顺序搞反了 所以 一直通信失败------------------------------------------------//
+	//设置包中的mac地址
+	memcpy(&packet[0],endAddress,6); 
+	memcpy(&packet[6],startAddress,6);
+       //发送数据程序段
+	
+		//发送数据封包
+		if( pcap_sendpacket( adapterHandle, // the adapter handle
+				 packet, // the packet
+				 length      // the length of the packet
+				   ) != 0 )
+		{
+			fprintf( stderr,"\nError sending the packet: \n", pcap_geterr( adapterHandle ) );
+			//return -1;
+		}
+		else
+		{
+			packetDataLength = length;
+			printf("Send data number: %d \n", packetDataLength);
+			printf("Send data is:\n");
+			for( i=0; i<packetDataLength; i++)
+			{
+				printf(" %02X", packet[i]);
+			}
+		}
+		//测试语句  刘迎迎 2013-1-18
+		//printf( "\n Enter enter to continue! \n");
+		//Sleep(1000);
+		/*while(1)
+		{
+			std::cin.clear();
+			std::cin.sync();
+			if(std::cin.get() == '\n')
+				break;
+		}*/
+
+	
+}

@@ -1,0 +1,65 @@
+所谓资源，我们首先应该想到的是程序中的rc文件，按说对资源的操作应该是操作这个文件的事情，可惜的是，自从微软提供了开发向导以后，大家都偏向于使用程序向导来完成一些资源的添加，修改，尺寸设置以及layout的工作，包括我自己，应该这实在是太方便了。但是万物有其利的一面，必然有其害的一面，这导致了大家对资源本身的了解较少，造成了除了向导外就不知所以然的结果。我周边就有人常问我同一个问题，问什么我在资源中点击右键添加一个Dialog后，总是默认的名字IDD_DIALOG1，我说这不就是个资源ID吗，你在ID属性中将它的名字改该就是。好的，Dialog的问题搞定了。接着，他在工程中添加了一个自定义的资源（费了好一翻劲），同样他加了一个资源，同样点右键，这时，没有属性选项了，傻眼了。其实，这些问题都可以通过在rc文件中操作，既然它们都是资源，那么这些定义都是在rc文件中定义的，你利用向导做的这些工作，只是微软帮你把它写进了rc文件之中了。那么你要是碰到了问题，自己进入rc文件中看看究竟不是很好吗。因为那才是资源的源头。
+
+
+
+
+ 
+
+一 利用rc文件进行界面的布局
+
+   打开一个资源文件，如FHRDemo.rc，右键选择查看代码，可以看到文本描述的资源文件，这里截取其中的一段。
+
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About FHRDemo"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "FHRDemo Version 2.0",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2007",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "OK",IDOK,178,7,50,16,WS_GROUP
+END
+
+IDD_FHRDEMO_FORM DIALOGEX 0, 0, 286, 211
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "",IDC_STATIC_INPUT_AREA,64,0,174,208,NOT WS_VISIBLE | WS_BORDER
+    PUSHBUTTON      "0",IDC_BUTTON_HIT0,0,0,63,22
+    PUSHBUTTON      "2",IDC_BUTTON_HIT2,0,43,63,21
+    PUSHBUTTON      "1",IDC_BUTTON_HIT1,0,22,63,21
+    PUSHBUTTON      "3",IDC_BUTTON_HIT3,0,64,63,21
+    PUSHBUTTON      "5",IDC_BUTTON_HIT5,0,106,63,21
+    PUSHBUTTON      "6",IDC_BUTTON_HIT6,0,127,63,21
+    PUSHBUTTON      "7",IDC_BUTTON_HIT7,0,147,63,21
+    PUSHBUTTON      "8",IDC_BUTTON_HIT8,0,168,63,21
+    PUSHBUTTON      "4",IDC_BUTTON_HIT4,0,85,63,21
+    PUSHBUTTON      "9",IDC_BUTTON_HIT9,1,189,62,21
+    PUSHBUTTON      "Clear",IDC_CLEAR,238,37,45,34
+    PUSHBUTTON      "Exit",IDC_EXIT,238,173,46,34
+    PUSHBUTTON      "Revert",IDC_REVERT,238,71,45,33
+    PUSHBUTTON      "Options",IDC_OPTIONS,238,136,45,36
+    PUSHBUTTON      "Mouse",IDC_SWITCH,238,104,45,32
+    PUSHBUTTON      "Recognition",IDC_RECOGNITION,238,0,45,37
+END
+
+这里，可以看到，上面对资源的描述包含了两个对话框，一个是IDD_ABOUTBOX，另外一个是IDD_FHRDEMO_FORM。第一个对话框的大小描述是（0，0，235，55），这四个的意思是：第一个0是表示该控件的X的最左的坐标，第二个0是Y方向的最上面的坐标。而235代表X方向的宽度，而55是代表Y方向的高度。接下来是STYLE: 紧跟后面的是该对话框的style。再接下来是该对话框的font及其他一些信息。在BEGIN和END之间的是列举该对话框中所有的控件以及这些都是一些什么控件及控件的尺寸和caption.
+
+有了这些以后，我们就可以完全在这上面对它进行改动来完成对界面的风格和尺寸的一些改动。而无需再依靠向导了，并且这个比向导要灵活很多。当然，一开始可能会出现错误！！
+
+
+
+
+二 利用rc文件添加自定义资源 
+
+
+
+
+这个就更加简单了，无需向导中那么的复杂步骤，且容易出现像我上面一篇文章说的那么多问题，如改名字不容易。这里，如果利用rc文件的话，就只需要一行就全部搞定。
+
+MYSKIN22                MIAOWEI                 "res\\shapedemo.smf"
+
+其中， MYSKIN22是新建资源的名字，在向导中是“新建”功能。MIAOWEI是资源名字，这个在向导中有个默认名字，有点搞的。而最后面的就不用说了，是该资源的路径。一般放在res文件夹下。我们只要在res文件夹中放入这个资源就可以了。这时，保存rc文件，然后重新在资源视图中去看看，可以发现，我们已经完成了向导中需要一系列操作的工作了。

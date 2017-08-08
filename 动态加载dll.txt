@@ -1,0 +1,13 @@
+HINSTANCE hinst;
+	hinst=LoadLibrary(_T("dll1.dll"));
+	typedef int (*addproc)(int a,int b);
+	addproc add=(addproc)GetProcAddress(hinst,"add");
+	if(!add)
+	{
+		MessageBox(_T("shibai"));
+		return;
+	}
+	CString mm;
+	mm.Format(_T("%d"),add(5,3));
+	SetDlgItemText(IDC_EDIT1,mm);
+	

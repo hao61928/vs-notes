@@ -1,0 +1,4 @@
+COLORREF dd=GetSysColor(COLOR_3DFACE);
+	BYTE r=GetRValue(dd);
+	BYTE g=GetGValue(dd);
+	BYTE b=GetBValue(dd);

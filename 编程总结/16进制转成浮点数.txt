@@ -1,0 +1,17 @@
+float Hex_To_Decimal(unsigned char *Byte,int num)//十六进制到浮点数
+{
+   char cByte[4];//方法一
+    for (int i=0;i<num;i++)
+     {
+  cByte[i] = Byte[i];
+     }
+     
+  float pfValue=*(float*)&cByte;
+  return  pfValue;
+
+}
+c语言中直接内存拷贝
+
+float a;
+ char *b=0x9A9941C1;
+ memcpy(&a,b,sizeof(a))  

@@ -1,0 +1,144 @@
+int CUtil::GetSystemPorts(CString *pNameList, CString *pPortList)   
+ {   
+     CRegKey RegKey;   
+     int nCount = 0;   
+        
+     if(RegKey.Open(HKEY_LOCAL_MACHINE, "Hardware\\DeviceMap\\SerialComm") == ERROR_SUCCESS)   
+     {   
+         while(true)   
+         {   
+             char ValueName[_MAX_PATH];   
+             unsigned char ValueData[_MAX_PATH];   
+             DWORD nValueSize = _MAX_PATH;   
+             DWORD nDataSize = _MAX_PATH;   
+             DWORD nType;   
+                
+             if(::RegEnumValue(HKEY(RegKey), nCount, ValueName, &nValueSize, NULL, &nType, ValueData, &nDataSize) == ERROR_NO_MORE_ITEMS)   
+             {   
+                 break;   
+             }   
+                
+             if(pNameList)   
+                 pNameList[nCount] = ValueName;   
+                
+             if(pPortList)   
+                 pPortList[nCount] = ValueData;   
+                
+             nCount++;   
+         }   
+     }   
+        
+     return nCount;   
+ }   
+第二种方法：
+void CSyst_Setting::CheckComPort()
+ {
+     HKEY hKey;
+     DWORD dwCount=0;//保存检索项的结果，即COM端口总数
+     DWORD dwBufLen=_MAX_PATH;//缓存大小
+     
+     
+     DWORD dwBufLen1[_MAX_PATH];//缓存大小
+     ::FillMemory((LPVOID)dwBufLen1,_MAX_PATH*2,0xFF);
+     DWORD dwBufLen2[_MAX_PATH];//缓存大小
+     ::FillMemory((LPVOID)dwBufLen2,_MAX_PATH*2,0xFF);
+     
+     
+     
+     DWORD dwTp=REG_DWORD;//待检索项的数据类型
+     
+     
+     CString subKey=_T("SYSTEM\\CurrentControlSet\\Services\\serenum\\Enum");
+     
+     
+     if(ERROR_SUCCESS!=::RegOpenKeyEx(HKEY_LOCAL_MACHINE,subKey,
+         NULL,KEY_QUERY_VALUE,&hKey))
+         return;//打开注册表失败，退出程序
+     
+     
+     //注册表打开成功，进一步检索设备管理器的设备树显示的端口节点里COM口的个数
+     if(ERROR_SUCCESS!=::RegQueryValueEx(hKey, _T("Count"), NULL, &dwTp,
+         (LPBYTE)&dwCount, &dwBufLen))
+     {
+         ::RegCloseKey( hKey );
+         return;//检索失败，退出
+     }
+     
+     HKEY hKey1;
+     CString subKey1=_T("SYSTEM\\CurrentControlSet\\Enum\\");//的COM设备名字检索路径     
+     CString strReg;
+     CString strACPI(_T('\0'),_MAX_PATH);
+     LPSTR lpstrACPI=strACPI.GetBuffer(_MAX_PATH);
+     
+     
+     CString strACPI1(_T('\0'),_MAX_PATH);
+     LPSTR lpstrACPI1=strACPI1.GetBuffer(_MAX_PATH);
+     
+     
+     for(unsigned int i=0;i<dwCount;i++)//COM端口数检索成功，进一步检索在设备管理器里出现的文字
+     {
+         
+         strReg.Format("%d",i);
+         
+         
+         if(::RegQueryValueEx(hKey,(LPCSTR)strReg,NULL, 
+             &dwTp,(LPBYTE)lpstrACPI,&dwBufLen1[i])
+             !=ERROR_SUCCESS) 
+             break;//检索失败，退出
+         
+         
+         subKey1=subKey1+lpstrACPI;
+         
+         if(::RegOpenKeyEx(HKEY_LOCAL_MACHINE,subKey1,
+             NULL,KEY_QUERY_VALUE,&hKey1)!=ERROR_SUCCESS)   
+             break;//打开注册表失败，退出程序
+         
+         
+         DWORD dwTp1=REG_SZ;//此处即为COM的说明文字项数据类型
+         if(ERROR_SUCCESS!=::RegQueryValueEx(hKey1, _T("FriendlyName"), NULL, &dwTp1,
+             (LPBYTE)lpstrACPI1, &dwBufLen2[i]))//检索COM口具体说明文字，即FriendlyName的值
+             break;//检索失败，退出
+         
+         //-------------------------------
+         CString strNum;
+         //    strNum =GetStr(lpstrACPI1);
+         strNum.Format(_T( "%s "),   lpstrACPI1);
+         int i;
+         CString shuzi;
+         
+         for(i=0;i< strNum.GetLength();i++)
+         {
+             int unicode = (int)strNum.GetAt(i);
+             if (unicode <= '9' && unicode >= '0')
+             {
+                 shuzi += strNum.GetAt(i);
+             }
+             
+         }
+         shuzi="COM"+shuzi;
+         m_intPort.AddString(shuzi);//添加检索的值添加到组合列表框
+         m_intPort2.AddString(shuzi);//添加检索的值添加到组合列表框
+         
+         //---------------------------
+         
+         //    m_Com1.AddString(lpstrACPI1);//添加检索的值添加到组合列表框
+         
+         strReg.Empty();//重新对变量赋值，避免前后冲突
+         subKey1.Empty();
+         subKey1=_T("SYSTEM\\CurrentControlSet\\Enum\\");
+         strACPI.Empty();
+         strACPI1.Empty();
+         strACPI=CString(_T('\0'),_MAX_PATH);
+         strACPI1=CString(_T('\0'),_MAX_PATH);      
+         
+     }
+     
+     
+     strACPI.ReleaseBuffer();
+     strACPI1.ReleaseBuffer();
+     ::RegCloseKey( hKey1 );
+     ::RegCloseKey( hKey );
+     m_intPort.SetCurSel(0);
+     m_intPort2.SetCurSel(0);
+
+ } 

@@ -1,0 +1,16 @@
+﻿生成启动时间为 2017/6/23 13:27:53。
+     1>项目“D:\VS\VS方案\DLL1\DLL1\DLL1.vcxproj”在节点 2 上(Rebuild 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D DLL1_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt DLL1.cpp
+         DLL1.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\VS\VS方案\DLL1\Release\DLL1.dll" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\VS\VS方案\DLL1\Release\DLL1.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\VS\VS方案\DLL1\Release\DLL1.lib" /MACHINE:X86 /SAFESEH /DLL Release\DLL1.obj
+            正在创建库 D:\VS\VS方案\DLL1\Release\DLL1.lib 和对象 D:\VS\VS方案\DLL1\Release\DLL1.exp
+         正在生成代码
+         已完成代码的生成
+         DLL1.vcxproj -> D:\VS\VS方案\DLL1\Release\DLL1.dll
+     1>已完成生成项目“D:\VS\VS方案\DLL1\DLL1\DLL1.vcxproj”(Rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:01.39

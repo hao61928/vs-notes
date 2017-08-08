@@ -1,0 +1,7 @@
+ID--HANDLE--HWND三者之间的互相转换
+id->句柄、、、、、hWnd = ::GetDlgItem(hParentWnd,id);
+ id->指针、、、、、CWnd::GetDlgItem();
+句柄->id、、、、、id = GetWindowLong(hWnd,GWL_ID);
+句柄->指针、、、、CWnd *pWnd=CWnd::FromHandle(hWnd);
+指针->ID、、、、、id = GetWindowLong(pWnd->GetSafeHwnd,GWL_ID);
+指针->句柄、、、、hWnd=cWnd.GetSafeHandle() or mywnd->m_hWnd;

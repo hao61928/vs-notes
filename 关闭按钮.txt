@@ -1,0 +1,3 @@
+CMenu* pMenu = this->GetSystemMenu(FALSE);//系统菜单
+
+pMenu->ModifyMenu(SC_CLOSE,MF_BYCOMMAND | MF_GRAYED );//禁用关闭按钮

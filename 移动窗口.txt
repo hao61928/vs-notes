@@ -1,0 +1,15 @@
+移动窗口至最左上角
+
+CRect rect; // 存储当前窗口
+
+  GetWindowRect(rect); // 得到当前窗体的位置及大小
+
+  MoveWindow(0, 0, rect.Width(), rect.Height(), TRUE);   // 改变窗口的位置
+
+
+改变窗口至原来一半
+CRect rect; // 存储当前窗口
+
+  GetWindowRect(rect); // 得到当前窗体的位置及大小
+
+  MoveWindow(rect.left, rect.top, rect.Width()/2, rect.Height()/2, TRUE);   // 改变窗

@@ -1,0 +1,5 @@
+关联按钮变量  CButtonST
+
+m_btnOk.SetColor(CButtonST::BTNST_COLOR_BK_IN ,RGB(255,0,0));
+	m_btnOk.SetColor(CButtonST::BTNST_COLOR_BK_OUT ,RGB(255,0,0));
+	m_btnOk.SetColor(CButtonST::BTNST_COLOR_BK_FOCUS ,RGB(255,0,0));

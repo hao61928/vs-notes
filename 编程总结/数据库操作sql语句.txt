@@ -1,0 +1,417 @@
+access 数据库导入到xls
+strSQLhead = "SELECT * INTO LUORE(数据库名) IN '";
+strSQLEnd = ".xls'  'EXCEL 5.0;' FROM " + strsource(数据库表名) ;
+strSQL =  strSQLhead + strFilePath + "\\" + strFileName + strSQLEnd; 	
+
+创建数据库
+创建之前判断该数据库是否存在
+if exists (select * from sysdatabases where name='databaseName')
+drop database databaseName
+go
+Create DATABASE databasename
+on primary-- 默认就属于primary文件组,可省略
+（
+/*--数据文件的具体描述--*/
+name=‘databasename_data’，-- 主数据文件的逻辑名称
+filename=‘'所存位置：\databasename_data.mdf’， -- 主数据文件的物理名称
+size=数值mb, --主数据文件的初始大小
+maxsize=数值mb, -- 主数据文件增长的最大值
+filegrowth=数值%--主数据文件的增长率
+）
+log on
+（
+/*--日志文件的具体描述,各参数含义同上--*/
+name='databasename_log', -- 日志文件的逻辑名称
+filename='所存目录:\databasename_log.ldf', -- 日志文件的物理名称
+size=数值mb, --日志文件的初始大小
+filegrowth=数值mb--日志文件的增长值
+）
+删除数据库
+drop database databasename
+备份sql server
+--- 创建备份数据的 device
+USE master
+EXEC sp_addumpdevice 'disk', 'testBack', 'c:\mssql7backup\MyNwind_1.dat'
+--- 开始备份
+BACKUP DATABASE pubs TO testBack
+创建新表
+create table tabname(col1 type1 [not null] [primary key] identity(起始值,递增量)
+,col2 type2 [not null],..)--primary key为主键 identity表示递增数量
+根据已有的表创建新表：
+A：go
+use 原数据库名
+go
+select * into 目的数据库名.dbo.目的表名 from 原表名(使用旧表创建新表)
+B：create table tab_new as select col1,col2… from tab_old definition only
+创建序列
+create sequence SIMON_SEQUENCE
+minvalue 1 -- 最小值
+maxvalue 999999999999999999999999999 -- 最大值
+start with 1 -- 开始值
+increment by 1 -- 每次加几
+cache 20;
+删除表
+drop table tabname--这是将表连同表中信息一起删除但是日志文件中会有记录
+删除表中信息
+delete from tabname-这是将表中信息删除但是会保留这个表
+增加一个列
+Alter table tabname add colname coltype
+删除一个列
+Alter table tabname drop column colname
+添加主键
+Alter table tabname add primary key(col)
+说明：删除主键：Alter table tabname drop primary key(col)
+创建索引
+create [unique] index idxname on tabname(col…。)
+删除索引：drop index idxname on tabname
+注：索引是不可更改的，想更改必须删除重新建。
+创建视图
+create view viewname as select statement
+删除视图：drop view viewname
+基本的sql语句
+(1) 数据记录筛选：
+sql="select * from 数据表 where字段名=字段值 order by字段名[desc]"
+sql="select * from 数据表 where字段名like '%字段值%' order by 字段名 [desc]"
+sql="select top 10 * from 数据表 where字段名=字段值 order by 字段名 [desc]"
+sql="select top 10 * from 数据表 order by 字段名 [desc]"
+sql="select * from 数据表 where字段名in ('值1','值2','值3')"
+sql="select * from 数据表 where字段名between 值1 and 值2"
+(2) 更新数据记录：
+sql="update 数据表 set字段名=字段值 where 条件表达式"
+sql="update 数据表 set 字段1=值1,字段2=值2 …… 字段n=值n where 条件表达式"
+(3) 删除数据记录：
+sql="delete from 数据表 where 条件表达式"
+sql="delete from 数据表" (将数据表所有记录删除)
+(4) 添加数据记录：
+sql="insert into 数据表 (字段1,字段2,字段3 …) values (值1,值2,值3 …)"
+sql="insert into 目标数据表 select * from 源数据表" (把源数据表的记录添加到目标数据表)
+(5) 数据记录统计函数：
+AVG(字段名) 得出一个表格栏平均值
+COUNT(*;字段名) 对数据行数的统计或对某一栏有值的数据行数统计
+MAX(字段名) 取得一个表格栏最大的值
+MIN(字段名) 取得一个表格栏最小的值
+SUM(字段名) 把数据栏的值相加
+引用以上函数的方法：
+sql="select sum(字段名) as 别名 from 数据表 where 条件表达式"
+set rs=conn.excute(sql)
+用 rs("别名") 获取统计的值，其它函数运用同上。
+查询去除重复值：select distinct * from table1
+(5) 数据表的建立和删除：
+CREATE TABLE 数据表名称(字段1 类型1(长度),字段2 类型2(长度) …… )
+(6) 单列求和:
+SELECT SUM(字段名) FROM 数据表
+编辑本段
+最新语句
+查询数据库中含有同一这字段的表：
+select name from sysobjects where xtype = 'u' and id in(select id from syscolumns where name = 's3')
+根据出生日期可以算出年龄：
+select datediff(year,scrq,'2013') as 年龄 from page_shsjgrgl
+根据当前年份自动算出年龄
+select datediff(year,csny,cast(YEAR(GETDATE()) as char))
+年
+select year(djsj) from page_shsjgrgl
+月
+select month(djsj) from page_shsjgrgl
+日
+select day(djsj) from page_shsjgrgl
+在同一数据库中复制表结构：
+select * into a from b where 1<>1
+当 IDENTITY_INSERT 设置为 OFF 时，不能为表 'aa' 中的标识列插入显式值。
+set identity_insert aa ON----设置打开，
+批量插入：
+insert into aa(Customer_ID, ID_Type, ID_Number) select Customer_ID, ID_Type, ID_Number from TCustomer;
+set identity_insert aa OFF－－－关闭
+不同数据库之间的复制：
+复制结构：
+select * into test.dbo.b from GCRT.dbo.page_shsjgrgl where 1<>1
+复制内容：
+insert into test.dbo.b(xm,ssdq) select xm,ssdq from GCRT.dbo.page_shsjgrgl
+查看数据库中所有的数据表表名：
+select name from SysObjects where type='u'
+查看数据库中所有表含有同一字段的表：
+select name from sysobjects where xtype = 'u' and id in(select id from syscolumns where name = '同一字段')
+查看数据表中的所有字段：
+select name from Syscolumns where id=object_id('表名')
+查询数据库时随机10条记录：
+select top 10 * from td_areacode order by newid()
+修改字段类型：
+ALTER TABLE 表名 ALTER COLUMN 字段名 varchar(30) NOT NULL
+use ZHJIANGJGYL
+declare @temp nvarchar(30)
+set @temp = 'ZWI4'
+select hllx from page_yljg_zyry where hllx not in(
+select
+case @temp when ''
+then ''
+else b1 end
+from (
+select * from TD_Code where page_en='page_yljg_zyry' and B2='ZWI'
+) s where s.b1 !=
+case @temp when '' then '' else @temp end
+)
+更改数据库表字段类型：
+alter table page_shsjgrgl alter column s1 int
+高级查询
+A：UNION 运算符
+UNION 运算符通过组合其他两个结果表（例如TABLE1 和TABLE2）并消去表中任何重复行而派生出一个结果表。当 ALL 随UNION 一起使用时（即UNION ALL），不消除重复行。两种情况下，派生表的每一行不是来自TABLE1 就是来自TABLE2。
+B： EXCEPT 运算符
+EXCEPT 运算符通过包括所有在TABLE1 中但不在TABLE2 中的行并消除所有重复行而派生出一个结果表。当ALL 随EXCEPT 一起使用时(EXCEPT ALL)，不消除重复行。
+C：INTERSECT 运算符
+INTERSECT 运算符通过只包括TABLE1 和TABLE2 中都有的行并消除所有重复行而派生出一个结果表。当ALL 随INTERSECT 一起使用时(INTERSECT ALL)，不消除重复行。
+注：使用运算词的几个查询结果行必须是一致的。
+外连接
+A、left outer join：
+左外连接（左连接）：结果集既包括连接表的匹配行，也包括左连接表的所有行。
+SQL: select a.a, a.b, a.c, b.c, b.d, b.f from a LEFT OUT JOIN b ON a.a = b.c
+B：right outer join:
+右外连接(右连接)：结果集既包括连接表的匹配连接行，也包括右连接表的所有行。
+C：full outer join：
+全外连接：不仅包括符号连接表的匹配行，还包括两个连接表中的所有记录。
+编辑本段
+判断对象
+判断数据库是否存在
+if exists (select * from sysdatabases where name= '数据库名')
+dropdatabase[数据库名]
+判断表是否存在
+if not exists (select * from sysobjects where [name] = '表名' and xtype='U')
+begin
+--这里创建表
+end
+判断存储过程是否存在
+if exists (select * from sysobjects whereid = object_id(N'[存储过程名]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+dropprocedure[存储过程名]
+判断临时表是否存在
+if object_id('tempdb..#临时表名') isnot null
+droptable#临时表名
+判断视图是否存在
+--SQL Server 2000
+IF EXISTS (SELECT * FROM sysviews WHEREobject_id = '[dbo].[视图名]'
+--SQL Server 2005
+IF EXISTS (SELECT * FROM sys.views WHERE object_id = '[dbo].[视图名]'
+判断函数是否存在
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[函数名]') and xtype in (N'FN', N'IF', N'TF'))
+dropfunction[dbo].[函数名]
+获取创建信息
+SELECT[name],[id],crdate FROM sysobjects where xtype='U'
+/*
+xtype 的表示参数类型，通常包括如下这些 C = CHECK约束 D = 默认值或DEFAULT约束 F = FOREIGNKEY约束 L = 日志 FN = 标量函数 IF = 内嵌表函数 P = 存储过程 PK = PRIMARYKEY约束（类型是K） RF = 复制筛选存储过程 S = 系统表 TF = 表函数 TR = 触发器U = 用户表 UQ = UNIQUE约束（类型是K） V = 视图 X = 扩展存储过程 */
+判断列是否存在
+if exists(select * from syscolumns whereid=object_id('表名') and name='列名')
+altertable表名dropcolumn列名
+判断列是否自增列
+if columnproperty(object_id('table'),'col','IsIdentity')=1
+print '自增列'
+else
+print '不是自增列'
+SELECT * FROM sys.columns WHEREobject_id=OBJECT_ID('表名')
+AND is_identity=1
+判断表中是否存在索引
+if exists(select * from sysindexes whereid=object_id('表名') and name='索引名')
+print '存在'
+else
+print '不存在
+查看数据库中对象
+SELECT * FROM sysobjects WHEREname='对象名'
+select * from table（所要查询的表名） where coloum(条件)
+编辑本段
+提升
+复制表
+(只复制结构，源表名：a 新表名：b) (Access可用)
+法一：select * into b from a where 1<>1
+法二：select top 0 * into b from a
+拷贝表
+(拷贝数据,源表名：a 目标表名：b) (Access可用)
+insert into b(x, y, z) select d,e,f from a;
+跨数据库之间表的拷贝
+(具体数据使用绝对路径) (Access可用)
+insert into b(x, y, z) select d,e,f from a in ‘具体数据库’ where 条件
+例子：。.from b in '"&Server.MapPath("."&"\data.mdb" &"' where..
+子查询
+(表名1：a 表名2：b)
+select a,b,c from a where a IN (select d from b 或者： select a,b,c from a where a IN (1,2,3)
+显示文章最后时间
+select a.title,a.username,b.adddate from table a,(select max(adddate) adddate from table where table.title=a.title) b
+外连接查询
+(表名1：a 表名2：b)
+select a.a, a.b, a.c, b.c, b.d, b.f from a LEFT OUT JOIN b ON a.a = b.c
+在线视图查询
+(表名1：a
+select * from (Select a,b,c FROM a) T where t.a > 1;
+between的用法
+between为查询某字段的指定范围，限制查询数据范围时包括了边界值，not between不包括边界值
+select * from table1 where time between time1 and time2
+select a,b,c, from table1 where a not between 数值1 and 数值2
+in 的使用方法
+select * from table1 where a [not] in (‘值1’，’值2’,’值4’，’值6’)
+删除主表没有的信息
+两张关联表delete from table1 where not exists ( select * from table2 where table1.field1=table2.field1
+四表联查问题
+select * from a left inner join b on a.a=b.b right inner join c on a.a=c.c inner join d on a.a=d.d where .....
+日程安排提前五分钟
+SQL: select * from 日程安排 where datediff('minute',f开始时间，getdate())>5
+一条sql 搞定数据库页
+select top 10 b.* from (select top 20 主键字段,排序字段 from 表名 order by 排序字段 desc) a,表名 b where b.主键字段= a.主键字段 order by a.排序字段
+前10条记录
+select top 10 * from table1 where 范围
+选择排名
+选择在每一组b值相同的数据中对应的a最大的记录的所有信息(类似这样的用法可以用于论坛每月排行榜，每月热销产品分析,按科目成绩排名，等等。)
+select a,b,c from tablename ta where a=(select max(a) from tablename tb where tb.b=ta.b)
+派生结果表
+包括所有在TableA 中但不在TableB和TableC 中的行并消除所有重复行而派生出一个结果表
+(select a from tableA except (select a from tableB) except (select a from tableC)
+随机取出10条数据
+select top 10 * from tablename order by newid()
+随机选择记录
+select newid()
+删除重复记录
+Delete from tablename where id not in (select max(id) from tablename group by col1,col2,...)
+列出数据库里的表名
+select name from sysobjects where type='U'
+列出表里的所有的
+select name from syscolumns where id=object_id('TableName')
+列示排列
+列示type、vender、pcs字段，以type字段排列，case可以方便地实现多重选择，类似select 中的case。
+select type,sum(case vender when 'A' then pcs else 0 end),sum(case vender when 'C' then pcs else 0 end),sum(case vender when 'B' then pcs else 0 end) FROM tablename group by type
+显示结果：
+type vender pcs
+电脑A 1
+电脑A 1
+光盘B 2
+光盘A 2
+手机B 3
+手机C 3
+初始化表table1
+TRUNCATE TABLE table1
+选择从10到15的记录
+select top 5 * from (select top10 * from (select top 15 * from table order by id asc) table_别名 order by id desc) table_2 order by id
+数据类型转换
+declare @numid int
+declare @id varchar(50)
+set @numid=2005
+set @id=convert(varchar,@numid)
+通过上述语句完成数据类型Int转换成varchar，其他转换类似，可参看convert函数
+编辑本段
+技巧
+1=1，1=2的使用
+在SQL语句组合时用的较多
+“where 1=1”是表示选择全部 “where 1=2”全部不选，
+如：
+if @strWhere !='
+begin
+set @strSQL = 'select count(*) as Total from [' + @tblName + '] where ' + @strWhere
+end
+else
+begin
+set @strSQL = 'select count(*) as Total from [' + @tblName + ']'
+end
+我们可以直接写成
+set @strSQL = 'select count(*) as Total from [' + @tblName + '] where 1=1 and '+ @strWhere
+收缩数据库
+--重建索引
+DBCC REINDEX
+DBCC INDEXDEFRAG
+--收缩数据和日志
+DBCC SHRINKDB
+DBCC SHRINKFILE
+压缩数据库
+dbcc shrinkdatabase(dbname)
+转移数据库给新用户以已存在用户权限
+exec sp_change_users_login 'update_one','newname','oldname'
+go
+检查备份集
+RESTORE VERIFYONLY from disk='E:\dvbbs.bak'
+修复数据库
+Alter DATABASE [dvbbs] SET SINGLE_USER
+GO
+DBCC CHECKDB('dvbbs',repair_allow_data_loss) WITH TABLOCK
+GO
+Alter DATABASE [dvbbs] SET MULTI_USER
+GO
+日志清除
+SET NOCOUNT ON
+DECLARE @LogicalFileName sysname,
+@MaxMinutes INT,
+@NewSize INT
+USE tablename -- 要操作的数据库名
+Select @LogicalFileName = 'tablename_log', -- 日志文件名
+@MaxMinutes = 10, -- Limit on time allowed to wrap log.
+@NewSize = 1 -- 你想设定的日志文件的大小(M)
+-- Setup / initialize
+DECLARE @OriginalSize int
+Select @OriginalSize = size
+FROM sysfiles
+Where name = @LogicalFileName
+Select 'Original Size of ' + db_name() + ' LOG is ' +
+CONVERT(VARCHAR(30),@OriginalSize) + ' 8K pages or ' +
+CONVERT(VARCHAR(30),(@OriginalSize*8/1024)) + 'MB'
+FROM sysfiles
+Where name = @LogicalFileName
+Create TABLE DummyTrans
+(DummyColumn char (8000) not null)
+DECLARE @Counter INT,
+@StartTime DATETIME,
+@TruncLog VARCHAR(255)
+Select @StartTime = GETDATE(),
+@TruncLog = 'BACKUP LOG ' + db_name() + ' WITH TRUNCATE_ONLY'
+DBCC SHRINKFILE (@LogicalFileName, @NewSize)
+EXEC (@TruncLog)
+-- Wrap the log if necessary.
+WHILE @MaxMinutes > DATEDIFF (mi, @StartTime, GETDATE()) -- time has not expired
+AND @OriginalSize = (Select size FROM sysfiles Where name = @LogicalFileName)
+AND (@OriginalSize * 8 /1024) > @NewSize
+BEGIN -- Outer loop.
+Select @Counter = 0
+WHILE ((@Counter < @OriginalSize / 16) AND (@Counter < 50000))
+BEGIN -- update
+Insert DummyTrans VALUES ('Fill Log')
+Delete DummyTrans
+Select @Counter = @Counter + 1
+END
+EXEC (@TruncLog)
+END
+Select 'Final Size of ' + db_name() + ' LOG is ' +
+CONVERT(VARCHAR(30),size) + ' 8K pages or ' +
+CONVERT(VARCHAR(30),(size*8/1024)) + 'MB'
+FROM sysfiles
+Where name = @LogicalFileName
+Drop TABLE DummyTrans
+SET NOCOUNT OFF
+更改某个表
+exec sp_changeobjectowner 'tablename','dbo'
+存储更改全部表
+Create PROCEDURE dbo.User_ChangeObjectOwnerBatch
+@OldOwner as NVARCHAR(128),
+@NewOwner as NVARCHAR(128)
+AS
+DECLARE @Name as NVARCHAR(128)
+DECLARE @Owner as NVARCHAR(128)
+DECLARE @OwnerName as NVARCHAR(128)
+DECLARE curObject CURSOR FOR
+select 'Name' = name,
+'Owner' = user_name(uid)
+from sysobjects
+where user_name(uid)=@OldOwner
+order by name
+OPEN curObject
+FETCH NEXT FROM curObject INTO @Name, @Owner
+WHILE(@@FETCH_STATUS=0)
+BEGIN
+if @Owner=@OldOwner
+begin
+set @OwnerName = @OldOwner + '.' + rtrim(@Name)
+exec sp_changeobjectowner @OwnerName, @NewOwner
+end
+-- select @name,@NewOwner,@OldOwner
+FETCH NEXT FROM curObject INTO @Name, @Owner
+END
+close curObject
+deallocate curObject
+GO
+循环写入数据
+declare @i int
+set @i=1
+while @i<30
+begin
+insert into test (userid) values(@i)
+set @i=@i+1
+end

@@ -1,0 +1,27 @@
+c# 别的线程不允许操作主界面控件，可以通过委托调用 
+例  private delegate void EventMuSetTextHander(Control control, string text);
+        private void MuThreadSetText(Control control, string text)
+        {
+            if (control.InvokeRequired)
+            {
+                EventMuSetTextHander mu = new EventMuSetTextHander(MuThreadSetText);
+                this.Invoke(mu, new object[] { control, text });
+            }
+            else
+            {
+                control.Text = text;
+            }
+        }
+
+private delegate void somedel(); 
+ private void someMethod() 
+ { 
+ if (this.InvokeRequired) 
+ { 
+ somedel sd = new somedel(this.someMethod); 
+ this.Invoke(sd); 
+ return; 
+ } 
+ this.timer1.Interval = 500; 
+ this.timer1.Enabled = true; 
+ }

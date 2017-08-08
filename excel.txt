@@ -1,0 +1,70 @@
+CApplication app;
+	CRange range;
+	CWorkbook book;
+	CWorkbooks books;
+	CWorksheet sheet;
+	CWorksheets sheets;
+	LPDISPATCH lpdisp;
+	COleVariant vresult;
+	COleVariant covtrue((short)TRUE);
+	COleVariant covfalse((short)FALSE);
+	COleVariant covoptional((long)DISP_E_PARAMNOTFOUND, VT_ERROR);
+	if(!app.CreateDispatch(L"Excel.Application"))
+	{
+		AfxMessageBox(L"Cannot start Excel server");
+		return;
+	}
+	app.put_Visible(FALSE);
+	books.AttachDispatch(app.get_Workbooks());
+	CString path;
+	GetFilePath(path);
+	path+=_T("\\11.xlsx");
+	//open file
+	lpdisp = books.Open(
+		path,
+		covoptional, covfalse, covoptional, covoptional, covoptional,
+		covoptional, covoptional, covoptional, covoptional, covoptional,
+		covoptional, covoptional, covoptional, covoptional);
+	//get workbook
+	book.AttachDispatch(lpdisp);
+	
+	//get worksheets
+	sheets.AttachDispatch(book.get_Worksheets());
+	//sheet = sheets.get_Item(_variant_t("test"));
+	lpdisp = book.get_ActiveSheet();
+	sheet.AttachDispatch(lpdisp);
+
+	//get the used range
+	CRange usedrange;
+	usedrange.AttachDispatch(sheet.get_UsedRange());
+
+	//get used row
+	/*range.AttachDispatch(usedrange.get_Rows());
+	long irownum = range.get_Count();
+	long istartrow = usedrange.get_Row();*/
+	
+	//get used column
+	/*range.AttachDispatch(usedrange.get_Columns());
+	long icolnum = range.get_Count();
+	long istartcol = usedrange.get_Column();
+	
+	CString skey = L"";
+	CString svalue = L"";*/
+	double dvalue = 3;
+	usedrange.put_Item(COleVariant((long)2), COleVariant((long)2), COleVariant((double)dvalue));//write to excel
+	book.Save();
+	book.Close(covoptional, COleVariant(path), covoptional);
+	books.Close();
+	app.Quit();
+
+
+	
+
+}
+void Ctest1Dlg::GetFilePath(CString &strPath)
+{
+   GetModuleFileName(NULL,strPath.GetBufferSetLength(MAX_PATH+1),MAX_PATH);
+   strPath.ReleaseBuffer();
+   int ipos = strPath.ReverseFind('\\');
+   strPath = strPath.Left(ipos);
+}

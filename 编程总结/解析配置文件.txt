@@ -1,0 +1,82 @@
+ CString str="lll";
+  CString strstr="";
+  CString ascstr="";
+ 
+   for (int i=0;i<str.GetLength();i++)
+   {
+	   CString str1;
+	   str1.Format("%02x",str.GetAt(i));
+       strstr+=str1;
+   }
+   if (strstr.GetLength()>8) strstr=strstr.Right(8);
+   while (strstr.GetLength()<8) strstr+="0";
+   
+   byte strbyte[4];
+   for (int j=0;j<strstr.GetLength();j+=2)
+   {
+	   BYTE tmp;
+       sscanf(strstr.Mid(j,2),"%02x",&tmp);
+	   strbyte[j/2]=tmp;
+   }
+
+for (int jj=0;jj<4;jj++)
+{    
+    ascstr+=(CString)strbyte[jj];
+}
+
+// 从指定路径中解析配置文件
+bool CMySettingDlg::LoadFile(CString &filePath)
+{
+	CString str,tmp,strLen;
+	int index = 0;
+	TCHAR strAppNameTemp[6500];//所有AppName的返回值
+	TCHAR strKeyNameTemp[6500];//对应每个AppName的所有KeyName的返回值
+	TCHAR strReturnTemp[6500];//返回值
+	DWORD dwKeyNameSize;//对应每个AppName的所有KeyName的总长度
+	//所有AppName的总长度
+	DWORD dwAppNameSize = GetPrivateProfileString(NULL,NULL,NULL,strAppNameTemp,6500,filePath);
+	if(dwAppNameSize>0)
+	{
+		TCHAR *pAppName = new TCHAR[dwAppNameSize];
+		int nAppNameLen=0;  //每个AppName的长度
+		for(int i = 0;i<dwAppNameSize;i++)
+		{
+			pAppName[nAppNameLen++]=strAppNameTemp[i];
+			if(strAppNameTemp[i]=='\0')
+			{
+				dwKeyNameSize = GetPrivateProfileString(pAppName,NULL,NULL,strKeyNameTemp,6500,filePath);
+				if(dwAppNameSize>0)
+				{
+					TCHAR *pKeyName = new TCHAR[dwKeyNameSize];
+					int nKeyNameLen=0;    //每个KeyName的长度
+					for(int j = 0; j < dwKeyNameSize; j++)
+					{
+						pKeyName[nKeyNameLen++]=strKeyNameTemp[j];
+						if(strKeyNameTemp[j]=='\0')
+						{
+							if(GetPrivateProfileString(pAppName,pKeyName,NULL,strReturnTemp,5000,filePath))
+							{
+								str.Format(_T("%s"), strReturnTemp);
+								tmp = str.Right(10);
+								strLen = tmp.Left(2);
+								tmp = tmp.Right(8);
+								int length = str.GetLength();
+								str = str.Left(length-10);
+								AddToList(m_importlist, index, pKeyName, str, strLen, tmp);
+								index++;
+							}
+							memset(pKeyName,0,dwKeyNameSize);
+							nKeyNameLen=0;
+						}
+					}
+					delete[]pKeyName;
+				}
+				memset(pAppName,0,dwAppNameSize);
+				nAppNameLen=0;
+			}
+		}
+		delete[]pAppName;
+	}
+	c_COUNT = index;
+	return true;
+}

@@ -1,0 +1,187 @@
+读取配置文件：
+public class IniOperate
+    {
+        string path = string.Empty;
+        public IniOperate(string path)
+        {
+            this.path = path;
+        }
+
+        [DllImport("kernel32")]
+        public static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
+        [DllImport("kernel32")]
+        public static extern int GetPrivateProfileString(string section, string key, string defVal, StringBuilder retVal, int size, string filePath);
+        [DllImport("kernel32")]
+        public static extern int GetPrivateProfileString(string section, string key, string defVal, byte[] buffer, int size, string filePath);
+        [DllImport("kernel32.dll")]
+        public extern static int GetPrivateProfileSection(string segName, StringBuilder buffer, int nSize, string fileName);
+        [DllImport("kernel32.dll")]
+        public extern static int GetPrivateProfileSectionNames(byte[] buffer, int iLen, string fileName);
+        //[DllImport("kernel32.dll")]
+        //public extern static int WritePrivateProfileSection(string segName, string sValue, string fileName);
+
+        /// <summary>
+        ///  返回该配置文件中所有Section名称的集合
+        /// </summary>
+        /// <returns>ArrayList</returns>
+        public ArrayList ReadSections()
+        {
+            byte[] buffer = new byte[65535];
+            int rel = GetPrivateProfileSectionNames(buffer, buffer.GetUpperBound(0), this.path);
+            return Conver2ArrayList(rel, buffer);
+        }
+        /// <summary>
+        ///  获取Section的所有KEY值
+        /// </summary>
+        /// <param name="sectionName">Section</param>
+        /// <returns>ArrayList</returns>
+        public ArrayList ReadKeys(string sectionName)
+        {
+            byte[] buffer = new byte[5120];
+            int rel = GetPrivateProfileString(sectionName, null, "", buffer, buffer.GetUpperBound(0), this.path);
+            return Conver2ArrayList(rel, buffer);
+        }
+
+        public ArrayList Conver2ArrayList(int rel, byte[] buffer)
+        {
+            ArrayList arrayList = new ArrayList();
+            if (rel > 0)
+            {
+                int iCnt, iPos;
+                string tmp;
+                iCnt = 0; iPos = 0;
+                for (iCnt = 0; iCnt < rel; iCnt++)
+                {
+                    if (buffer[iCnt] == 0x00)
+                    {
+                        tmp = System.Text.ASCIIEncoding.Default.GetString(buffer, iPos, iCnt - iPos).Trim();
+                        iPos = iCnt + 1;
+                        if (tmp != "")
+                            arrayList.Add(tmp);
+                    }
+                }
+            }
+            return arrayList;
+        }
+
+        /// <summary>
+        /// 读取INI文件
+        /// </summary>
+        /// <param name="section">段落</param>
+        /// <param name="key">键</param>
+        /// <returns>返回的键值</returns>
+        public string IniReadValue(string section, object key)
+        {
+            StringBuilder temp = new StringBuilder(255);
+            int i = GetPrivateProfileString(section, key.ToString(), "", temp, 255, this.path);
+            return temp.ToString();
+        }
+
+        /// <summary>
+        /// 写INI文件
+        /// </summary>
+        /// <param name="section">段落</param>
+        /// <param name="key">键</param>
+        /// <param name="value">值</param>
+        public void IniWriteValue(string section, string key, string value)
+        {
+            WritePrivateProfileString(section, key, value, this.path);
+        }
+
+        /// <summary>
+        /// 删除ini文件下所有段落
+        /// </summary>
+        public void DellAllSections()
+        {
+            ArrayList sectionList = ReadSections();
+            for (int i = 0; i < sectionList.Count; i++)
+            {
+                DellAllKey4Section(sectionList[i]);
+            }
+            //IniWriteValue(null, null, null);
+        }
+        /// <summary>
+        /// 删除ini文件下x段落及其下的所有键
+        /// </summary>
+        public void DellAllKey4Section(object section)
+        {
+            IniWriteValue(section.ToString(), null, null);
+        }
+
+}
+获取mac地址：本地和远程
+ public static string getlocalmac()
+        {
+            string mac = "";
+            ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+            ManagementObjectCollection moc = mc.GetInstances();
+            foreach (ManagementObject mo in moc)
+            {
+                if (mo["IPEnabled"].ToString() == "True")
+                {
+                    mac = mo["MacAddress"].ToString();
+                    mac = mac.Replace(":", "");
+                } 
+                mo.Dispose();
+            }
+            return mac;
+        }
+        [DllImport("Iphlpapi.dll")]
+        static extern int SendARP(Int32 DestIP, Int32 SrcIP, ref Int64 MacAddr, ref Int32 PhyAddrLen);
+        [DllImport("Ws2_32.dll")]
+        static extern Int32 inet_addr(string ipaddr);
+        /// <summary> 
+        /// SendArp获取MAC地址 
+        /// </summary> 
+        /// <param name="RemoteIP">目标机器的IP地址如(192.168.1.1)</param> 
+        /// <returns>目标机器的mac 地址</returns> 
+        public static string getMacAddr_Remote(string RemoteIP)
+        {
+            StringBuilder macAddress = new StringBuilder();
+            try
+            {
+                Int32 remote = inet_addr(RemoteIP);
+                Int64 macInfo = new Int64();
+                Int32 length = 6;
+                SendARP(remote, 0, ref macInfo, ref length);
+                string temp = Convert.ToString(macInfo, 16).PadLeft(12, '0').ToUpper();
+                int x = 12;
+                for (int i = 0; i < 6; i++)
+                {
+                    if (i == 5)
+                    {
+                        macAddress.Append(temp.Substring(x - 2, 2));
+                    }
+                    else
+                    {
+                        macAddress.Append(temp.Substring(x - 2, 2) + "-");
+                    }
+                    x -= 2;
+                }
+                string macAdd = macAddress.ToString();
+                macAdd = macAdd.Replace("-", "");
+                return macAdd;
+            }
+            catch (Exception ex)
+            {
+                string macAdd = macAddress.ToString();
+                macAdd = macAdd.Replace("-", "");
+                System.Diagnostics.Debugger.Log(0, "1", ex.Message);
+                return macAdd;
+            }
+        } 
+字符格式：
+        /// <summary>
+        /// 16进制的字符串转成byte输出
+        /// </summary>
+        /// <param name="hex"></param>
+        /// <returns></returns>
+        public static byte[] StringToByteArray(string hex)
+        {          
+            hex = hex.Replace("-", "");
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray();
+
+        }      

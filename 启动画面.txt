@@ -1,0 +1,64 @@
+在VC6.0下可以直接添加组件来添加程序启动画面，但是VS却不行，我们要自己添加类来制作启动画面。
+1.新建或者导入一个ID为IDB_BITMAP1的位图；
+2.现在项目下新建一个类CSplashWnd，基类为CWnd；
+3.然后在该类下添加一个protected型的变量CBitmap m_bitmap
+SplashWnd.h中
+protected：
+CBitmap m_bitmap;
+4.添加一个Create函数加载位图，创建窗口；
+SplashWnd.h中
+public:
+virtual BOOL Create();
+
+
+SplashWnd.cpp中
+BOOL CSplashWnd::Create()
+{
+if(!m_bitmap.LoadBitmap(IDB_BITMAP1))
+return false;
+BITMAP bm;
+m_bitmap.GetBitmap(&bm);
+return CreateEx(0,  AfxRegisterWndClass(0, AfxGetApp()->LoadStandardCursor(IDC_ARROW)),  
+NULL, WS_POPUP | WS_VISIBLE, 0, 0, bm.bmWidth, bm.bmHeight, NULL, NULL);  
+}
+5.显示窗口发送WM_PAINT消息，映射此消息；
+SplashWnd.h中
+public:
+afx_msg void OnPaint();
+SplashWnd.cpp中
+void CSplashWnd::OnPaint()
+{
+CPaintDC dc(this); 
+CDC dcimage;
+if(!dcimage.CreateCompatibleDC(&dc)) return ;
+BITMAP bm;
+m_bitmap.GetBitmap(&bm);
+CBitmap* pOldBitmap = dcimage.SelectObject(&m_bitmap);  
+dc.BitBlt(0, 0, bm.bmWidth, bm.bmHeight, &dcimage, 0, 0, SRCCOPY);  
+dcimage.SelectObject(pOldBitmap);  
+//添加文本
+CString str=_T("version:4.2.10.568");
+CString zz=_T("zuozhe:quan shiwei");
+CDC* pDC = this->GetDC();
+TextOut(pDC->GetSafeHdc(),100,100,str,str.GetLength());
+TextOut(pDC->GetSafeHdc(),100,200,zz,zz.GetLength());
+this->ReleaseDC(pDC);
+
+
+
+}
+6；在App类中的InitInstance()函数中添加以下代码：
+。。。。。
+CWinApp::InitInstance();
+CSplashWnd *pSplashWindow = new CSplashWnd;//创建对象
+pSplashWindow->Create();
+pSplashWindow->CenterWindow();
+pSplashWindow->ShowWindow(SW_SHOW);  //显示窗口
+pSplashWindow->UpdateWindow();
+Sleep(3000);  //表示启动画面持续时间
+pSplashWindow->DestroyWindow(); //销毁启动画面
+delete pSplashWindow; //删除
+。。。。。
+还有不要忘记在App类的cpp文件中添加SplashWnd的头文件
+#include "SplashWnd.h"
+在SplashWnd的头文件中添加#include "resource.h"

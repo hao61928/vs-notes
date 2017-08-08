@@ -1,0 +1,58 @@
+CStringArray road;
+    
+ CString temp="a|b|c|d|e";
+ int s0=temp.ReverseFind('|');
+ road.Add(temp.Mid(s0+1));
+
+ while(s0>0)
+ {
+  temp=temp.Mid(0,s0);
+  s0=temp.ReverseFind('|');
+  road.Add(temp.Mid(s0+1));
+ }
+ int n=road.GetSize();
+ for(int i=0;i
+ {
+  MessageBox(road.GetAt(i));
+ }
+
+ 
+
+  由于所做的项目中需要一个,可以从象"a|b|c|d|e"的字符串中提取出字符,并且存在一个数组中,这样的函数.所以写了以上的代码.头次使用CStringArray,觉得这个类挺好的,记录下来,呵呵
+
+  下面是网上找的一个例子,也一块记到这吧
+
+  CStringArray   as;  
+  as.Add("aaaa");  
+  as.Add("bbb");  
+  as.Add("CCC");  
+  as.Add("dddddddddddddd");  
+   
+  int   size=as.GetSize();  
+  CStdioFile   file;  
+  CString   strTemp;  
+  file.Open("Save.txt",CFile::modeCreate|CFile::modeWrite);  
+   
+  for(int   i=0;i 
+  {  
+  strTemp=as.GetAt(i);  
+  file.WriteString(strTemp+"\n");  
+  }  
+  file.Close();
+
+
+
+
+CStringArray as;
+ as.Add("11");//加数据
+ as.Add("22");
+ as.Add("33");
+ as.Add("44");
+ int   size=as.GetSize();   //得长度
+ for(int   i=0;i
+ {   //的数据
+  CString strTmp=as.GetAt(i);   
+ }   
+    as.InsertAt(2,"00");
+ as.RemoveAt(2);
+ as.RemoveAll();

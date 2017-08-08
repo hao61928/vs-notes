@@ -1,0 +1,8 @@
+1、、加入ico格式图标
+
+HICON m_hicn1=AfxGetApp()->LoadIcon(IDI_ICON1);  
+m3.SetIcon(m_hicn1);
+2、加入bmp格式图片
+HBITMAP   hBitmap; 
+hBitmap = LoadBitmap(AfxGetInstanceHandle(),  MAKEINTRESOURCE(IDB_BITMAP1)); 
+((CButton *)GetDlgItem(IDC_BUTTON3))->SetBitmap(hBitmap);

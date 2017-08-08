@@ -1,0 +1,4 @@
+修改BCMenu.cpp 
+1360行 CString junk=OptionText改为CString junk=(CString)OptionText
+
+运行后出现错误的地方将i修改为int i

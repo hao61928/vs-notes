@@ -1,0 +1,92 @@
+在应用程序类（App类）中的InitInstance函数体内添加以下语句：
+
+AfxInitRichEdit(); 对应1.0版本
+
+
+
+如果有2.0版本需要添加如下
+
+AfxInitRichEdit2(); 对应2.0 版本
+
+
+
+
+
+注，InitCommonControlsEx(&InitCtrls); 
+。。。。//放在这里 
+CWinApp::InitInstance();
+
+说明：
+
+添加RichEdit控件后，在调用对话框函数DoModal()之前需要调用AfxInitRichEdit( )函数，对于一个工程中，只需要调用一次AfxInitRichEdit( )函数就可以初始化所有的RichEdit控件的基本信息，实际上只要在工程的初始化中调用一次就可以了。
+、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
+改变RichEdit指定区域的文字背景颜色
+CHARFORMAT2 cf;   
+02.memset( &cf, sizeof(CHARFORMAT2) );  
+03.cf.cbSize = sizeof(CHARFORMAT2);  
+04.cf.dwMask = CFM_BACKCOLOR;      // 使crBackColor字段有效           
+05.cf.crBackColor = RGB(0, 255, 0);        // 背景颜色为绿色  
+06.m_richEditCtrl.SetSel( lStart, lEnd ); // 选中区域文字                
+07.m_richEditCtrl.SendMessage( EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf ); 
+、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
+设置RichEdit指定区域的文字颜色及字体 
+        将使用到CHARFORMAT结构体中的yHeight、szFaceName、crTextColor等字段，相关代码如下所示：
+
+void CRichEditCtrlEx::SetTextFontColor( const LOGFONT& font,COLORREF color )  
+02.{  
+03.    CHARFORMAT cf;  
+04.    memset( &cf, 0, sizeof(CHARFORMAT) );  
+05.    GetDefaultCharFormat(cf);  
+06.  
+07.    // 设置相关字体属性  
+08.    if(font.lfWeight == FW_BOLD)  
+09.    {  
+10.        cf.dwEffects |= CFE_BOLD;  
+11.    }  
+12.    else  
+13.    {  
+14.        cf.dwEffects &= ~(CFE_BOLD);  
+15.    }  
+16.    if(font.lfItalic)  
+17.    {  
+18.        cf.dwEffects |= CFE_ITALIC;  
+19.    }  
+20.    else  
+21.    {  
+22.        cf.dwEffects &= ~(CFE_ITALIC);  
+23.    }  
+24.    if(font.lfUnderline)  
+25.    {  
+26.        cf.dwEffects |= CFE_UNDERLINE;  
+27.    }  
+28.    else  
+29.    {  
+30.        cf.dwEffects &= ~(CFE_UNDERLINE);  
+31.    }  
+32.    if(font.lfStrikeOut)  
+33.    {  
+34.        cf.dwEffects |= CFE_STRIKEOUT;  
+35.    }  
+36.    else  
+37.    {  
+38.        cf.dwEffects &= ~(CFE_STRIKEOUT);  
+39.    }  
+40.  
+41.    cf.yHeight = 20*font.lfHeight;  
+42.    cf.bPitchAndFamily = font.lfPitchAndFamily;  
+43.    strcpy(cf.szFaceName,font.lfFaceName);  
+44.  
+45.    cf.dwEffects ^= CFE_AUTOCOLOR;  
+46.    cf.crTextColor = color;  
+47.   
+48.    // 为将要输入的内容设定字体  
+49.    SetWordCharFormat(cf);  
+50.}  
+
+、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
+
+1、设置RichEdit客户区的背景颜色
+m_richedit.SetBackgroundColor(FALSE,RGB(183,223,227)); 
+
+        要设置RichEdit的背景色，需要发送 EM_SETBKGNDCOLOR 消息给RichEdit控件，关于该消息的说明：wParam参数 为颜色选项，如果是0，说明使用 lParam参数 中的颜色值作为背景色；如果该参数不为0，则使用系统背景色。因为我们要发送该消息来改变背景色，所以我们必须将wParam设置为0，将lParam设置为指定的颜色，即
+::SendMessage( m_richEditCtrl.GetSafeHandle(), 0, (LPARAM)RGB(0,128,192) );  

@@ -1,0 +1,57 @@
+CFont cfont; //这个是全局的。放到include的下面就可以了
+
+//以下这一部分放到OnInitDialog()里面。
+cfont.CreateFont(16, //字体大小
+0,0,0,FW_NORMAL, 
+ FALSE,FALSE, 
+ 0, 
+ ANSI_CHARSET, // nCharSet
+ OUT_DEFAULT_PRECIS, // nOutPrecision
+ CLIP_DEFAULT_PRECIS, // nClipPrecision
+ DEFAULT_QUALITY, // nQuality
+ DEFAULT_PITCH | FF_SWISS, "Arial"); // 字体
+CWnd* pWnd = GetDlgItem(IDC_STATIC_TITLE); // 静态文本的编号
+pWnd->SetFont(&cfont); 
+
+OK
+
+、、、、、、、、、、、、、、、、、、、、、、、、、、、、
+
+cfont1.CreateFont(30,
+ 0,0,0,FW_NORMAL,
+ FALSE,FALSE,
+ 0,
+ ANSI_CHARSET, // nCharSet  
+ OUT_DEFAULT_PRECIS,        // nOutPrecision  
+ CLIP_DEFAULT_PRECIS,       // nClipPrecision  
+ DEFAULT_QUALITY,           // nQuality  
+ DEFAULT_PITCH | FF_SWISS, "Arial");
+
+///////////////////////////////////////
+
+CClientDC dc(this);
+	  // CFont font;//先创立一种字体
+	   font.CreatePointFont(300,"华文行楷",NULL);//定义字体大小，什么格式
+	   dc.SelectObject(&font);//选到系统里
+
+、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
+1、在****Dlg.h文件中加入  CFont  font;     //字体对象
+
+ 
+
+2、定义一个CEdit控件变量
+
+CEdit *m_EditAa=(CEdit *)GetDlgItem(IDC_A_EDIT_A);     //关联控件A
+
+CEdit *m_EditBb=(CEdit *)GetDlgItem(IDC_B_EDIT_B);     //关联控件B
+
+
+ 
+
+3、加入下列代码
+
+font.CreatePointFont(480,"宋体");     //选择字体
+m_EditAa->SetFont(&font);
+ m_EditBb->SetFont(&font);
+
+以上第2、3步骤都在OnInitDialog.h 文件中定义 

@@ -1,0 +1,94 @@
+智能指针方式：
+	_ConnectionPtr	m_pConnection;   // 定义ADO连接、命令、记录集变量指针
+	_RecordsetPtr pRec;
+	_CommandPtr pCom;
+//执行删除操作，直接用_command命令
+	m_pConnection.CreateInstance("ADODB.Connection");
+	//-----------------连接数据库----------------------//
+	try
+	{		
+		m_pConnection->ConnectionTimeout = 8;
+		//连接ACCESS2000
+		m_pConnection->PutCursorLocation( adUseClient );
+		m_pConnection->Open("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=LUORE.mdb","","",adModeUnknown);
+		//m_pConnection->Open("File Name=my_data2.udl","","",adModeUnknown);
+（1）通过JET数据库引擎对ACCESS2000数据库的连接：
+m_pConnection->Open("Provider=Microsoft.Jet.OLEDB.4.0;
+Data Source=C:\\test.mdb","","",adModeUnknown);
+
+　　（2）通过DSN数据源对任何支持ODBC的数据库进行连接：
+m_pConnection->Open("Data Source=adotest;UID=sa;PWD=;","","",adModeUnknown);
+
+
+　　（3）不通过DSN对SQL SERVER数据库进行连接： 
+m_pConnection->Open("driver={SQL Server};Server=127.0.0.1;DATABASE=vckbase;
+UID=sa;PWD=139","","",adModeUnknown);
+	}
+	catch(_com_error e)///捕捉异常
+	{
+		AfxMessageBox("数据库连接失败!");
+		return FALSE;
+	} 
+
+	CString strSQL;
+	strSQL.Format(_T("delete * from %s where 时间 like '%%%s%%'"),strtablename,strtime);
+	try
+	{
+		_CommandPtr m_pCommand;
+		m_pCommand.CreateInstance("ADODB.Command");
+		m_pCommand->ActiveConnection = theApp.m_pConnection ;
+		m_pCommand->CommandText =(_bstr_t)strSQL;
+		m_pCommand->Execute(NULL,NULL,adCmdText);
+	}
+    catch (_com_error e)
+    {
+       MessageBox(e.ErrorMessage());	
+    }
+保存进数据库
+try
+	{
+		CTime tm=CTime::GetCurrentTime();
+	    CString strtm =	tm.Format("%Y-%m-%d-%h:%m:%s");
+		CString strql=_T("");
+		CString strstartdairy=_T("程序启动");
+	//	strql="insert  into 事件记录(时间,事件描述)value(tm,strstartdairy)";
+		strql="select * from 事件记录";
+		pRec.CreateInstance(__uuidof(Recordset));
+        pRec->Open((_variant_t)strql,_variant_t((IDispatch *)theApp.m_pConnection,true),adOpenDynamic,adLockPessimistic,adCmdUnknown);
+        pRec->AddNew();
+		pRec->PutCollect("时间",(_bstr_t)strtm);
+		pRec->PutCollect("事件描述",(_bstr_t)strstartdairy);
+		pRec->Update();
+		pRec->Close();
+	}
+    catch (_com_error e	)
+	{
+        _bstr_t bstrSource( e.Source() );
+        _bstr_t bstrDescription( e.Description() );
+		AfxMessageBox("数据库写入失败!");
+		return FALSE;
+	}
+2.另一种
+        CADORecordset* pRs;
+        CString strSQL=_T("select * from 事件记录");
+	pRs = new CADORecordset();
+	if(pRs->Open(theApp.m_pConnection,strSQL))
+        {
+	pRs->AddNew();
+	pRs->SetFieldValue("时间",m_strDate);
+	pRs->SetFieldValue("事件描述",m_Check);
+	pRs->Update();
+	pRs->Close();
+	}
+定义打开数据库操作：
+HRESULT CLyRDView::OpenDataBase
+     (
+	   CString strSQL 
+	  )
+{
+	HRESULT hr;
+	m_pRecordset.CreateInstance(__uuidof(Recordset));
+	hr = m_pRecordset->Open((_variant_t)strSQL,_variant_t((IDispatch *)theApp.m_pConnection,true),adOpenDynamic,adLockPessimistic,adCmdText);
+
+	return hr;
+}

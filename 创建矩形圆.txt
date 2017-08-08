@@ -1,0 +1,46 @@
+矩形 并填充
+	CDC* pdc=GetDC();
+	CRect itemrc(0,0,50,50);
+	CBrush brush(RGB(255,0,0));
+	pdc->FillRect(itemrc,&brush);
+	brush.DeleteObject();
+	CDialogEx::OnPaint();
+
+
+m_OK.GetWindowRect(&rect);
+
+圆形 并填充
+CBrush brush3(RGB(255,0,0));
+	pdc->SelectObject(&brush3);
+	pdc->Ellipse(190,20,240,70);
+	brush3.DeleteObject();
+    CDialogEx::OnPaint();
+
+
+HDC *pDC = ::GetDC();
+CBrush brush(RGB(x,x,x));//根据自己需要填充颜色
+CBrush *oldbrush;oldbrush = pDC->SelectObject(&brush);//选新的画刷
+pDC->Ellispe(x1,y1,x2,y2);
+pDC->SelectObject(oldbrush);//将原来的画刷选回去 
+
+
+
+m_static1.GetWindowRect(&m1);
+POINT d1;
+POINT d2;
+d1=m2.TopLeft();
+d2=m2.BottomRight();
+pdc->FillRect(m1,&brush);
+pdc->Ellipse(d1.x,d1.y,d2.x,d2.y);
+
+获取 静态框 透明框
+GetDlgItem(IDC_GROUP_STATIC)->GetWindowRect(&rect);//获取控件的屏幕坐标
+		ScreenToClient(&rect);//转换为对话框上的客户坐标
+		CPen NewPen(PS_SOLID, 1, RGB(255,0,0));  
+		pdc->SelectObject(&NewPen);  
+		POINT d1=rect.TopLeft();
+		POINT d2=rect.BottomRight();
+		pdc->SelectStockObject(NULL_BRUSH);   
+		pdc->Rectangle(d1.x, d1.y, d2.x, d2.y);  
+		NewPen.DeleteObject();
+		CDialogEx::OnPaint();

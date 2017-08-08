@@ -1,0 +1,542 @@
+ var _blog_base_url = 'http://vc2000.blog.sohu.com/'; var _blog_base_path = 
+'http://vc2000.blog.sohu.com/'; var _blog_domain='vc2000'; var _ebi = 
+'beab664892'; var _ept = 'vicle_won'; var _xpt = 'dmljbGVfd29uQHNvaHUuY29t'; var 
+_upt = 'dmljbGVfd29uQHNvaHUuY29t';   VC线程向主窗口发送带参数的消息-开心程序员-搜狐博客    var JSPATH = 
+{}, HCP='http://js2.pp.sohu.com.cn/ppp/js/common_v_20120320/',
+ HMP='http://js4.pp.sohu.com.cn/ppp/js/module_v_20130922/',
+ HTP='http://js5.pp.sohu.com.cn/ppp/js/tool_v_090418/';
+ JSPATH.util={common:HCP+'common.js',module:HMP,tool:HTP}; var BLOG_SP = 
+'http://js3.pp.sohu.com.cn/ppp/blog/js_ppp_v_20140227/';
+ JSPATH.blog={_path:BLOG_SP}; var TP = 
+'http://js2.pp.sohu.com.cn/ppp/group/toolbar_v_090827/';       
+body{background-image: 
+url(http://1841.img.pp.sohu.com.cn/images/blog/2008/12/10/21/3/11ec9bac316g215.jpg);}
+ #header-bak{background-image: 
+url(http://1871.img.pp.sohu.com.cn/images/blog/2008/12/10/21/2/11ec9bc2833g213.jpg);}
+ #header{height: 141px;} body-bak{background-image: 
+url(http://1841.img.pp.sohu.com.cn/images/blog/2008/12/10/21/3/11ec9bac316g215.jpg);}
+ #body-bak{background-image: 
+url(http://1843.img.pp.sohu.com.cn/images/blog/2008/9/13/8/17/11d000e97deg214.jpg);}  
+	 
+
+
+
+分享到
+
+  一键分享
+
+
+  QQ空间
+
+
+  新浪微博
+
+
+  百度云收藏
+
+
+  人人网
+
+
+  腾讯微博
+
+
+  百度相册
+
+
+  开心网
+
+
+  腾讯朋友
+
+
+  百度贴吧
+
+
+  豆瓣网
+
+
+  搜狐微博
+
+
+  百度新首页
+
+
+  QQ好友
+
+
+  和讯微博
+
+
+  更多...
+
+
+百度分享
+ var toolbarSysRec = [ ]; function showToolbarAd(){ try { if (toolbarSysRec) { 
+var len = toolbarSysRec.length; if (!toolbarSysRec[len - 1]) { len = len - 1; } 
+var n = Math.floor(Math.random() * len); var rd = toolbarSysRec[n]; return '<a 
+href="'+ rd.tip.url + '" target="_blank" onmousedown="CA.q(\'toolbar_tips\');">' 
++ rd.tip.title + '</a>'; } } catch (err) { } return ''; }  
+ var SP = BLOG_SP; var ThP = 
+'http://js2.pp.sohu.com.cn/ppp/blog/themes_ppp_v_20140529/'; var WP = 
+'/ppp/blog/widgets_v_20140529/'; var UWAP = 
+'http://js3.pp.sohu.com.cn/ppp/blog/widgets_v_080920/uwa_widget/';
+ document.write('<scr'+'ipt type="text/javascript" src="'+ SP + 
+'sohublog.js"></scr'+'ipt>');  var utf8jss = [SP+'common.v.20140529.js', 
+'http://r.suc.itc.cn/combo.action?v.120412&r=/itoolbar/core/base64.js|/itoolbar/core/jquery.cookie.js|/itoolbar/core/jquery.easing.js|/itoolbar/core/jquery.hotmap.js|/itoolbar/core/passport.js&t=js&c=utf-8'];
+ lsl([HCP+'common.js'], 'utf-8');
+ lsl(['http://js2.pp.sohu.com.cn/ppp/blog/js_v_100326/pp18030_all.v.13042501.js',)
+HTP+'effect.js']); lsl(utf8jss, 'utf-8'); var noToolBar = true;
+ lsl([TP+'toolbar.v.20130716.js'], 'utf-8');  
+
+
+
+
+ 
+
+
+登录注册
+
+  |
+
+
+
+  |
+
+  博文广场
+
+
+  
+
+
+
+
+
+
+
+登录名  
+
+密码  
+
+
+登录  记住登录状态 
+
+注册新用户忘记密码帮助中心 
+
+正在登录,请稍候...
+
+
+使用您常用的账号登录
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+开心程序员
+
+首页 日志 相册 视频 资料  
+
+开心程序员
+
+
+  document.write(getNavIco('', '首页'));
+  首页
+
+
+
+
+
+
+
+
+搜狐博客 > 开心程序员 > 日志 > VC程序员 
+
+#sz_qz { width: 100%; overflow: hidden; height: 18px; padding: 15px 0; } #sz_qz 
+.qz-tt { color: #666; float: left; font-size: 12px; height: 22px; line-height: 
+22px; } #sz_qz .to { margin-right: 8px; float: left; line-height: 18px; 
+margin-bottom: 8px; } #sz_qz .to .txt-img { font-size: 12px; font-style: normal; 
+background-color: #ED7B49; color: #FFFFFF; display: inline-block; font-family: 
+Helvetica, Arial, sans-serif; height: 18px; line-height: 18px; margin-right: 
+3px; text-align: center; width: 18px; } #sz_qz .to a { color: #333; font-size: 
+12px; text-decoration: none; } #sz_qz .to a:hover { color: #ed7b49; 
+text-decoration: underline; }  var bruUrl = 
+"http://i.sohu.com/login/logon.do?bru=http://vc2000.blog.sohu.com/142406768.html";  
+
+搜狐博客 > 开心程序员 > 日志 > VC程序员 
+
+
+
+
+
+
+
+
+
+
+
+      个人资料
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+      博客年龄：4年6个月
+       访问：?次
+       文章：5篇
+
+
+      个人描述
+
+
+
+      #sideBlogStat 
+      ul{margin:0;overflow:hidden;white-space:nowrap;list-style:none;padding:0;} 
+      #sideBlogStat ul li{line-height:20px;}   
+
+
+      修改个性介绍
+
+
+      推荐给跟随
+
+
+ 
+
+
+
+
+
+
+      博主最新文章
+
+
+
+        VC线程向主窗口发送带参数的消息 
+        VC ListCtrl控件双击行时获取行号 
+        VC中利用Wininet下载网页 
+        MFC消息框自动关闭 
+        MFC对话框型程序动态修改自身标题 
+
+      更多文章>>
+
+
+
+ 
+
+
+
+
+
+      推荐博文
+
+
+
+
+
+
+      雾中攀爬华山天险
+
+
+      韩国最牛酒店
+        央行万亿刺激房地产后果
+        张庭宾
+        哪些城市房价还会上涨
+        金岩石
+        名校也不上"考霸"究竟留恋啥
+        熊丙奇
+        乌镇似水年华只为一场旧梦
+        武阿哥
+        让你胃口大开的咖喱口水鸡
+        蛋糕妈妈
+        美女敢胸衣外穿才是王道
+        AvaFoo
+
+      更多相关文章>>
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+      日志正文
+
+
+
+
+
+
+
+
+
+
+
+      VC线程向主窗口发送带参数的消息 
+
+      分类：VC程序员 | 标签： VC  线程  消息  通迅  
+
+      2010-01-16 11:03 阅读(?)评论(0)编辑删除 
+
+
+
+        VC与主窗口之间，可通过发送自定义消息的方式通迅，并可在消息中传递参数。
+
+        
+
+        自定义消息：
+
+        #define WM_THREAD              (WM_USER+100)
+
+        
+
+        常数定义
+
+        #define THREAD_WPARAM_1        0　　　
+
+        #define THREAD_LPARAM_1        0
+
+        
+
+        娈量定义
+
+        HWND hDlgWnd;    //用来保存主窗口的句柄，可在窗口初始化时为其赋值　hDlgWnd = GetSafeHwnd();
+
+        
+
+        主窗口类定义中声明消息处理函数
+
+         // Generated message map functions
+       //{{AFX_MSG(CMyDlg)
+
+          ......
+          afx_msg void OnThreadMessage(WPARAM wParam,  LPARAM lParam);
+       //}}AFX_MSG
+       DECLARE_MESSAGE_MAP()
+
+        
+
+       主窗口类中定义消息映射
+
+       BEGIN_MESSAGE_MAP(CMyDlg, CDialog)
+       //{{AFX_MSG_MAP(CMyDlg)
+
+          ......
+
+          ON_MESSAGE(WM_THREAD, OnThreadMessage) 
+       //}}AFX_MSG_MAP
+       END_MESSAGE_MAP()  
+
+          
+
+      消息处理函数    
+
+      void CMyDlg::OnThreadMessage(WPARAM wParam,  LPARAM lParam) 
+      {
+         switch(wParam)
+         {
+           case THREAD_WPARAM_1:
+
+             ....
+             break;
+
+           default:
+             break;
+         }  
+      }
+
+       
+
+      进程函数     
+
+      UINT ThreadTest(LPVOID lpParam)
+
+      {
+
+        SendMessage(hDlgWnd, WM_THREAD, THREAD_WPARAM_1, THREAD_LPARAM_1);    
+
+        return 0;
+
+      }
+
+          
+
+
+
+       
+
+      分享到：
+
+
+
+       document.getElementById("bdshell_js").src = 
+      "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + 
+      Math.ceil(new Date()/3600000)     最后修改于 2010-01-16    阅读(?)评论(0)编辑删除 
+       下一篇：VC ListCtrl控件双击行时获取行号   
+
+
+
+      提示：“固定链接”为您显示此篇文章的固定不变链接，如果您有还有疑问请点击帮助
+      链接地址：http://vc2000.blog.sohu.com/142406768.html 复制此地址
+
+
+
+
+
+
+      评论     想第一时间抢沙发么？
+
+
+
+
+
+      var entryId = '142406768'; var blogId = ''; var pageTextContainer = 
+      $('pageText'); var curPage = 1; var itemPerPage = 20; var startPage = 1;
+       var totalCount = 0; var chagePageAction = 'chagePage'; var noCache = 
+      location.href.indexOf('?') > 0; chagePage();  
+
+       
+          
+             
+            评论内容: 
+            表　　情:document.write('<scr'+'ipt type="text/javascript" src="'+ HMP + 
+            'emote.js"></scr'+'ipt>');  
+            加载中... 
+            var commentContentEl = null; function addEmote(ubb) { if 
+            (!commentContentEl) commentContentEl = $('commentContent');
+             commentContentEl.value += ' ' + ubb; commentContentEl.focus(); }
+             Emote.init({parent: 'emotionBox', callback: addEmote, stat: 
+            'reply'});  
+
+               
+            请各位遵纪守法并注意语言文明
+
+       var commentPermission = '0'; setCPShow();  
+
+
+
+
+var isblanked = false; var hidimg = 
+"http://1824.img.pp.sohu.com.cn/images/blog/2010/1/16/9/26/126e569ff16g215.jpg";
+ var nick = "开心程序员"; var showurl = "http://vc2000.i.sohu.com"; var tags = '';
+ tags='VC 线程 消息 通迅'  document.write('<scr'+'ipt type="text/javascript" 
+src="'+SP+'counter.js"></scr'+'ipt>');     *html .fixed-bottom 
+{position:absolute;bottom:auto;top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-parseInt(this.currentStyle.bottom)));}a
+#popup{ position:fixed; _position:absolute; display:none; } h3{margin:0} #popup 
+.pop-wrapper .title h4{ 
+background:url("http://i2.itc.cn/20140303/73a_d1d941dc_a3a3_535b_f165_d3844395343e_1.gif")o
+no-repeat scroll 32px 0!important; height: 22px; width:100px!important; 
+padding-left: 32px; margin: 0; }}  
+ 
+
+
+
+
+
+
+3分钟免费把生意搬到手机上 
+
+
+
+村头树五谷杂粮试用
+
+工作一天回到家，畅饮一碗温润的小米粥或者一杯冰镇绿豆汤吧~
+
+  甜蜜中开启新周——可可饼干
+  健康不腻的老北京茄子馅儿饺子
+  吃鱼不吐刺——烙饼卷带鱼
+  入伏解暑的白汤虾皮冬瓜
+  营养美味金不换菜脯炒薄壳
+function wmh_linkClick() { var stat = new Image; stat.src = 
+"http://pv.mini.sohu.com/blog.gif?t=" + new Date().getTime(); }   var popupAd = 
+new bms.popup(); 
+popupAd.init('popup','closepopup',false,120,function(){CA.q('popup_show')}); 
+setTimeout(popupAd.popupAd,2000); 
+//window.onload=function(){setTimeout(popupAd.popupAd,500)};  (function(){ 
+$(function(){ $('#popup .action i.btn-draw').hover(function(){ 
+$(this).addClass('btn-draw-hover'); },function(){ 
+$(this).removeClass('btn-draw-hover'); }); $('#popup .action 
+i.btn-exchange').hover(function(){ $(this).addClass('btn-exchange-hover'); 
+},function(){ $(this).removeClass('btn-exchange-hover'); }); }); })(jQuery)  
+
+
+帮助 - 客服中心 - 意见建议 - 举报 - 搜狐博客 - 搜狐首页 - 全部博文 - 新闻 function writeReport() { if 
+(typeof entryId == 'undefined' || !entryId) return; var url = 
+'http://act.blog.sohu.com/plus/impeach.jsp?rp='+escape(location.href)+'&p='+escape(getP());
+ var str = ''; str += ' | <a href="'+ url +'" target="_blank" 
+rel="nofollow">举报不良信息</a>'; document.write(str); } writeReport();  | 举报不良信息 
+
+Copyright &copy; 2014 Sohu.com Inc. All rights reserved. 搜狐公司 版权所有 
+   var _wratingId = '860010-0601020100'; if(_wratingId !=null){
+ document.write('<scr'+'ipt type="text/javascript" 
+src="http://js.sohu.com/a1.js"></scr'+'ipt>'); } 
+
+if(_wratingId !=null){ document.write('<scr'+'ipt type="text/javascript">');
+ document.write('var vjAcc="'+_wratingId+'";'); document.write('var 
+wrUrl="http://sohu.wrating.com/";');
+ document.write('try{vjTrack();}catch(e){}'); document.write('</scr'+'ipt>'); } 
+var vjAcc="860010-0601020100";var 
+wrUrl="http://sohu.wrating.com/";try{vjTrack();}catch(e){} function 
+checkLogonUserCount() { if (getCookie('lastdomain') && getCookie('lastdomain') 
+!= '') { var _lastdomain = getCookie('lastdomain').split('|')[1]; if 
+(_lastdomain) { var _url = 'http://bgt.blog.sohu.com/blogping.gif?sohupp='+ 
+_lastdomain; _url += '&refer='+ escape(document.referrer); _url += '&c='+ 
+timeStamp(); if (isLogin()) { _url += '&logon='+ getXP(); } document.write('<img 
+src="'+ _url +'" />'); } } } checkLogonUserCount();  

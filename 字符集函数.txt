@@ -1,0 +1,223 @@
+/D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NON_CONFORMING_SWPRINTFS"
+
+int ieng = _tcstoul(streng,0,16);
+
+asci：strcpy(m_NotifyData.szTip, "认证系统客户端");
+unicode：wcscpy(m_NotifyData.szTip, L"认证系统客户端");
+ 
+wcscpy_s(m_NotifyData.szTip, _countof(m_NotifyData.szTip),_T(" 隶书") );
+errno_t wcscpy_s(
+   wchar_t *strDestination,
+   size_t numberOfElements,
+   const wchar_t *strSource 
+);
+strDestination
+目标字符串缓冲区的位置。
+numberOfElements
+多字节窄函数 char 单元以及宽函数 wchar_t 单元中的目标字符串缓冲区的大小。
+strSource
+以 null 结尾的源字符串缓冲区。
+
+
+wcscpy_s 是宽字符版本的 strcpy_s；_mbscpy_s 是多字节字符版本。
+
+strcat_s( string, _countof(string), "strcat_s!" );
+、、、、///////////////////////////////////////////////////////////
+vsnprintf(szBuffer, dwLength, szFormat, va);
+_vsnprintf_s(szBuffer,sizeof(szBuffer), dwLength, szFormat, va);
+
+
+int vsnprintf(
+   char *buffer,
+   size_t count,
+   const char *format,
+   va_list argptr 
+
+buffer 输出的存储位置。  count 的最大字符数写入的。  format 格式规范。  argptr 列表的指针参数。  locale 使用的区域设置。 
+int vsnprintf_s(
+   char *buffer,
+   size_t sizeOfBuffer,
+   size_t count,
+   const char *format,
+   va_list argptr 
+);
+buffer输出的存储位置。sizeOfBuffer buffer 的输出大小作为字符数。count 最大字符数编写(不包括终止空字符），或者 _TRUNCATE。format格式规范argptr 指向参数列表的指针。locale 要使用的区域设置。
+
+sizeof()  ：返回所查询目标所占用字节数
+
+_countof() ：返回所查询目标所含有元素个数
+
+
+swprintf( tempwcX, L"%s", tempStrX.c_str());  
+
+swprintf( tempwcX, 100, L"%s", tempStrX.c_str());  
+
+、、、、、、、字符串转 char*     宽字节Unicode、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
+	CString bianji=_T("");
+	
+	GetDlgItemText(IDC_EDIT1,bianji);
+
+	const size_t strsize=(bianji.GetLength()+1)*2; // 宽字符的长度;
+	char * pstr= new char[strsize]; //分配空间;
+	size_t sz=0;
+	wcstombs_s(&sz,pstr,strsize,bianji,_TRUNCATE);
+	double fudian=atof(pstr);
+
+浮点型和16进制互转 Unicode
+/*	int i=0x41D841D8;
+	float lin;
+	lin=*(float*)&i;
+	CString ss;
+	ss.Format(_T("%.6f"),lin);
+	SetDlgItemText(IDC_EDIT2,ss);*/
+
+	/*float f=27.03215027;
+	int i;
+	i=*(int *)&f;
+	CString ss;
+	ss.Format(_T("%x"),i);
+	SetDlgItemText(IDC_EDIT2,ss);*/
+
+、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
+一.CString与LPCWSTR 
+
+两者的不同：LPCWSTR 是Unicode字符串指针，初始化时串有多大，申请空间就有多大，以后存贮若超过则出现无法预料的结果，这是它与CString的不同之处。而CString是一个串类，内存空间类会自动管理。
+
+CString转换成LPCWSTR
+
+方法一：CString strFileName;
+
+LPCWSTR lpcwStr = strFileName.AllocSysString();
+
+方法二：CString str=_T("TestStr"); 
+USES_CONVERSION; 
+LPCWSTR lpcwStr = A2CW((LPCSTR)str);
+
+MFC中CString和LPSTR是可以通用，其中A2CW表示(LPCSTR) -> (LPCWSTR)，USER_CONVERSION表示用来定义一些中间变量，在使用ATL的转换宏之前必须定义该语句。
+
+LPCWSTR转换成CString
+
+LPCWSTR lpcwStr = L"TestWStr"; 
+CString str(lpcwStr);
+
+二.CString与LPSTR转换
+
+CString转换成LPSTR:
+
+方法一：CString strFileName;
+
+LPSTR lpStr = strFileName.GetBuffer();
+
+strFileName.ReleaseBuffer();
+
+方法二：CString strFileName;
+
+LPSTR lpStr = (LPSTR)(LPCSTR)strFimeName;
+
+LPSTR转换成CString:
+
+LPSTR lpStr = L"TestStr"; 
+CString str(lpStr);
+
+注意：CString和LPCSTR可直接转换，如下:
+
+CString str;
+
+LPCSTR lpcStr = (LPCSTR)str;
+
+三.CString和char*转换
+
+CString转换成char*
+方法一：CString str;
+char* p = str.GetBuffer();
+方法二：CString str;
+char* p = (LPSTR)(LPCSTR)str;
+
+
+char*转换成CString
+char* p = "test";
+CString str = ("%s",p);
+
+四.String和int、float的转换
+
+可以使用atoi,atof,atol等函数来完成。
+
+五.LPSTR(char*)和LPWSTR的转换
+
+可以使用下面的ATL宏来进行，最好是将变量定义成TCHAR、LPTSTR等T类型，可以避免转换。
+
+ATL宏介绍：
+
+A2BSTR OLE2A T2A W2A 
+A2COLE OLE2BSTR T2BSTR W2BSTR 
+A2CT OLE2CA T2CA W2CA 
+A2CW OLE2CT T2COLE W2COLE 
+A2OLE OLE2CW T2CW W2CT 
+A2T OLE2T T2OLE W2OLE 
+A2W OLE2W T2W W2T
+
+A ：ANSI 字符串，也就是 MBCS。 
+W、OLE 宽字符串，也就是 UNICODE。 
+T 中间类型T。如果定义了 _UNICODE，则T表示W；如果定义了 _MBCS，则T表示A 
+C const 的缩写
+
+利用这些宏，可以快速的进行各种字符间的转换。使用前必须包含头文件，并且申明USER_CONVERSION；使用 ATL 转换宏，由于不用释放临时空间，所以使用起来非常方便。但是考虑到栈空间的尺寸（VC 默认2M），使用时要注意几点：
+
+1、只适合于进行短字符串的转换； 
+2、不要试图在一个次数比较多的循环体内进行转换； 
+3、不要试图对字符型文件内容进行转换，因为文件尺寸一般情况下是比较大的； 
+4、对情况 2 和 3，要使用 MultiByteToWideChar() 和 WideCharToMultiByte()；
+
+void Func1(LPSTR lpStr);
+
+void Func2(LPWSTR lpwStr);
+
+TCHAR name[256];
+
+TCHAR* pName = new TCHAR[256];
+
+Func1(name); // Func1(pName);
+
+Func2(name); // Func2(pName);
+
+注意在VS2005中上面用红色标记的代码已经不成立。
+
+VS2005中CString已经改为宽字符型，一些转换如下：
+
+char name[10];
+TCHAR sex[5] ;
+char *p = name;
+TCHAR *pw = sex;
+
+LPSTR lpstr = name;
+LPCSTR lpcstr = name;
+lpcstr = lpstr;
+lpstr = p;
+p = (char*)sex;
+pw = (WCHAR*)name;
+LPWSTR lpwstr = (LPWSTR)lpstr;
+lpwstr = (LPWSTR)lpcstr;
+LPCWSTR lpcwstr = (LPCWSTR)lpstr;
+lpcwstr = (LPCWSTR)name;
+
+CString str(lpstr);
+CString str1(lpcstr);
+CString str2(lpwstr);
+CString str3(lpcwstr);
+CString str4(name);
+CString str5(sex);
+
+lpwstr = (LPWSTR)(LPCWSTR)str;
+lpstr = (LPSTR)(LPCWSTR)str;
+lpcstr = (LPCSTR)(LPCWSTR)str;
+
+p = (char*)str.GetBuffer();
+pw = str.GetBuffer();
+
+可以看出转换更加简单了，基本上可以直接转换，A2W等宏基本上不需要啦。UNICODE
+	
+char* temp=new char【50】；
+  CString str = CString(Temp);  
+    USES_CONVERSION;  
+    LPCWSTR wszClassName = A2CW(W2A(str));  
+    str.ReleaseBuffer(); 

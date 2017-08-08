@@ -1,0 +1,21 @@
+	用MsgWaitForMultipleObjects方式
+			CWinThread*pThreadzhu = AfxBeginThread(duquzhuthread,this,THREAD_PRIORITY_NORMAL,0,CREATE_SUSPENDED);
+			pThreadzhu->ResumeThread();
+			
+			CWinThread*pThreaddui = AfxBeginThread(duquduithread,this,THREAD_PRIORITY_NORMAL,0,CREATE_SUSPENDED);
+			pThreaddui->ResumeThread();
+			HANDLE g_hRetEvent[2]={pThreadzhu->m_hThread,pThreadzhu->m_hThread};
+			//g_hRetEvent[0]=pThreadzhu->m_hThread;
+			DWORD dwRet = 0;
+			::Sleep(0);
+			doevent();
+			do
+			{
+				dwRet=::MsgWaitForMultipleObjects(2,g_hRetEvent,TRUE,INFINITE,QS_ALLINPUT);	
+				if(dwRet!=WAIT_OBJECT_0)
+				{
+					doevent();
+				}
+			}
+			while ((dwRet!=WAIT_OBJECT_0)&&(dwRet!=WAIT_FAILED));
+2 、用event 方式

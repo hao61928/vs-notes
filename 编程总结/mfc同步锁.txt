@@ -1,0 +1,17 @@
+同步锁
+ CMutex m_mutex;
+
+ CSingleLock slock(&m_mutex);
+ slock.lock();
+     if (slock.Lock( 1000)) // 时间以毫秒记,
+     {
+     ……
+     slock.unlock();
+     }
+如果在这个类中保存的数据与其他类中保存的数据相关，则在两个类中嵌入CMutex变量，两边都用CMultiLock等待，如下所示：
+     CMutex mutex[2];
+     mutex[0] = &mutex1;
+     mutex[1] = &mutex2;
+     CMultiLock mlock( mutex,2 ); // where 2 is the number of mutexes
+     if (mlock.Lock(1000))
+     { }

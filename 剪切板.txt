@@ -1,0 +1,66 @@
+单击按钮 复制编辑框的内容
+void Ctest1Dlg::OnBnClickedZihuiButton()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	
+	// TODO: 在此添加控件通知处理程序代码
+     if( !OpenClipboard() )
+     {
+        AfxMessageBox( _T("Cannot open the Clipboard!") );
+        return;
+    }
+ 
+    // 将剪贴板内容清空，释放数据资源，然后指定当前打开剪贴板的窗口为剪贴板的所有制
+     if( !EmptyClipboard() )        
+     {
+         AfxMessageBox( _T("Cannot empty the Clipboard!") );
+         return;
+    }
+ 
+     // 取回当前控件的数据，hData开辟全局内存区域，存放数据
+     CStringW str;
+     this->GetDlgItemTextW( IDC_EDIT2, str );
+    size_t cbStr = (str.GetLength()+1)*sizeof(TCHAR);
+     HGLOBAL hData = GlobalAlloc(GMEM_MOVEABLE, cbStr);
+     memcpy_s( GlobalLock(hData), cbStr, str.LockBuffer(), cbStr );
+     GlobalUnlock( hData );
+     str.UnlockBuffer();
+ 
+    // 选择合适的格式
+     UINT uiFormat = (sizeof(TCHAR)==sizeof(WCHAR)) ? CF_UNICODETEXT : CF_TEXT;
+     if(::SetClipboardData( uiFormat, hData ) == NULL )
+     {
+         AfxMessageBox(_T("Unable to set Clipboard data"));
+         CloseClipboard();
+         return;
+     }
+    CloseClipboard();
+
+}
+
+
+将剪贴布的内容 粘贴出来
+
+ void CChipBoardOperateDlg::OnBnClickedBtnPastecb()
+39 {
+40     if( !OpenClipboard() )
+41     {
+42         AfxMessageBox( _T("Cannot open the Clipboard!") );
+43         return;
+44     }
+45 
+46     // 选择合适的格式（读取的时候不用获得剪贴板的拥有权）
+47     UINT uiFormat = (sizeof(TCHAR)==sizeof(WCHAR) ? CF_UNICODETEXT : CF_TEXT );
+48     HANDLE hData = ::GetClipboardData( uiFormat );
+49     if( NULL == hData )
+50     {
+51         AfxMessageBox( _T("Unable to get Clipboard data!") );
+52         CloseClipboard();
+53         return;
+54     }
+55     CStringW str;
+56     LPCTSTR lpdata = (LPCTSTR)GlobalLock(hData);
+57     this->SetDlgItemTextW( IDC_EDIT_PASTECB, lpdata );
+58     GlobalUnlock( hData );
+59     CloseClipboard();
+60 }

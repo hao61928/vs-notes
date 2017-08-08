@@ -1,0 +1,62 @@
+Unicode  下 判断只允许英文和数字
+	int len=dizhi.GetLength();
+	if(len!=12)
+	{
+			MessageBox(_T("地址位数为12位！"));
+			return;
+	}
+	 unsigned   char   tmp;   
+	for(int i=0;i<len;i++)
+	{
+		
+		tmp=dizhi[i];
+		if(tmp>0x7f)  //判断中文  可省略
+		{
+			MessageBox(_T("只允许字母和数字！"));
+			return;
+		}
+		tmp=dizhi.GetAt(i);
+		if( !(isalpha(tmp)  || isalnum(tmp)) )
+		{
+			MessageBox(_T("只允许字母和数字！"));
+			return;
+		}
+
+	}
+	
+只适用用于多字节
+	
+ /* CString   s;   
+  s   =   "sss黄飞鹄9999";   
+  int   lens;   
+  lens   =   strlen(s);   
+    
+  unsigned   char     s1[10],s2[10],s3[10];   
+    
+  unsigned   char   ch;   
+  int   l,m,n;   
+  l=m=n   =   0;   
+  for(int   i=0;i<lens;i++)
+  {   
+	  ch   =   s[i];   
+	  if(ch   >   0x7f)
+	  {   
+		s1[l++]   =   ch;   
+	  }else   if(ch   >=   '0'   &&   ch   <=   '9')
+	  {   
+		s2[m++]   =   ch;   
+	  }else
+	  {   
+		s3[n++]   =   ch;   
+	  }   
+  }   
+  s1[l]   =   '\0';   
+  s2[m]   =   '\0';   
+  s3[n]   =   '\0';   
+  CString   cs;   
+  cs   =   s1;   
+  MessageBox(cs,_T("中文"),MB_OK);   
+  cs   =   s2;   
+  MessageBox(cs,_T("数字"),MB_OK);   
+  cs   =   s3;   
+  MessageBox(cs,_T("英文"),MB_OK);*/

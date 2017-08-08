@@ -1,0 +1,34 @@
+信号灯一般用来限制 可以同时存取一共同区域的数目。
+
+它的用法是:
+先用CreateSemaphore初始化最大数和当前数
+
+当前数为0时，信号灯为nonsingled状态，也就是说这时用WaitForSingleObject时会等待直到当前数大于0（或超时），如果不为0时，用WaitForSingleObject就马上返回并把当前数减一;
+
+那如何增加当前数呢? 曰: ReleaseSemaphore.
+
+GetPrivateProfileString 
+读取.ini文件：DWORD GetPrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpDefaut,LPSTR lpReturnedString,DWORD nSize,LPCTSTR lpFileName);
+
+读取整形值：UINT GetPrivateProfileInt(LPCTSTR lpAppName,LPCTSTR lpKeyName,INT nDefault,LPCTSTR lpFileName);
+其中个参数的意思：
+LPCTSTR lpAppName ------- INI文件中的一个字段名
+LPCTSTR lpKeyName -------- lpAppName 下的一个键名，也就是里面具体的变量名
+LPCTSTR lpString ---------是键值，也就是变量的值， 必须为LPCTSTR或CString类型
+LPCTSTR lpFileName --------完整的INI文件路径名
+LPCTSTR lpDefaut ----------如果没有其前两个参数值，则将此值赋给变量
+LPSTR lpReturnedString --------接收INI文件中的值的CString对象，即接收缓冲区
+DWORD nSize ------接收缓冲区的大小
+
+DECLARE_MESSAGE_MAP() 
+说明： 
+用户程序中的每个CCmdTarget派生类必须提供消息映射以处理消息。在类定义的末尾使用DECLARE_MESSAGE_MAP宏。接着，在定义类成员函数的.CPP文件中，使用BEGIN_MESSAGE_MAP宏，每个用户消息处理函数的宏项下面的列表以及END_MESSAGE_MAP宏。 
+注释： 
+如果在DECLARE_MESSAGE_MAP之后定义任何一个成员，那么必须为他们指定一个新存取类型（公共的，私有的，保护的）。 
+其中BEGIN_MESSAGE_MAP(参数1,参数2) ,参数1为该类的类名，参数2为该类基类的类名。 
+其中ON_MESSAGE(参数1，参数2），参数1为响应的消息，参数2为该消息对应的处理的函数名。 
+ 
+ atoi     把字符串转换成整型数
+ itoa      把一整数转换为字符串
+
+

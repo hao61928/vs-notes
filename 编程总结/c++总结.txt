@@ -1,0 +1,256 @@
+字符串按照特定字符进行分割是编程时候经常要用到方法
+
+MFC中CString 和std::string 常可以用 find() + Mid() 的方法来实现
+
+CString实现:
+
+Cpp代码 
+inline static void split(CString src, CString token, vector<CString>& vect)    
+{    
+    int nend=0;    
+    int nbegin=0;    
+    while(nend != -1)    
+    {    
+        nend = src.Find(token, nbegin);    
+        if(nend == -1)    
+            vect.push_back(src.Mid(nbegin, src.GetLength()-nbegin));    
+        else   
+            vect.push_back(src.Mid(nbegin, nend-nbegin));    
+        nbegin = nend + 1;    
+    }    
+}    
+std::string实现
+
+Cpp代码 
+inline static void split(std::string src, std::string token, vector<std::string>& vect)    
+{    
+    int nend=0;    
+    int nbegin=0;    
+    while(nend != -1)    
+    {    
+        nend = src.find_first_of(token, nbegin);    
+        if(nend == -1)    
+            vect.push_back(src.substr(nbegin, src.length()-nbegin));    
+        else   
+            vect.push_back(src.substr(nbegin, nend-nbegin));    
+        nbegin = nend + 1;    
+    }    
+}   
+c++ odbc 保存xls表格
+ExportListToExcel(CListCtrl *pList, CString sExcelFile, CString sSheetName)
+{
+	CString warningStr;
+	if(pList->GetItemCount() > 0) 
+	{ 
+		CDatabase database;
+		CString sDriver;
+		CString sSql;
+		// 检索是否安装有Excel驱动 "Microsoft Excel Driver (*.xls)" 
+		sDriver = GetExcelDriver();
+		if(sDriver.IsEmpty())
+		{
+			// 没有发现Excel驱动
+			MessageBox("没有安装Excel!/n请先安装Excel软件才能使用导出功能!", "提示", MB_OK|MB_ICONSTOP|MB_TOPMOST);
+			return;
+		}
+		// 创建进行存取的字符串
+		sSql.Format("DRIVER={%s};DSN='';FIRSTROWHASNAMES=1;READONLY=FALSE;CREATE_DB=\"%s\";DBQ=%s",sDriver, sExcelFile, 	sExcelFile);
+		// 创建数据库 (既Excel表格文件)
+		if(database.OpenEx(sSql, CDatabase::noOdbcDialog) )
+		{
+			// 创建表结构
+			int i;
+			LVCOLUMN columnData;
+			CString columnName;
+			int columnNum = 0;
+			CString strH;
+			CString strV;
+			
+			sSql = "";
+			strH = "";
+			columnData.mask = LVCF_TEXT;
+			columnData.cchTextMax =100;
+			columnData.pszText = columnName.GetBuffer (100);
+			for(i=0;pList->GetColumn(i,&columnData);i++)
+			{
+				if (i!=0)
+				{
+					sSql = sSql + "," ;
+					strH = strH + "," ;
+				}
+				sSql = sSql + columnData.pszText + " TEXT";
+				strH = strH + columnData.pszText + " ";
+			}
+			columnName.ReleaseBuffer ();
+			columnNum = i;
+			
+			sSql = "CREATE TABLE " + sSheetName+ " (" + sSql +  ")";
+			database.ExecuteSQL(sSql);
+			// 插入数据项
+			int nItemIndex;
+			for(nItemIndex=0;nItemIndex<pList->GetItemCount ();nItemIndex++)
+			{
+				strV = "";
+				for(i=0;i<columnNum;i++)
+				{
+					if (i!=0)
+					{
+						strV = strV + "," ;
+					}
+					strV = strV + "'" + pList->GetItemText(nItemIndex,i) +"'";
+				}
+				sSql = "INSERT INTO "+ sSheetName
+					+" ("+ strH + ")"
+					+" VALUES("+ strV + ")";
+				database.ExecuteSQL(sSql);
+			}
+		}      
+		// 关闭数据库
+		database.Close();
+		
+		warningStr.Format("导出文件保存于%s!", sExcelFile);
+		MessageBox(warningStr, "提示", MB_OK|MB_ICONINFORMATION|MB_TOPMOST);
+	}
+	else
+	{
+		//没有数据
+		MessageBox("没有数据，不能导出!", "提示", MB_OK|MB_ICONWARNING|MB_TOPMOST);
+	}
+}
+//获取ODBC中Excel驱动函数
+CString GetExcelDriver()
+{
+	char szBuf[2001];
+    WORD cbBufMax = 2000;
+    WORD cbBufOut;
+    char *pszBuf = szBuf;
+    CString sDriver="";
+    // 获取已安装驱动的名称(涵数在odbcinst.h里)
+    if (!SQLGetInstalledDrivers(szBuf, cbBufMax, &cbBufOut))
+        return "";
+    // 检索已安装的驱动是否有Excel...
+    do
+    {
+        if (strstr(pszBuf, "Excel") != 0)
+        {
+            //发现 !
+            sDriver = CString(pszBuf);
+            break;
+        }
+        pszBuf = strchr(pszBuf, '\0') + 1;
+    }while (pszBuf[1] != '\0');
+ 
+    return sDriver;
+}
+mfc程序自动记忆功能
+一，基于对话框
+BOOL C*****Dlg::OnInitDialog()
+{
+CDialog::OnInitDialog();
+// TODO: 在此添加额外的初始化代码
+WINDOWPLACEMENT wp;
+GetWindowPlacement(&wp);
+//获得对话框的当前状态
+CString szPosMainFrm = AfxGetApp()-> GetProfileString("Setting","DlgPos");
+if (!szPosMainFrm.IsEmpty())
+{
+CRect rc;
+sscanf(szPosMainFrm,"%u,%u,%d,%d,%d,%d,%d,%d,%d,%d",&wp.flags,&wp.showCmd,
+&wp.ptMinPosition.x,&wp.ptMinPosition.y,
+&wp.ptMaxPosition.x,&wp.ptMaxPosition.y,
+&wp.rcNormalPosition.left,&wp.rcNormalPosition.right,
+&wp.rcNormalPosition.bottom,&wp.rcNormalPosition.top);
+}
+SetWindowPlacement(&wp);//设置对话框状态
+return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
+}
+=================================================================
+void CAutoMFCDlg::OnDestroy()
+{
+WINDOWPLACEMENT wp;
+wp.length = sizeof wp;
+if (GetWindowPlacement(&wp))
+{
+wp.flags = 0;
+if (IsIconic())//窗口最小化
+{
+wp.flags  = WPF_SETMINPOSITION;
+wp.showCmd  = SW_SHOWMINIMIZED;
+}
+CString szMainFrmpos;
+szMainFrmpos.Format("%u,%u,%d,%d,%d,%d,%d,%d,%d,%d",wp.flags,wp.showCmd,
+wp.ptMinPosition.x,wp.ptMinPosition.y,
+wp.ptMaxPosition.x,wp.ptMaxPosition.y,
+wp.rcNormalPosition.left,wp.rcNormalPosition.right,
+wp.rcNormalPosition.bottom,wp.rcNormalPosition.top);
+AfxGetApp()->WriteProfileString("Setting","DlgPos",szMainFrmpos);
+}
+CDialog::OnDestroy();
+// TODO: 在此处添加消息处理程序代码
+}
+======================================================================二，基于单文档int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
+////////////////////////////////////////////////////////////////
+WINDOWPLACEMENT wp;
+GetWindowPlacement(&wp);
+//获得对话框的当前状态
+CString szPosMainFrm = AfxGetApp()-> GetProfileString((LPCTSTR)"Setting",(LPCTSTR)"MainFrmPos");
+if (!szPosMainFrm.IsEmpty())
+{
+CRect rc;
+sscanf(szPosMainFrm,"%u,%u,%d,%d,%d,%d,%d,%d,%d,%d",&wp.flags,&wp.showCmd,
+&wp.ptMinPosition.x,&wp.ptMinPosition.y,
+&wp.ptMaxPosition.x,&wp.ptMaxPosition.y,
+&wp.rcNormalPosition.left,&wp.rcNormalPosition.right,
+&wp.rcNormalPosition.bottom,&wp.rcNormalPosition.top);
+ 
+if (wp.showCmd==SW_SHOWMAXIMIZED)
+{
+AfxGetApp()->m_nCmdShow =SW_SHOWMAXIMIZED;
+}
+wp.showCmd = SW_SHOW;
+}
+SetWindowPlacement(&wp);//设置对话框状态
+LoadBarState(AfxGetApp()->m_pszProfileName);
+==========================================================================
+void CMainFrame::OnDestroy()
+{
+SaveBarState(AfxGetApp()->m_pszProfileName);
+//保存框架装口位置
+WINDOWPLACEMENT wp;
+wp.length = sizeof wp;
+if (GetWindowPlacement(&wp))
+{
+wp.flags = 0;
+if (IsIconic())//窗口最小化
+{
+wp.flags  = WPF_SETMINPOSITION;
+wp.showCmd  = SW_SHOWMINIMIZED;
+}
+CString szMainFrmpos;
+szMainFrmpos.Format("%u,%u,%d,%d,%d,%d,%d,%d,%d,%d",wp.flags,wp.showCmd,
+wp.ptMinPosition.x,wp.ptMinPosition.y,
+wp.ptMaxPosition.x,wp.ptMaxPosition.y,
+wp.rcNormalPosition.left,wp.rcNormalPosition.right,
+wp.rcNormalPosition.bottom,wp.rcNormalPosition.top);
+AfxGetApp()->WriteProfileString((LPCTSTR)"Setting",(LPCTSTR)"MainFrmPos",szMainFrmpos);
+}
+CFrameWnd::OnDestroy();
+// TODO: 在此处添加消息处理程序代码
+}
+调用dll
+HINSTANCE   hInst   =   LoadLibrary(L"User32.DLL");     // 加载DLL
+if(hInst)
+{
+  // 加载成功
+  // 定义待访问函数原型  
+  typedef   BOOL   (WINAPI   *MYFUNC)(HWND,COLORREF,BYTE,DWORD);     
+  MYFUNC   fun   =   NULL;   
+  // 获取函数地址
+  fun=(MYFUNC)GetProcAddress(hInst,   "SetLayeredWindowAttributes");
+  if(fun)
+  {
+    // 成功
+    fun(hWnd, RGB(0, 0, 0), 255, 2 | 1);
+  }
+ FreeLibrary(hInst);     //释放 DLL
+} 

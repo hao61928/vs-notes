@@ -1,0 +1,3 @@
+	CWnd *pWnd   =  AfxGetMainWnd();
+	HWND hHwnd = pWnd->m_hWnd;
+	pWnd->ModifyStyle(WS_CAPTION,0,0);

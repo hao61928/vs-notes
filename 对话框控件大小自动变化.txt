@@ -1,0 +1,131 @@
+假设创建的对话框的类名是CMyDlg，具体过程如下：
+
+步骤一：把easysize.h拷贝到CMyDlg项目文件夹中，同时在CMyDlg的.h文件和.cpp文件中加入#include "easysize.h"；
+
+步骤二：在CMyDlg类的h文件中，加入DECLARE_EASYSIZE，注意结尾处不要加“；”。
+
+class CMyDlg : public CDialog
+
+{
+
+       DECLARE_EASYSIZE
+
+// Construction
+
+…
+
+}
+
+步骤三：在CMyDlg类的OnInitDialog()函数的结尾处加入INIT_EASYSIZE, 注意此处结尾处要加“；”。
+
+BOOL CMyDlg::OnInitDialog()
+
+{     …
+
+// TODO: Add extra initialization here
+
+       INIT_EASYSIZE;
+
+       return TRUE;  // return TRUE  unless you set the focus to a control
+
+}
+
+ 
+
+步骤四：增加WM_SIZE消息响应函数OnSize()，在函数中加入UPDATE_EASYSIZE，注意此处结尾处要加“；”。
+
+void CMyDlg::OnSize(UINT nType, int cx, int cy)
+
+{
+
+       CDialog::OnSize(nType, cx, cy);
+
+       // TODO: Add your message handler code here
+
+       UPDATE_EASYSIZE;
+
+}
+
+ 
+
+步骤五：在CMyDlg的cpp文件中添加EASYSIZE 的宏映射
+
+END_MESSAGE_MAP()
+
+BEGIN_EASYSIZE_MAP(CMyDlg)
+
+EASYSIZE(control,left,top,right,bottom,options) //这里写要变化的控件
+
+END_EASYSIZE_MAP
+
+ 
+
+注意：如果没有添加EASYSIZE 的宏映射就开始编译的话，会出现链接错误！
+
+ 
+
+这里需要解释的是宏EASYSIZE()的用法，其原型如下：
+
+EASYSIZE(control,left,top,right,bottom,options)
+
+该宏表示对ID值为control的控件实施缩放效果，缩放后的上下左右位置由control,left,top,right,bottom来确定，大小由option确定。
+
+其中：control为对话框中的控件ID值，left,top,right,bottom四个参数为控件位置的坐标，其值可以选择ES_BOARD,ES_KEEPSIZE, 控件ID值三者之一。Options可以为ES_HCENTER, ES_VCENTER的结合，options可置0。
+
+ 
+
+ES_BOARD表示控件与对话框边界（以下简称边界）的距离；
+
+ES_KEEPSIZE表示控件水平/垂直方向上尺寸保持不变；
+
+控件ID值表示当前控件与指定控件之间的距离；
+
+ES_HCENTER表示缩放后控件在指定位置内水平居中；
+
+ES_VCENTER表示缩放后控件在指定位置内垂直居中；、
+
+ 
+
+下面两点很重要~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+options可指定为0，也可指定为以下值：
+        ES_HCENTER：保持宽度不变，水平位置在left和right指定的控件正中间
+        ES_VCENTER：保持高度不变，垂直位置在left和right指定的控件正中间
+
+例如：
+
+EASYSIZE(IDOK,ES_BORDER,ES_BORDER,ES_BORDER,ES_BORDER,0)
+
+表示缩放后，值为IDOK的控件，距离边界上下左右位置保持不变，水平和垂直方向尺寸拉伸；
+
+ 
+
+EASYSIZE(IDOK,ES_BORDER,ES_BORDER,ES_BORDER,ES_BORDER,ES_HCENTER)
+
+表示缩放后，值为IDOK的控件，距离边界上下位置保持不变，垂直方向尺寸拉伸，水平居中；
+
+ 
+
+EASYSIZE(IDOK,ES_BORDER,ES_BORDER,ES_BORDER,ES_BORDER,ES_HCENTER| ES_HCENTER)
+
+表示缩放后，值为IDOK的控件，在对话框内垂直居中，水平居中；
+
+ 
+
+ 
+
+EASYSIZE(IDOK,ES_BORDER,ES_KEEPSIZE,ES_KEEPSIZE,ES_BORDER,0)
+
+表示缩放后，值为IDOK的控件，距离边界左、下方位置保持不变，同时保持控件尺寸；
+
+ 
+
+EASYSIZE(IDOK,ES_BORDER,ES_KEEPSIZE, ES_BORDER,ES_BORDER,0)
+
+表示缩放后，值为IDOK的控件，距离边界左、右、下方位置保持不变，水平方向尺寸拉伸，垂直方向尺寸不变；
+
+ 
+
+EASYSIZE(IDOK,ES_BORDER,ES_BORDER,IDCANCEL,ES_BORDER,0)
+
+表示缩放后，值为IDOK的控件，距离边界上下左位置保持不变，距离ID值为IDCANCEL的右方位置距离保持不变，水平和垂直方向尺寸拉伸；（当使用指定控件作为定位参数时候，确保指定控件的EASYSIZE在该宏前面）

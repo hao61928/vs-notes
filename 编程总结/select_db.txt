@@ -1,0 +1,28 @@
+新安装的oracle,用 system / admin登录成功.
+
+exp ams/ams@TAISHANAMS file=D:\Taishan-vod\db\20100428ams.dmp 
+
+imp newepgtest/newepgtest@lyb file=5_201_sig.dmp full=y
+
+一定要使用full=y这个参数,否则导入错误.
+
+新建用户:
+	default space---> 选择user
+	表临时space-----> 选择Temp
+
+	Role privileges--> 
+			Add-->dba        后面选项打勾
+			Add-->connect    选项打钩
+
+ 
+清除的方法如下:  (可以删除哪些 以$bin开头的table)
+
+PURGE recyclebin;
+
+
+oracle修改IP地址:
+
+D:\oracle\product\10.2.0\db_1\network\admin\listener.ora
+D:\oracle\product\10.2.0\db_1\NETWORK\ADMIN\tnsnames.ora
+
+

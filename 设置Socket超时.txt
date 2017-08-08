@@ -1,0 +1,68 @@
+设置connect超时很简单，CSDN上也有人提到过使用select，但却没有一个令人满意与完整的答案。偶所讲的也正是select函数，此函数集成在winsock1.1中，简单点讲，"作用使那些想避免在套接字调用过程中被锁定的应用程序，采取一种有序的方式，同时对多个套接字进行管理"(《Windows网络编程技术》原话)。使用方法与解释请见《Windows网络编程技术》。
+　　在使用此函数前，需先将socket设置为非阻塞模式，这样，在connect时，才会立马跳过，同时，通常也会产生一个WSAEWOULDBLOCK错误，这个错误没关系。再执行select则是真正的超时。
+
+WSADATA wsd;
+SOCKET cClient;
+int ret;
+struct sockaddr_in server;
+hostent *host=NULL;
+
+if(WSAStartup(MAKEWORD(2,0),&wsd)){return 0;}
+cClient=socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
+if(cClient==INVALID_SOCKET){return 0;}
+//set Recv and Send time out
+DWORD TimeOut=6000; //设置发送超时6秒
+if(::setsockopt(cClient,SOL_SOCKET,SO_SNDTIMEO,(char *)&TimeOut,sizeof(TimeOut))==SOCKET_ERROR){
+return 0;
+}
+TimeOut=6000;//设置接收超时6秒
+if(::setsockopt(cClient,SOL_SOCKET,SO_RCVTIMEO,(char *)&TimeOut,sizeof(TimeOut))==SOCKET_ERROR){
+return 0;
+}
+//设置非阻塞方式连接
+unsigned long ul = 1;
+ret = ioctlsocket(cClient, FIONBIO, (unsigned long*)&ul);
+if(ret==SOCKET_ERROR)return 0;
+
+//连接
+server.sin_family = AF_INET;
+server.sin_port = htons(25);
+server.sin_addr .s_addr = inet_addr((LPCSTR)pSmtp);
+if(server.sin_addr.s_addr == INADDR_NONE){return 0;}
+
+connect(cClient,(const struct sockaddr *)&server,sizeof(server)); //立即返回
+
+//select 模型，即设置超时
+struct timeval timeout ;
+fd_set r;
+
+FD_ZERO(&r);
+FD_SET(cClient, &r);
+timeout.tv_sec = 15; //连接超时15秒
+timeout.tv_usec =0;
+ret = select(0, 0, &r, 0, &timeout);
+if ( ret <= 0 )
+{
+::closesocket(cClient);
+return 0;
+}
+//一般非阻塞模式套接比较难控制，可以根据实际情况考虑 再设回阻塞模式
+unsigned long ul1= 0 ;
+ret = ioctlsocket(cClient, FIONBIO, (unsigned long*)&ul1);
+if(ret==SOCKET_ERROR){
+::closesocket (cClient);
+return 0;
+}
+
+原文：http://www.cnblogs.com/nemolog/archive/2006/03/12/348431.html
+
+补充——关于Socket阻塞和非阻塞的区别：
+
+简单点说:
+
+阻塞就是干不完不准回来，   
+非组赛就是你先干，我现看看有其他事没有，完了告诉我一声
+
+我们拿最常用的send和recv两个函数来说吧... 
+比如你调用send函数发送一定的Byte,在系统内部send做的工作其实只是把数据传输(Copy)到TCP/IP协议栈的输出缓冲区,它执行成功并不代表数据已经成功的发送出去了,如果TCP/IP协议栈没有足够的可用缓冲区来保存你Copy过来的数据的话...这时候就体现出阻塞和非阻塞的不同之处了:对于阻塞模式的socket send函数将不返回直到系统缓冲区有足够的空间把你要发送的数据Copy过去以后才返回,而对于非阻塞的socket来说send会立即返回WSAEWOULDDBLOCK告诉调用者说:"发送操作被阻塞了!!!你想办法处理吧..." 
+对于recv函数,同样道理,该函数的内部工作机制其实是在等待TCP/IP协议栈的接收缓冲区通知它说:嗨,你的数据来了.对于阻塞模式的socket来说如果TCP/IP协议栈的接收缓冲区没有通知一个结果给它它就一直不返回:耗费着系统资源....对于非阻塞模式的socket该函数会马上返回,然后告诉你:WSAEWOULDDBLOCK---"现在没有数据,回头在来看看"

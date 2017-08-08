@@ -1,0 +1,16 @@
+CString m_strFolderPath=_T("d:\\test");
+ // 判断路径是否存在 
+	if (!PathIsDirectory(m_strFolderPath) ) 
+	 { 
+		 CString strMsg; 
+		 strMsg.Format (_T("指定路径\"%s\"不存在，是否创建?"), m_strFolderPath); 
+		 if (AfxMessageBox(strMsg, MB_YESNO) == IDYES) 
+		 { 
+			if (!CreateDirectory(m_strFolderPath, NULL ) ) 
+			 { 
+				 strMsg.Format (_T("创建路径\"%s\"失败！是否继续?"), m_strFolderPath); 
+				 if (AfxMessageBox(strMsg, MB_YESNO) == IDYES) 
+				 return; 
+			 } 
+		 } 
+	 } 
