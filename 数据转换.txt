@@ -1,0 +1,92 @@
+%c 单个字符
+%d 十进制整数(int)
+%ld 十进制整数(long)
+%f 十进制浮点数(float)
+%lf 十进制浮点数(double)
+%o 八进制数
+%s 字符串
+%u 无符号十进制数
+%x 十六进制数
+1、int转换为CString
+CString str;
+int number=15;
+
+//str="15"
+str.Format(_T("%d"),number);
+
+//str=" 15"(前面有两个空格；4表示将占用4位，如果数字超过4位将输出所有数字，不会截断)
+str.Format(_T("%4d"),number);
+
+//str="0015"(.4表示将占用4位，如果数字超过4位将输出所有数字，不会截断)
+str.Format(_T("%.4d"),number);
+
+
+
+long转换为CString的方法与上面相似，只需要把%d改为%ld就可以了。
+2、double转换为CString
+CString str;
+double num=1.46;
+
+//str="1.46"
+str.Format(_T("%lf"),num);
+
+//str="1.5"(.1表示小数点后留1位，小数点后超过1位则四舍五入)
+str.Format(_T("%.1lf"),num);
+
+//str="1.4600"
+str.Format(_T("%.4f"),num);
+
+//str=" 1.4600"(前面有1个空格)
+str.Format(_T("%7.4f"),num);
+
+float转换为CString的方法也同上面相似，将lf%改为f%就可以了。
+
+3.CString转化为double型
+CString ss="123.21";
+
+double dd=atof(ss);
+
+4.CString转化为int型
+CString str = "123";
+int i = _ttoi(str);//转为64位int类型的话可以使用_ttoi64()
+int ieng = _tcstoul(streng,0,16);
+int x10=strtol(tmp,NULL,16);
+
+double=atof(CString);
+
+
+error C2664: “atof”: 不能将参数 1 从“CString”转换为“const char *” 
+解决：用_ttof代替atof 或 _wtof(str);
+
+/*char * pFileName = "11223344FEFE16AAAA";
+
+          USES_CONVERSION;
+          CString s = A2T(pFileName);
+		  TRACE(s);
+		  */
+
+
+//		  char * pFileName = "112233445566";
+//
+//          //计算char *数组大小，以字节为单位，一个汉字占两个字节
+//         int charLen = strlen(pFileName);
+//
+//         //计算多字节字符的大小，按字符计算。
+//         int len = MultiByteToWideChar(CP_ACP,0,pFileName,charLen,NULL,0);
+//
+//          //为宽字节字符数组申请空间，数组大小为按字节计算的多字节字符大小
+//         TCHAR *buf = new TCHAR[len + 1];
+//
+//           //多字节编码转换成宽字节编码
+//          MultiByteToWideChar(CP_ACP,0,pFileName,charLen,buf,len);
+//
+//         buf[len] = '/0'; //添加字符串结尾，注意不是len+1
+//
+//          //将TCHAR数组转换为CString
+//          CString pWideChar;
+//          pWideChar.Append(buf);
+//
+//          //删除缓冲区
+//         delete []buf;
+//
+//		 TRACE(pWideChar);

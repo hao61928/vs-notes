@@ -1,0 +1,58 @@
+map<int,CString> dic;
+
+
+try{
+		a=ff.at(12);
+		a=ff.at(13);
+		a=ff.at(10);
+		a=ff.at(5);
+	}
+	catch(std::out_of_range & exc)
+	{
+		
+	}
+	
+	
+）map的声明
+
+map<key,value>mapst;
+
+3)map的一些用法：
+
+主要简述一些map的构造方法：
+
+1.用insert函数插入pair数据
+
+Map<int, string> mapArmy;
+mapArmy.insert(pair<int, string>(1, “student_one”));
+mapArmy.insert(pair<int, string>(2, “student_two”));
+mapArmy.insert(pair<int, string>(3, “student_three”));
+map<int, string>::iterator  iter;
+for(iter = mapArmy.begin(); iter !=mapArmy.end(); iter++)
+{
+       Cout<<iter->first<<”   ”<<iter->second<<end;
+}
+
+2.用insert函数插入value_type数据
+
+Map<int, string> mapArmy;
+mapArmy.insert(map<int, string>::value_type (1, “刘备”));
+mapArmy.insert(map<int, string>::value_type (2, “关羽”));
+mapArmy.insert(map<int, string>::value_type (3, “张飞”));
+map<int, string>::iterator  iter;
+for(iter = mapArmy.begin(); iter !=mapArmy.end(); iter++)
+{
+       Cout<<iter->first<<”   ”<<iter->second<<end;
+}
+
+3.第三种：用数组方式插入数据
+
+Map<int, string> mapStudent;
+mapStudent[1] =  “刘备”;
+mapStudent[2] =  “关羽”;
+mapStudent[3] =  “张飞”;
+map<int, string>::iterator  iter;
+for(iter = mapStudent.begin(); iter != mapStudent.end(); iter++)
+{
+       Cout<<iter->first<<”   ”<<iter->second<<end;
+}

@@ -1,0 +1,987 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MFCexcel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCexcelDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CApplication.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChart.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGlobal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COLEObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CQueryTable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorkbook.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorksheet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAboveAverage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CActions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAddIn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAddIns.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAdjustments.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAllowEditRange.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAllowEditRanges.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAppEvents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CArc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CArcs.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAreas.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAutoCorrect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAutoFilter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAutoRecover.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAxes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAxis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAxisTitle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CBorder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CBorders.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CButton0.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CButtons.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCalculatedFields.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCalculatedItems.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCalculatedMember.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCalculatedMembers.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCalloutFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCellFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCharacters.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartArea.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartColorFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartEvents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartFillFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartGroup.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartGroups.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartObjects.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCharts.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartTitle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CChartView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCheckBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCheckBoxes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CColorFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CColorScale.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CColorScaleCriteria.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CColorScaleCriterion.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CColorStop.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CColorStops.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CComment.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CComments.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CConditionValue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CConnections.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CConnectorFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CControlFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCorners.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCubeField.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCubeFields.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCustomProperties.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCustomProperty.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCustomView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CCustomViews.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDatabar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDataLabel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDataLabels.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDataTable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDefaultWebOptions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDiagram.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDiagramNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDiagramNodeChildren.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDiagramNodes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDialog0.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDialogFrame.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDialogs.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDialogSheet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDialogSheets.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDialogSheetView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDisplayUnitLabel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDocEvents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDownBars.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDrawing.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDrawingObjects.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDrawings.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDropDown.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDropDowns.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CDropLines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CEditBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CEditBoxes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CError.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CErrorBars.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CErrorCheckingOptions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CErrors.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CFillFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CFilter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CFilters.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CFloor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CFont0.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CFormatColor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CFormatCondition.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CFormatConditions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CFreeformBuilder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGraphic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGridlines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGroupBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGroupBoxes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGroupObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGroupObjects.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGroupShapes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CHeaderFooter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CHiLoLines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CHPageBreak.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CHPageBreaks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CHyperlink.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CHyperlinks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ccon.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CconCriteria.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CconCriterion.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CconSet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CconSetCondition.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CconSets.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cnterior.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRtdServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRTDUpdateEvent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLabel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLabels.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLeaderLines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLegend.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLegendEntries.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLegendEntry.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLegendKey.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLinearGradient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLineFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CLinkFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CListBox0.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CListBoxes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CListColumn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CListColumns.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CListDataFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CListObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CListObjects.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CListRow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CListRows.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMailer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMenu0.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMenuBar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMenuBars.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMenuItem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMenuItems.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMenus.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CModule.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CModules.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CModuleView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CMultiThreadedCalculation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CName.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CNames.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CODBCConnection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CODBCError.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CODBCErrors.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COLEDBConnection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COLEDBError.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COLEDBErrors.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COLEFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COLEObjectEvents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COLEObjects.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COptionButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COptionButtons.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COutline.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COval.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COvals.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPages.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPageSetup.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPane.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPanes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CParameter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CParameters.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPhonetic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPhonetics.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPicture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPictureFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPictures.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotAxis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotCache.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotCaches.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotCell.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotField.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotFields.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotFilter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotFilters.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotFormula.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotFormulas.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotItem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotItemList.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotItems.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotLayout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotLine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotLineCells.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotLines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotTable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPivotTables.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlotArea.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPoint0.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPoints.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CProtection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPublishObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CPublishObjects.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CQueryTables.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRange.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRanges.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRecentFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRecentFiles.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRectangle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRectangles.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRectangularGradient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRefreshEvents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CResearch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRoutingSlip.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRTD.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CScenario.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CScenarios.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CScrollBar0.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CScrollBars.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSeries.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSeriesCollection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSeriesLines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CServerViewableItems.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CShadowFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CShape.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CShapeNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CShapeNodes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CShapeRange.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CShapes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSheets.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSheetViews.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSmartTag.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSmartTagAction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSmartTagActions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSmartTagOptions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSmartTagRecognizer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSmartTagRecognizers.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSmartTags.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSort.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSortField.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSortFields.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoundNote.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSpeech.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSpellingOptions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSpinner.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSpinners.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CStyle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CStyles.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTab.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTableStyle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTableStyleElement.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTableStyleElements.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTableStyles.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTextBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTextBoxes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTextEffectFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTextFrame.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTextFrame2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CThreeDFormat.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTickLabels.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CToolbar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CToolbarButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CToolbarButtons.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CToolbars.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTop10.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTreeviewControl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTrendline.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CTrendlines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CUniqueValues.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CUpBars.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CUsedObjects.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CUserAccess.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CUserAccessList.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CValidation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CVPageBreak.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CVPageBreaks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWalls.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWatch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWatches.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWebOptions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWindow0.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWindows.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorkbookConnection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorkbookEvents.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorkbooks.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorksheetFunction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorksheets.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorksheetView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CXmlDataBinding.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CXmlMap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CXmlMaps.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CXmlNamespace.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CXmlNamespaces.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CXmlSchema.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CXmlSchemas.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CXPath.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MFCexcel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCexcelDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MFCexcel.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\MFCexcel.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\MFCexcel.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

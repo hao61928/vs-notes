@@ -1,0 +1,443 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3FB5235D-C410-4B84-81A1-8722E062550F}</ProjectGuid>
+    <RootNamespace>MFCexcel</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CAboveAverage.h" />
+    <ClInclude Include="CAction.h" />
+    <ClInclude Include="CActions.h" />
+    <ClInclude Include="CAddIn.h" />
+    <ClInclude Include="CAddIns.h" />
+    <ClInclude Include="CAdjustments.h" />
+    <ClInclude Include="CAllowEditRange.h" />
+    <ClInclude Include="CAllowEditRanges.h" />
+    <ClInclude Include="CAppEvents.h" />
+    <ClInclude Include="CApplication.h" />
+    <ClInclude Include="CArc.h" />
+    <ClInclude Include="CArcs.h" />
+    <ClInclude Include="CAreas.h" />
+    <ClInclude Include="CAutoCorrect.h" />
+    <ClInclude Include="CAutoFilter.h" />
+    <ClInclude Include="CAutoRecover.h" />
+    <ClInclude Include="CAxes.h" />
+    <ClInclude Include="CAxis.h" />
+    <ClInclude Include="CAxisTitle.h" />
+    <ClInclude Include="CBorder.h" />
+    <ClInclude Include="CBorders.h" />
+    <ClInclude Include="CButton0.h" />
+    <ClInclude Include="CButtons.h" />
+    <ClInclude Include="CCalculatedFields.h" />
+    <ClInclude Include="CCalculatedItems.h" />
+    <ClInclude Include="CCalculatedMember.h" />
+    <ClInclude Include="CCalculatedMembers.h" />
+    <ClInclude Include="CCalloutFormat.h" />
+    <ClInclude Include="CCellFormat.h" />
+    <ClInclude Include="CCharacters.h" />
+    <ClInclude Include="CChart.h" />
+    <ClInclude Include="CChartArea.h" />
+    <ClInclude Include="CChartColorFormat.h" />
+    <ClInclude Include="CChartEvents.h" />
+    <ClInclude Include="CChartFillFormat.h" />
+    <ClInclude Include="CChartFormat.h" />
+    <ClInclude Include="CChartGroup.h" />
+    <ClInclude Include="CChartGroups.h" />
+    <ClInclude Include="CChartObject.h" />
+    <ClInclude Include="CChartObjects.h" />
+    <ClInclude Include="CCharts.h" />
+    <ClInclude Include="CChartTitle.h" />
+    <ClInclude Include="CChartView.h" />
+    <ClInclude Include="CCheckBox.h" />
+    <ClInclude Include="CCheckBoxes.h" />
+    <ClInclude Include="CColorFormat.h" />
+    <ClInclude Include="CColorScale.h" />
+    <ClInclude Include="CColorScaleCriteria.h" />
+    <ClInclude Include="CColorScaleCriterion.h" />
+    <ClInclude Include="CColorStop.h" />
+    <ClInclude Include="CColorStops.h" />
+    <ClInclude Include="CComment.h" />
+    <ClInclude Include="CComments.h" />
+    <ClInclude Include="Ccon.h" />
+    <ClInclude Include="CconCriteria.h" />
+    <ClInclude Include="CconCriterion.h" />
+    <ClInclude Include="CConditionValue.h" />
+    <ClInclude Include="CConnections.h" />
+    <ClInclude Include="CConnectorFormat.h" />
+    <ClInclude Include="CconSet.h" />
+    <ClInclude Include="CconSetCondition.h" />
+    <ClInclude Include="CconSets.h" />
+    <ClInclude Include="CControlFormat.h" />
+    <ClInclude Include="CCorners.h" />
+    <ClInclude Include="CCubeField.h" />
+    <ClInclude Include="CCubeFields.h" />
+    <ClInclude Include="CCustomProperties.h" />
+    <ClInclude Include="CCustomProperty.h" />
+    <ClInclude Include="CCustomView.h" />
+    <ClInclude Include="CCustomViews.h" />
+    <ClInclude Include="CDatabar.h" />
+    <ClInclude Include="CDataLabel.h" />
+    <ClInclude Include="CDataLabels.h" />
+    <ClInclude Include="CDataTable.h" />
+    <ClInclude Include="CDefaultWebOptions.h" />
+    <ClInclude Include="CDiagram.h" />
+    <ClInclude Include="CDiagramNode.h" />
+    <ClInclude Include="CDiagramNodeChildren.h" />
+    <ClInclude Include="CDiagramNodes.h" />
+    <ClInclude Include="CDialog0.h" />
+    <ClInclude Include="CDialogFrame.h" />
+    <ClInclude Include="CDialogs.h" />
+    <ClInclude Include="CDialogSheet.h" />
+    <ClInclude Include="CDialogSheets.h" />
+    <ClInclude Include="CDialogSheetView.h" />
+    <ClInclude Include="CDisplayUnitLabel.h" />
+    <ClInclude Include="CDocEvents.h" />
+    <ClInclude Include="CDownBars.h" />
+    <ClInclude Include="CDrawing.h" />
+    <ClInclude Include="CDrawingObjects.h" />
+    <ClInclude Include="CDrawings.h" />
+    <ClInclude Include="CDropDown.h" />
+    <ClInclude Include="CDropDowns.h" />
+    <ClInclude Include="CDropLines.h" />
+    <ClInclude Include="CEditBox.h" />
+    <ClInclude Include="CEditBoxes.h" />
+    <ClInclude Include="CError.h" />
+    <ClInclude Include="CErrorBars.h" />
+    <ClInclude Include="CErrorCheckingOptions.h" />
+    <ClInclude Include="CErrors.h" />
+    <ClInclude Include="CFillFormat.h" />
+    <ClInclude Include="CFilter.h" />
+    <ClInclude Include="CFilters.h" />
+    <ClInclude Include="CFloor.h" />
+    <ClInclude Include="CFont0.h" />
+    <ClInclude Include="CFormatColor.h" />
+    <ClInclude Include="CFormatCondition.h" />
+    <ClInclude Include="CFormatConditions.h" />
+    <ClInclude Include="CFreeformBuilder.h" />
+    <ClInclude Include="CGlobal.h" />
+    <ClInclude Include="CGraphic.h" />
+    <ClInclude Include="CGridlines.h" />
+    <ClInclude Include="CGroupBox.h" />
+    <ClInclude Include="CGroupBoxes.h" />
+    <ClInclude Include="CGroupObject.h" />
+    <ClInclude Include="CGroupObjects.h" />
+    <ClInclude Include="CGroupShapes.h" />
+    <ClInclude Include="CHeaderFooter.h" />
+    <ClInclude Include="CHiLoLines.h" />
+    <ClInclude Include="CHPageBreak.h" />
+    <ClInclude Include="CHPageBreaks.h" />
+    <ClInclude Include="CHyperlink.h" />
+    <ClInclude Include="CHyperlinks.h" />
+    <ClInclude Include="CLabel.h" />
+    <ClInclude Include="CLabels.h" />
+    <ClInclude Include="CLeaderLines.h" />
+    <ClInclude Include="CLegend.h" />
+    <ClInclude Include="CLegendEntries.h" />
+    <ClInclude Include="CLegendEntry.h" />
+    <ClInclude Include="CLegendKey.h" />
+    <ClInclude Include="CLine.h" />
+    <ClInclude Include="CLinearGradient.h" />
+    <ClInclude Include="CLineFormat.h" />
+    <ClInclude Include="CLines.h" />
+    <ClInclude Include="CLinkFormat.h" />
+    <ClInclude Include="CListBox0.h" />
+    <ClInclude Include="CListBoxes.h" />
+    <ClInclude Include="CListColumn.h" />
+    <ClInclude Include="CListColumns.h" />
+    <ClInclude Include="CListDataFormat.h" />
+    <ClInclude Include="CListObject.h" />
+    <ClInclude Include="CListObjects.h" />
+    <ClInclude Include="CListRow.h" />
+    <ClInclude Include="CListRows.h" />
+    <ClInclude Include="CMailer.h" />
+    <ClInclude Include="CMenu0.h" />
+    <ClInclude Include="CMenuBar.h" />
+    <ClInclude Include="CMenuBars.h" />
+    <ClInclude Include="CMenuItem.h" />
+    <ClInclude Include="CMenuItems.h" />
+    <ClInclude Include="CMenus.h" />
+    <ClInclude Include="CModule.h" />
+    <ClInclude Include="CModules.h" />
+    <ClInclude Include="CModuleView.h" />
+    <ClInclude Include="CMultiThreadedCalculation.h" />
+    <ClInclude Include="CName.h" />
+    <ClInclude Include="CNames.h" />
+    <ClInclude Include="Cnterior.h" />
+    <ClInclude Include="CODBCConnection.h" />
+    <ClInclude Include="CODBCError.h" />
+    <ClInclude Include="CODBCErrors.h" />
+    <ClInclude Include="COLEDBConnection.h" />
+    <ClInclude Include="COLEDBError.h" />
+    <ClInclude Include="COLEDBErrors.h" />
+    <ClInclude Include="COLEFormat.h" />
+    <ClInclude Include="COLEObject.h" />
+    <ClInclude Include="COLEObjectEvents.h" />
+    <ClInclude Include="COLEObjects.h" />
+    <ClInclude Include="COptionButton.h" />
+    <ClInclude Include="COptionButtons.h" />
+    <ClInclude Include="COutline.h" />
+    <ClInclude Include="COval.h" />
+    <ClInclude Include="COvals.h" />
+    <ClInclude Include="CPage.h" />
+    <ClInclude Include="CPages.h" />
+    <ClInclude Include="CPageSetup.h" />
+    <ClInclude Include="CPane.h" />
+    <ClInclude Include="CPanes.h" />
+    <ClInclude Include="CParameter.h" />
+    <ClInclude Include="CParameters.h" />
+    <ClInclude Include="CPhonetic.h" />
+    <ClInclude Include="CPhonetics.h" />
+    <ClInclude Include="CPicture.h" />
+    <ClInclude Include="CPictureFormat.h" />
+    <ClInclude Include="CPictures.h" />
+    <ClInclude Include="CPivotAxis.h" />
+    <ClInclude Include="CPivotCache.h" />
+    <ClInclude Include="CPivotCaches.h" />
+    <ClInclude Include="CPivotCell.h" />
+    <ClInclude Include="CPivotField.h" />
+    <ClInclude Include="CPivotFields.h" />
+    <ClInclude Include="CPivotFilter.h" />
+    <ClInclude Include="CPivotFilters.h" />
+    <ClInclude Include="CPivotFormula.h" />
+    <ClInclude Include="CPivotFormulas.h" />
+    <ClInclude Include="CPivotItem.h" />
+    <ClInclude Include="CPivotItemList.h" />
+    <ClInclude Include="CPivotItems.h" />
+    <ClInclude Include="CPivotLayout.h" />
+    <ClInclude Include="CPivotLine.h" />
+    <ClInclude Include="CPivotLineCells.h" />
+    <ClInclude Include="CPivotLines.h" />
+    <ClInclude Include="CPivotTable.h" />
+    <ClInclude Include="CPivotTables.h" />
+    <ClInclude Include="CPlotArea.h" />
+    <ClInclude Include="CPoint0.h" />
+    <ClInclude Include="CPoints.h" />
+    <ClInclude Include="CProtection.h" />
+    <ClInclude Include="CPublishObject.h" />
+    <ClInclude Include="CPublishObjects.h" />
+    <ClInclude Include="CQueryTable.h" />
+    <ClInclude Include="CQueryTables.h" />
+    <ClInclude Include="CRange.h" />
+    <ClInclude Include="CRanges.h" />
+    <ClInclude Include="CRecentFile.h" />
+    <ClInclude Include="CRecentFiles.h" />
+    <ClInclude Include="CRectangle.h" />
+    <ClInclude Include="CRectangles.h" />
+    <ClInclude Include="CRectangularGradient.h" />
+    <ClInclude Include="CRefreshEvents.h" />
+    <ClInclude Include="CResearch.h" />
+    <ClInclude Include="CRoutingSlip.h" />
+    <ClInclude Include="CRTD.h" />
+    <ClInclude Include="CRtdServer.h" />
+    <ClInclude Include="CRTDUpdateEvent.h" />
+    <ClInclude Include="CScenario.h" />
+    <ClInclude Include="CScenarios.h" />
+    <ClInclude Include="CScrollBar0.h" />
+    <ClInclude Include="CScrollBars.h" />
+    <ClInclude Include="CSeries.h" />
+    <ClInclude Include="CSeriesCollection.h" />
+    <ClInclude Include="CSeriesLines.h" />
+    <ClInclude Include="CServerViewableItems.h" />
+    <ClInclude Include="CShadowFormat.h" />
+    <ClInclude Include="CShape.h" />
+    <ClInclude Include="CShapeNode.h" />
+    <ClInclude Include="CShapeNodes.h" />
+    <ClInclude Include="CShapeRange.h" />
+    <ClInclude Include="CShapes.h" />
+    <ClInclude Include="CSheets.h" />
+    <ClInclude Include="CSheetViews.h" />
+    <ClInclude Include="CSmartTag.h" />
+    <ClInclude Include="CSmartTagAction.h" />
+    <ClInclude Include="CSmartTagActions.h" />
+    <ClInclude Include="CSmartTagOptions.h" />
+    <ClInclude Include="CSmartTagRecognizer.h" />
+    <ClInclude Include="CSmartTagRecognizers.h" />
+    <ClInclude Include="CSmartTags.h" />
+    <ClInclude Include="CSort.h" />
+    <ClInclude Include="CSortField.h" />
+    <ClInclude Include="CSortFields.h" />
+    <ClInclude Include="CSoundNote.h" />
+    <ClInclude Include="CSpeech.h" />
+    <ClInclude Include="CSpellingOptions.h" />
+    <ClInclude Include="CSpinner.h" />
+    <ClInclude Include="CSpinners.h" />
+    <ClInclude Include="CStyle.h" />
+    <ClInclude Include="CStyles.h" />
+    <ClInclude Include="CTab.h" />
+    <ClInclude Include="CTableStyle.h" />
+    <ClInclude Include="CTableStyleElement.h" />
+    <ClInclude Include="CTableStyleElements.h" />
+    <ClInclude Include="CTableStyles.h" />
+    <ClInclude Include="CTextBox.h" />
+    <ClInclude Include="CTextBoxes.h" />
+    <ClInclude Include="CTextEffectFormat.h" />
+    <ClInclude Include="CTextFrame.h" />
+    <ClInclude Include="CTextFrame2.h" />
+    <ClInclude Include="CThreeDFormat.h" />
+    <ClInclude Include="CTickLabels.h" />
+    <ClInclude Include="CToolbar.h" />
+    <ClInclude Include="CToolbarButton.h" />
+    <ClInclude Include="CToolbarButtons.h" />
+    <ClInclude Include="CToolbars.h" />
+    <ClInclude Include="CTop10.h" />
+    <ClInclude Include="CTreeviewControl.h" />
+    <ClInclude Include="CTrendline.h" />
+    <ClInclude Include="CTrendlines.h" />
+    <ClInclude Include="CUniqueValues.h" />
+    <ClInclude Include="CUpBars.h" />
+    <ClInclude Include="CUsedObjects.h" />
+    <ClInclude Include="CUserAccess.h" />
+    <ClInclude Include="CUserAccessList.h" />
+    <ClInclude Include="CValidation.h" />
+    <ClInclude Include="CVPageBreak.h" />
+    <ClInclude Include="CVPageBreaks.h" />
+    <ClInclude Include="CWalls.h" />
+    <ClInclude Include="CWatch.h" />
+    <ClInclude Include="CWatches.h" />
+    <ClInclude Include="CWebOptions.h" />
+    <ClInclude Include="CWindow0.h" />
+    <ClInclude Include="CWindows.h" />
+    <ClInclude Include="CWorkbook.h" />
+    <ClInclude Include="CWorkbookConnection.h" />
+    <ClInclude Include="CWorkbookEvents.h" />
+    <ClInclude Include="CWorkbooks.h" />
+    <ClInclude Include="CWorksheet.h" />
+    <ClInclude Include="CWorksheetFunction.h" />
+    <ClInclude Include="CWorksheets.h" />
+    <ClInclude Include="CWorksheetView.h" />
+    <ClInclude Include="CXmlDataBinding.h" />
+    <ClInclude Include="CXmlMap.h" />
+    <ClInclude Include="CXmlMaps.h" />
+    <ClInclude Include="CXmlNamespace.h" />
+    <ClInclude Include="CXmlNamespaces.h" />
+    <ClInclude Include="CXmlSchema.h" />
+    <ClInclude Include="CXmlSchemas.h" />
+    <ClInclude Include="CXPath.h" />
+    <ClInclude Include="MFCexcel.h" />
+    <ClInclude Include="MFCexcelDlg.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MFCexcel.cpp" />
+    <ClCompile Include="MFCexcelDlg.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MFCexcel.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\MFCexcel.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\MFCexcel.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="MFCexcel.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

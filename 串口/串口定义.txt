@@ -1,0 +1,14 @@
+DCE:Data Circuit-terminaL Equipment 数据通信设备
+DTE:data terminal equipment 数据终端设备  
+联络控制线
+DSR(Data Set Ready):数据装置准备好，有效时，表明DCE处于可以以使用的状态
+DTR(Data Terminal Ready):数据终端准备好，有效时，表明DTE可以使用
+/////////////
+RTS(Request To Send):用来表示DTE请求DCE发送数据
+CTS(Clear To Send):用来表示DCE准备好接收DTE发来的数据
+RLSD(Received Line Signal Detection):接收信号检出，用来表示DCE已经接通通信链路，告知DTE准备接受数据。又叫数据载波检出(Data Carrier Detection)
+RI(Ringing)振铃指示,通知终端，已被呼叫
+TxD(Transmitted Data):
+RxD(Received Data):
+
+

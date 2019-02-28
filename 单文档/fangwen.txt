@@ -1,0 +1,206 @@
+MFC类与类之间的访问与调用（单文档应用程序+多文档应用程序）以及在一个对话框中获取另一个对话框的指针
+2016年04月28日 16:18:31
+阅读数：2203
+在实际的应用中，经常需要在多个类之间交换数据，调用另一个类中的函数，框架提供一系列的函数用于多个类之间的交互
+
+1.单文档应用程序的类与类之间的访问
+
+（1）在所有类中获取App指针：
+
+CWin *pApp=AfxGetApp();
+
+CXXXApp *pMyApp=(CXXXApp*)pApp;
+
+
+
+(2)所有类中获取CMainFrame类指针：
+
+CMainFrame *pFrame=(CMainFrame*)AfxGetMainWnd();
+
+CMainFrame *pFrame=(CMainFrame*)(AfxGetApp()->m_pMainWnd);
+
+
+
+(3)在框架类（CMainFrame）中访问视图（View）
+
+CXXXView *pView=(CXXXView*)GetActiveView();
+
+
+
+(4)在框架类（CMainFrame）中访问文档（Doc）
+
+CXXXDoc *pDOC=(CXXXDoc*)GetActiveDocument();
+
+
+
+(5)在视图类（View）中访问文档（Doc）
+
+CXXXDoc *pDoc=GetDocumen()；
+
+
+
+(6)在文档类（Doc)中访问关联的所有视图（View）
+
+POSITION pos=GetFirstViewPosition（）；
+
+while（pos ! = NULL）
+
+{
+
+CXXXView *pView=(CXXXView*)GetNextView(pos);
+
+}
+
+2.多文档应用程序类与类之间的交互
+
+（1）在所有类中获取App类指针
+
+CWinApp *pApp=AfxGetApp();
+
+CMDIXXXApp * pMyApp=(CMDIXXXApp*)pApp;
+
+(2)所有类中获取CMainFrame类指针
+
+CMainFrame *pFrame=(CMainFrame*)AfxGetMainWnd();
+
+CMainFrame *pFrame=(CMainFrame*)(AfxGetApp()->m_pMainWnd);
+
+(3)获取当前活动的MDI子窗口指针
+
+CMainFrame *pMainFrame=(CMainFrame*)AfxGetMainWnd();
+
+CChildFrame *pActiveChild=(CChildFrame*)pMainFrame->MDIGetActive();
+
+(4)获取活动视图、文档的指针
+
+CMainFrame *pMainFrame=（CMainFrame*）AfxGetMainWnd();
+
+CChildFrame *pActiveChild=(CChildFrame*)pMainFrame->MDIGetActive();
+
+CMDIXXXView *pActiveView=(CMDIXXXView*)pActiveChild->GetActiveView();
+
+CMDIXXXDoc *pActiveDoc=(CMDIXXXDoc*)pActiveChild->GetActiveDocument();
+
+3.在一个对话框中获取另一对话框的指针，由此可以访问另一对话框的函数和变量
+
+MFC在很多的对话框操作中,我们经常要用到在一个对话框中调用另一个对话框的函数或变量.可以用如下方法来解决.
+
+HWND hWnd=::FindWindow(NULL,_T("Sphere"));      //得到对话框的句柄
+   C***Dialog* pWnd= (C***Dialog*)FromHandle(hWnd); //由句柄得到对话框的对象指针
+   pWnd->xxx( );                                             //调用C***Dialog中的函数xxx();
+
+
+
+比如：
+
+在这个对话框.cpp中包含要获取的对话框类的头文件
+
+
+[cpp] view plain copy
+//在此对话框中获取CCJCZDlgDemoDlg类的指针，以便完成操作  
+    HWND hwnd=::FindWindow(NULL,_T("CJCZDlg Demo"));  
+    CCJCZDlgDemoDlg *pWnd=(CCJCZDlgDemoDlg *)FromHandle(hwnd);  
+通过窗口类函数:CWnd *GetWindow获得窗口指针,pWnd->m_hWnd(The handle of the Windows window attached to this CWnd)在::FromHandle(hWnd);
+
+获取主窗口句柄:       CWnd *wnd  = AfxGetMainWnd();
+                     HWND hwnd = wnd->GetSafeHwnd();
+
+设置控件为窗口焦点：GetDlgItem(IDC_TREE1)->SetFocus();
+
+获取控件句柄：HWND hwndctrl = ::GetDlgItem(mainHwnd, IDC_TREE1);//获取树形控件的句柄IDC_TREE IDC_COMBO1
+
+获取当前最上层窗口的句柄： HWND  mainHwnd = ::GetForegroundWindow();//获取当前topmost的窗口句柄
+获取当前窗口的焦点句柄：        HWND  currentFocus = ::GetFocus();
+MFC中获得各个类的句柄的总结   
+
+这其中的关键在于理解 m_pMainWnd， AfxGetApp()，AfxGetMainWnd() 的意义！
+
+1） 在View中获得Doc指针
+CYouSDIDoc *pDoc=GetDocument();一个视只能有一个文档。
+
+
+2) 在App中获得MainFrame指针
+CWinApp 中的 m_pMainWnd变量就是MainFrame的指针，也可以： CMainFrame *pMain =(CMainFrame *)AfxGetMainWnd();
+
+
+3) 在View中获得MainFrame指针
+CMainFrame *pMain=(CmaimFrame *)AfxGetApp()->m_pMainWnd;
+
+
+4) 获得View（已建立）指针
+CMainFrame *pMain=(CmaimFrame *)AfxGetApp()->m_pMainWnd;
+CyouView *pView=(CyouView *)pMain->GetActiveView();
+
+
+5) 获得当前文档指针
+CDocument * pCurrentDoc =(CFrameWnd *)m_pMainWnd->GetActiveDocument();
+
+
+6) 获得状态栏与工具栏指针
+CStatusBar * pStatusBar＝(CStatusBar *)AfxGetMainWnd()->GetDescendantWindow(AFX_IDW_STATUS_BAR);
+CToolBar * pToolBar=(CtoolBar *)AfxGetMainWnd()->GetDescendantWindow(AFX_IDW_TOOLBAR);
+
+
+
+7) 如果框架中加入工具栏和状态栏变量还可以这样
+(CMainFrame *)GetParent()->m_wndToolBar;
+(CMainFrame *)GetParent()->m_wndStatusBar;
+
+
+
+8) 在Mainframe获得菜单指针
+CMenu *pMenu=m_pMainWnd->GetMenu();
+
+
+9) 在任何类中获得应用程序类
+AfxGetInstanceHandle 得到句柄，AfxGetApp 得到指针
+
+
+
+B1.如何在自己的类和“应用程序类”中获得“文档类”的句柄？
+SDI AfxGetMainWnd() -> GetActiveView() -> GetDocument() 得到指针
+MDI AfxGetMainWnd() -> MDIGetActive() -> GetActiveView() -> GetDocument() 得到指针
+
+
+B3.如何在“框架类”中获得“文档类”句柄？
+
+SDI GetActiveView() -> GetDocument() 得到指针，MDI MDIGetActive() -> GetActiveView() -> GetDocument() 从 CMainFrame 得到指针，GetActiveView() -> GetDocument() 从 CChildFrame 得到指针
+
+
+B4.如何在“视图类”中获得“文档类”句柄？
+GetDocument()
+
+
+
+C1.如何在“文档类”中获得“视图类”句柄？
+GetView()，调用 GetFirstViewPosition 和 GetNextView 函数得到指针。
+
+
+C2.如何在自己的类和“应用程序类”中获得“视图类”句柄？
+SDI GetActiveView 得到指针
+MDI MDIGetActive() -> GetActiveView() 从 CMainFrame 得到指针，GetActiveView 从 CChildFrame 得到指针
+
+
+最后提醒大家，在提取到各个句柄之后，因为初次提取的都是标准类句柄，所以，在使用时要注意将标准句柄转换成自己的类的句柄。
+如：
+AfxGetApp();//得到的是WinApp类的句柄，
+所以操作前记得转换成自己定义的类的句柄。
+如：
+((CMyApp*)AfxGetApp())->XXXX（）；//这的xxxx()就是你定义的类中间的成员。
+
+
+
+
+
+MFC 子对话框中得到主对话框指针
+
+在MFC的主窗口中添加了tab control控件之后，可以在一个窗口中显示不同的页面。
+假如主对话框类为CMainDialog, 子对话框类为CChildDialog
+
+有时候会遇到tab 的子窗口访问主窗口中变量和函数的问题，具体方法是：
+
+CMainDialog *pDlg = (CMainDialog *)GetParent()->GetParent()->GetParent();
+pDlg->函数或者变量；
+
+
+上述语句中，第一个GetParent()获取的是tab control指针，再通过tab control获取主对话框指针。

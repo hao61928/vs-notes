@@ -129,3 +129,125 @@ EASYSIZE(IDOK,ES_BORDER,ES_KEEPSIZE, ES_BORDER,ES_BORDER,0)
 EASYSIZE(IDOK,ES_BORDER,ES_BORDER,IDCANCEL,ES_BORDER,0)
 
 表示缩放后，值为IDOK的控件，距离边界上下左位置保持不变，距离ID值为IDCANCEL的右方位置距离保持不变，水平和垂直方向尺寸拉伸；（当使用指定控件作为定位参数时候，确保指定控件的EASYSIZE在该宏前面）
+
+
+
+
+
+//////////////////////////////////////////
+用CWnd类的函数MoveWindow()或SetWindowPos()可以改变控件的大小和位置。
+
+ 
+
+void MoveWindow(int x,int y,int nWidth,int nHeight);
+void MoveWindow(LPCRECT lpRect,BOOL bRepaint);
+第一种用法需给出控件新的坐标和宽度、高度；
+第二种用法给出存放位置的CRect对象,并且设定bRepaint是否需要进行重绘,如果为TRUE，则CWnd象通常那样在OnPaint消息处理函数中接收到一条WM_PAINT消息。如果这个参数为FALSE，则不会发生任何类型的重画操作。这应用于客户区、非客户区（包括标题条和滚动条）和由于CWnd移动而露出的父窗口的任何部分。当这个参数为FALSE的时候，应用程序必须明确地使CWnd和父窗口中必须重画的部分无效或重画。
+
+    对于x，y顶点坐标，对于顶层的CWnd对象，x和y参数是相对于屏幕的左上角的。对于子对象，它们是相对于父窗口客户区的左上角的。  也就是说这两个值都是相对值。
+
+    MoveWindow函数发送一条WM_GETMINMAXINFO消息。处理这个消息时，CWnd得到一个改变最大和最小的窗口缺省值的机会。如果传递给MoveWindow成员函数的参数超过了这些值，则在WM_GETMINMAXINFO处理函数中可以用最小或最大值来代替这些值。
+例：
+CWnd *pWnd;
+pWnd = GetDlgItem( IDC_EDIT1 );    //获取控件指针，IDC_EDIT1为控件ID号
+pWnd->MoveWindow( CRect(0,0,100,100) ,TRUE );    //在窗口左上角显示一个宽100、高100的编辑控件
+
+ 
+
+ 
+
+SetWindowPos()函数使用更灵活，多用于只修改控件位置而大小不变或只修改大小而位置不变的情况，调用这个成员函数以改变子窗口、弹出窗口和顶层窗口的大小、位置和Z轴次序。窗口在屏幕上按照它们的Z轴次序排序。在Z轴次序上处于顶端的窗口将显示在所有其它窗口的顶部。
+BOOL SetWindowPos(const CWnd* pWndInsertAfter,int x,int y,int cx,int cy,UINT nFlags);
+第一个参数pWndInsertAfter是要改变窗口的ZORDER时填的.如果只是移动位置的话就填NULL，
+
+它标识了在Z轴次序上位于这个CWnd对象之前的CWnd对象。这个参数可以是指向CWnd对象的指针，也可以是指向下列值的指针：
+
+wndBottom       将窗口放在Z轴次序的底部。如果这个CWnd是一个顶层窗口，则窗口将失去它的顶层状态；系统将这个窗口放在其它所有窗口的底部。
+
+wndTop       将窗口放在Z轴次序的顶部。
+
+wndTopMost       将窗口放在所有非顶层窗口的上面。这个窗口将保持它的顶层位置，即使它失去了活动状态。
+
+wndNoTopMost       将窗口重新定位到所有非顶层窗口的顶部（这意味着在所有的顶层窗口之下）。这个标志对那些已经是非顶层窗口的窗口没有作用。
+
+ 
+
+x、y控件位置；cx、cy控件宽度和高度；
+
+子窗口的所有坐标都是客户坐标（相对于父窗口客户区的左上角）。
+
+
+nFlags常用取值：
+SWP_NOZORDER：忽略第一个参数；
+SWP_NOMOVE：忽略x、y，维持位置不变；
+SWP_NOSIZE：忽略cx、cy，维持大小不变；
+例：
+CWnd *pWnd;
+pWnd = GetDlgItem( IDC_BUTTON1 );    //获取控件指针，IDC_BUTTON1为控件ID号
+pWnd->SetWindowPos( NULL,50,80,0,0,SWP_NOZORDER | SWP_NOSIZE );    //把按钮移到窗口的(50,80)处
+pWnd = GetDlgItem( IDC_EDIT1 );
+pWnd->SetWindowPos( NULL,0,0,100,80,SWP_NOZORDER | SWP_NOMOVE );    //把编辑控件的大小设为(100,80)，位置不变
+pWnd = GetDlgItem( IDC_EDIT1 );
+pWnd->SetWindowPos( NULL,0,0,100,80,SWP_NOZORDER );    //编辑控件的大小和位置都改变
+以上方法也适用于各种窗口。
+
+ 
+
+nFlags参数的其他取值：
+
+SWP_DRAWFRAME       围绕窗口画出边框（在创建窗口的时候定义）。
+
+SWP_FRAMECHANGED       向窗口发送一条WM_NCCALCSIZE消息，即使窗口的大小不会改变。如果没有指定这个标志，则仅当窗口的大小发生变化时才发送WM_NCCALCSIZE消息。
+
+SWP_HIDEWINDOW       隐藏窗口。S
+
+WP_NOACTIVATE       不激活窗口。如果没有设置这个标志，则窗口将被激活并移动到顶层或非顶层窗口组（依赖于pWndInsertAfter参数的设置）的顶部。
+
+SWP_NOCOPYBITS       废弃这个客户区的内容。如果没有指定这个参数，则客户区的有效内容将被保存，并在窗口的大小或位置改变以后被拷贝回客户区。
+
+SWP_NOMOVE       保持当前的位置（忽略x和y参数）。
+
+SWP_NOOWNERZORDER       不改变拥有者窗口在Z轴次序上的位置。
+
+SWP_NOREDRAW       不重画变化。如果设置了这个标志，则不发生任何种类的变化。这适用于客户区、非客户区（包括标题和滚动条）以及被移动窗口覆盖的父窗口的任何部分。当这个标志被设置的时候，应用程序必须明确地无效或重画要重画的窗口和父窗口的任何部分。
+
+SWP_NOREPOSITION       与SWP_NOOWNERZORDER相同。
+
+SWP_NOSENDCHANGING       防止窗口接收WM_WINDOWPOSCHANGING消息。
+
+SWP_NOSIZE       保持当前的大小（忽略cx和cy参数）。
+
+SWP_NOZORDER       保持当前的次序（忽略pWndInsertAfter）。
+
+SWP_SHOWWINDOW       显示窗口。
+
+
+
+//////////////////////////////////////////
+CRect rc;  
+	this->GetWindowRect(&rc);  //先保存原始窗口大小
+	MoveWindow(0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), true);
+	//this->MoveWindow(0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), true);
+	EnumDisplayMonitors(NULL, NULL, &MonitorEnumProc, 0);
+		 
+	float x,y; 
+	x=GetSystemMetrics( SM_CXSCREEN );   //获得屏幕分辨率
+	y=GetSystemMetrics( SM_CYSCREEN );   	
+	x=(float)x/(rc.right-rc.left); //如果你布局时的分辨率不是1280*800，就改一下就行了。  //455
+	y=(float)y/(rc.bottom-rc.top); //327
+	////改变对话框的大小
+	//CFont m_editFont1;
+	//m_editFont1.CreatePointFont(180, "黑体");	
+	//this->MoveWindow((int)(rc.top*y),(int)(rc.left*x),(int)(rc.Width()*x),(int)(rc.Height()*y));//设置屏幕 左高均恒为0
+	CWnd *pWnd = GetTopWindow();  
+	while (NULL != pWnd)  
+	{  
+		pWnd->GetWindowRect(&rc);
+		//pWnd->SetFont(&m_editFont1);  
+		ScreenToClient(&rc);
+		pWnd->SetWindowPos( NULL,(int)(rc.left*x),(int)(rc.top*y),(int)(rc.Width()*x),(int)(rc.Height()*y),SWP_NOZORDER );    //编辑控件的大小和位置都改变
+		pWnd = pWnd->GetNextWindow();  
+	}  
+	this->ShowWindow(SW_SHOWMAXIMIZED);
+
+
